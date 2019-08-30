@@ -33,9 +33,8 @@ secret_dict = get_secret(constants.secret_filename)
 
 class OpenWeatherMap(object):
 
-    def __init__(self):
-        self.appid = secret_dict.get('appid')
-        self.uri = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=' + self.appid
+    def __init__(self, appid: str):
+        self.uri = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=' + appid
 
     def _request(self, uri: str) -> dict:
         """ Make GET request to given uri """
@@ -49,7 +48,7 @@ class OpenWeatherMap(object):
         except exceptions.ConnectionError as e:
             logger.critical('Connection error: {}'.format(e))
 
-    def city_temperature(self, city) -> dict:
+    def city_temperature(self, city: str) -> dict:
         """ Retrieve temperature info """
 
         return self._request(self.uri.format(city))["main"]["temp"]
@@ -65,6 +64,5 @@ class OpenWeatherMap(object):
         return response
 
 
-owm = OpenWeatherMap()
-current_kiev_temp = owm.city_temperature('Kiev')
+owm = OpenWeatherMap(secret_dict.get('appid'))
 
