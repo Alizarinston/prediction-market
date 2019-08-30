@@ -63,3 +63,8 @@ class OpenWeatherMap(object):
             return {}
 
         return response
+
+
+owm = OpenWeatherMap()
+current_kiev_temp = owm.city_temperature('Kiev')
+
