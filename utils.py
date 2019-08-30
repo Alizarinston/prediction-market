@@ -1,13 +1,18 @@
+import logging
+
 from django.core.exceptions import ImproperlyConfigured
 from json import loads
 from config import constants
+from requests import get, exceptions
+
+logger = logging.getLogger('custom')
 
 
 def get_secret(filename):
     """ Get the secret from json file or raise exception """
 
     fields = (
-        'secret_key', 'db_admin', 'db_pass', 'db_name', 'db_host', 'db_port', 'broker_url', 'hosts', 'admins'
+        'secret_key', 'db_admin', 'db_pass', 'db_name', 'db_host', 'db_port', 'broker_url', 'hosts', 'admins', 'appid'
     )
 
     try:
@@ -24,3 +29,37 @@ def get_secret(filename):
 
 
 secret_dict = get_secret(constants.secret_filename)
+
+
+class OpenWeatherMap(object):
+
+    def __init__(self):
+        self.appid = secret_dict.get('appid')
+        self.uri = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=' + self.appid
+
+    def _request(self, uri: str) -> dict:
+        """ Make GET request to given uri """
+
+        try:
+            return self._parse_errors(get(uri).json())
+
+        except exceptions.Timeout:
+            logger.critical('Timeout occurred')
+
+        except exceptions.ConnectionError as e:
+            logger.critical('Connection error: {}'.format(e))
+
+    def city_temperature(self, city) -> dict:
+        """ Retrieve temperature info """
+
+        return self._request(self.uri.format(city))["main"]["temp"]
+
+    @staticmethod
+    def _parse_errors(response: dict) -> dict:
+        if 'errors' in response:
+            for error in response['errors']:
+                logger.warning('OpenWeatherMap response error: {}'.format(error))
+
+            return {}
+
+        return response
