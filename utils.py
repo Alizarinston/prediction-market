@@ -50,8 +50,11 @@ class OpenWeatherMap(object):
 
     def city_temperature(self, city: str) -> dict:
         """ Retrieve temperature info """
+        try:
+            return self._request(self.uri.format(city))["main"]["temp"]
 
-        return self._request(self.uri.format(city))["main"]["temp"]
+        except KeyError:
+            logger.critical('Requests returned empty dictionary')
 
     @staticmethod
     def _parse_errors(response: dict) -> dict:
