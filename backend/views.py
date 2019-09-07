@@ -1,10 +1,8 @@
-from backend.models import Market, Portfolio, Outcome, Position, Order
+from backend.models import Market, Outcome
 from backend.serializers import MarketSerializer, PortfolioSerializer
 from backend.serializers import OutcomeSerializer, PositionSerializer, OrderSerializer
 from rest_framework.views import APIView, Response
 from rest_framework import generics, permissions, status
-from functools import reduce
-from django.db.models import QuerySet
 
 
 class PortfolioDetail(generics.GenericAPIView):
