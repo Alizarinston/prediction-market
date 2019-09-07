@@ -12,7 +12,7 @@ def get_secret(filename):
     """ Get the secret from json file or raise exception """
 
     fields = (
-        'secret_key', 'db_admin', 'db_pass', 'db_name', 'db_host', 'db_port', 'broker_url', 'hosts', 'admins', 'appid'
+        'secret_key', 'db_admin', 'db_pass', 'db_name', 'db_host', 'db_port', 'broker_url', 'hosts', 'admins', 'owm_id'
     )
 
     try:
@@ -67,5 +67,4 @@ class OpenWeatherMap(object):
         return response
 
 
-owm = OpenWeatherMap(secret_dict.get('appid'))
-
+owm = OpenWeatherMap(secret_dict['owm_id'])
