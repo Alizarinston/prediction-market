@@ -8,7 +8,7 @@ try:
     environ['DJANGO_SETTINGS_MODULE']
 
 except KeyError:
-    environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
+    environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
 
 settings = import_module(environ['DJANGO_SETTINGS_MODULE'])
 
@@ -18,11 +18,3 @@ app = Celery(settings.BASE_NAME)
 app.config_from_object(settings)
 app.autodiscover_tasks()
 app.conf.task_default_queue = 'default'
-
-app.conf.beat_schedule = {
-    'predict-weather-every-day': {
-        'task': 'predict_weather',
-        'schedule': 86400.0,
-        'args': ['weather in Kyiv']
-    },
-}
