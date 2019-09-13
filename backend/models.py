@@ -5,6 +5,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class Portfolio(models.Model):
+    """
+    По суті, гаманець користувача
+
+    cash - ігрова валюта, яку можна начислять хоч кожен день
+
+    + тут будуть ще токени ASH
+    """
     name = models.CharField(max_length=256)
     owner = models.OneToOneField(User, related_name='portfolio', on_delete=models.CASCADE)
     cash = models.FloatField(default=0)
@@ -14,6 +21,25 @@ class Portfolio(models.Model):
 
 
 class Market(models.Model):
+    """
+    Передбачення щодо настання тієї чи іншої події
+
+    b - константа, яку ми самі визначаємо для регулювання впливу транзакції користувача (сильно це повпливає на ціни
+    акцій чи не дуже), що залежить від кількості учасників цього передбачення
+
+    start_date - з цього моменту можлива торгівля акціями/"исходами" (outcomes)
+
+    end_date - з цього моменту торгувати неможливо (не факт, може й можна, нада тестувать), подія вже відбулася (і
+    всі юзери мають знати що цей маркет уже просрочений і чекає свого рішення), адміни мають позначити яка саме
+
+    resolved - адміни снізошли і рішили цю загадку, як тіки позначається True, правильний outcome коштує максимальну
+    ціну, типу 100 токенів за акцію (ну всмислі 100%, бо така ймовірність його настання), а всі інші 0
+
+    outcomes_description - список можливих варіантів настання події перечислених через якийсь роздільний знак,
+    по ідеї формується з полей фронтенд сторінки. Спочатку всі події рівноцінні (1 / кількість варіантів),
+    це і формує їх початкову ціну (тобто ймовірність у відсотках)
+
+    """
     name = models.CharField(max_length=256)
     b = models.FloatField()
     number_of_outcomes = models.IntegerField(blank=True)
@@ -51,6 +77,20 @@ class Market(models.Model):
 
 
 class Outcome(models.Model):
+    """
+    Можливий варіант настання події якогось передбачення (або просто акція)
+
+    market - передбачення, одним із "исходов" якого є оцей outcome
+
+    description - опис цього оуткама, можна брать з outcomes_description в моделі Market
+
+    outstanding - кількість акцій цього екземпляра що знаходяться в обігу (їх хтось купив і ще не продав)
+
+    probability - ймовірність настання цієї події (якщо брати у відсотках) і також його ціна
+
+    winning - яйщо True (що може бути тільки якщо маркет resolved), значить його ціна 100, всі інші 0
+
+    """
     market = models.ForeignKey(Market, related_name='outcomes', on_delete=models.CASCADE)
     description = models.CharField(max_length=256)
     outstanding = models.IntegerField()
@@ -76,6 +116,19 @@ class Outcome(models.Model):
 
 
 class Position(models.Model):
+    """
+    Загальна кількість куплених акцій конкретного outcome користувача (персональна інформація, типу список активів),
+    аналог Portfolio, тільки для куплених акцій, які постійно змінюються в ціні, поки Market не закриється,
+    так шо рано чи пізно їх доведеться продати (або купити, це у випадку шорта, ну щас це не нада, забєй)
+
+    market - передбачення, до якого прив'язані акції цього outcome
+
+    amount - кількість куплених акцій конкретного outcome
+
+    closed - обнулити кількість активів на конеретний outcome, то ість продать всі акції по поточній ціні (або
+    купить і отдать, то інша історія)
+
+    """
     outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, related_name='positions', on_delete=models.CASCADE, blank=True)
@@ -84,6 +137,15 @@ class Position(models.Model):
 
 
 class Order(models.Model):
+    """
+    Ордер (інструкція) на покупку або продаж акцій по поточній ціні. В нашому випадку є маркетмейкер, то ість ціна
+    динамічна і покупка відбудеться автоматично, то ість її не встигнеш відмінити, але в теорії можна (потім
+    подумаємо про реалізацію без маркетмейкера, то ість покупка і продаж відбувається з іншими користувачами)
+
+    position - якщо в тебе немає цих outcomes, створюється автоматично, якщо в тебе вже є непродані акції цього
+    outcome, то оновлюється існуючий
+
+    """
     outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, related_name='orders', on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, related_name='orders', on_delete=models.CASCADE)
@@ -152,10 +214,16 @@ class Order(models.Model):
 
 
 def cost_function(b, amounts):
+    """
+    обчислюється ціна транзакції
+    """
     return b * math.log(sum((math.e ** (a / b) for a in amounts)))
 
 
 def probabilities(b, amounts):
+    """
+    обчислюється ціна актива
+    """
     s = sum((math.e ** (a / b) for a in amounts))
     return [(math.e ** (a / b)) / s for a in amounts]
 
