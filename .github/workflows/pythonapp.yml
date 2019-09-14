@@ -21,6 +21,7 @@ jobs:
       uses: harmon758/postgresql-action@v1
       with:
         postgresql version: '11'
+        postgresql db: 'market'
     
     - name: Copy secret
       env:
@@ -36,11 +37,6 @@ jobs:
     - name: Install coverage
       run: |
         pip install coverage
-   
-    - name: Create database
-      run: |
-        su - postgres
-        createdb market
     
     - name: Run migrations
       run: |
