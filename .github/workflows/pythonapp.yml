@@ -34,9 +34,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Install coverage
+    - name: Install coverage and codecov
       run: |
         pip install coverage
+        pip install codecov
     
     - name: Run migrations
       run: |
@@ -45,7 +46,10 @@ jobs:
         python manage.py migrate --settings=config.settings.local
     
     - name: Run tests
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         coverage run -a manage.py test backend.tests --settings=config.settings.local
         coverage run -a manage.py test users.tests --settings=config.settings.local
         coverage report
+        codecov -t $CODECOV_TOKEN
