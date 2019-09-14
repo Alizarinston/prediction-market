@@ -1,23 +1,6 @@
 import math
 from django.db import models, transaction
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-
-
-class Portfolio(models.Model):
-    """
-    По суті, гаманець користувача
-
-    cash - ігрова валюта, яку можна начислять хоч кожен день
-
-    + тут будуть ще токени ASH
-    """
-    name = models.CharField(max_length=256)
-    owner = models.OneToOneField(User, related_name='portfolio', on_delete=models.CASCADE)
-    cash = models.FloatField(default=0)
-
-    def __str__(self):
-        return self.name
 
 
 class Market(models.Model):
@@ -131,7 +114,7 @@ class Position(models.Model):
     """
     outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, on_delete=models.CASCADE)
-    portfolio = models.ForeignKey(Portfolio, related_name='positions', on_delete=models.CASCADE, blank=True)
+    # portfolio = models.ForeignKey(Portfolio, related_name='positions', on_delete=models.CASCADE, blank=True)
     amount = models.IntegerField(default=0)
     closed = models.BooleanField(default=False)
 
@@ -148,7 +131,7 @@ class Order(models.Model):
     """
     outcome = models.ForeignKey(Outcome, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, related_name='orders', on_delete=models.CASCADE)
-    portfolio = models.ForeignKey(Portfolio, related_name='orders', on_delete=models.CASCADE)
+    # portfolio = models.ForeignKey(Portfolio, related_name='orders', on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True)
     type = models.TextField(choices=[('buy', 'Buy'), ('sell', 'Sell')])
     amount = models.IntegerField(default=0)

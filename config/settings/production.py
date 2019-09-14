@@ -76,14 +76,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_beat',
-    'knox',
-    'accounts',
-    'backend'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'backend',
+    'users'
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': 'knox.auth.TokenAuthentication',
-}
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+AUTH_USER_MODEL = 'users.MarketUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

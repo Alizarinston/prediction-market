@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from backend.models import Portfolio, Market, Outcome, Position, Order
-
-
-class PortfolioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'owner', 'cash')
+from backend.models import Market, Outcome, Position, Order
 
 
 class MarketSerializer(serializers.ModelSerializer):

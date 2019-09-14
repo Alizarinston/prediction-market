@@ -1,20 +1,8 @@
 from backend.models import Market, Outcome
-from backend.serializers import MarketSerializer, PortfolioSerializer
+from backend.serializers import MarketSerializer
 from backend.serializers import OutcomeSerializer, PositionSerializer, OrderSerializer
 from rest_framework.views import APIView, Response
 from rest_framework import generics, permissions, status
-
-
-class PortfolioDetail(generics.GenericAPIView):
-    serializer_class = PortfolioSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
-
-    def get(self, request):
-        portfolio = request.user.portfolio
-        serializer = PortfolioSerializer(portfolio)
-        return Response(serializer.data)
 
 
 class MarketList(generics.ListCreateAPIView):
