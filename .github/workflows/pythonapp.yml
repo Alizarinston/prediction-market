@@ -1,4 +1,4 @@
-name: Run tests
+name: tests
 
 on:
   push:
@@ -40,7 +40,6 @@ jobs:
     
     - name: Run migrations
       run: |
-        python manage.py migrate --settings=config.settings.local
         python manage.py makemigrations backend --settings=config.settings.local
         python manage.py makemigrations users --settings=config.settings.local
         python manage.py migrate --settings=config.settings.local
