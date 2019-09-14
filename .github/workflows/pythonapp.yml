@@ -37,6 +37,13 @@ jobs:
       run: |
         pip install coverage
     
+    - name: Run migrations
+      run: |
+        python manage.py migrate --settings=config.settings.local
+        python manage.py makemigrations backend --settings=config.settings.local
+        python manage.py makemigrations users --settings=config.settings.local
+        python manage.py migrate --settings=config.settings.local
+    
     - name: Run tests
       run: |
         coverage run -a manage.py test backend.tests --settings=config.settings.local
