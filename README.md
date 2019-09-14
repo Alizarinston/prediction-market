@@ -1,6 +1,6 @@
 # Prediction market
 
-[![Actions Status](https://github.com/AverHLV/prediction-market/workflows/tests/badge.svg)(https://github.com/AverHLV/prediction-market)
+[![Actions Status](https://github.com/AverHLV/prediction-market/workflows/tests/badge.svg)](https://github.com/AverHLV/prediction-market)
 
 Simple prediction market on django and django-rest-framework.
 
