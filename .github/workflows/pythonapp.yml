@@ -36,6 +36,11 @@ jobs:
     - name: Install coverage
       run: |
         pip install coverage
+   
+    - name: Create database
+      run: |
+        su - postgres
+        createdb market
     
     - name: Run migrations
       run: |
