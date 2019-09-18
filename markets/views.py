@@ -1,6 +1,6 @@
-from backend.models import Market, Outcome
-from backend.serializers import MarketSerializer
-from backend.serializers import OutcomeSerializer, PositionSerializer, OrderSerializer
+from markets.models import Market, Outcome
+from markets.serializers import MarketSerializer
+from markets.serializers import OutcomeSerializer, PositionSerializer, OrderSerializer
 from rest_framework.views import APIView, Response
 from rest_framework import generics, permissions, status
 

@@ -1,5 +1,5 @@
 from celery import shared_task
-from backend.models import Market
+from markets.models import Market
 import datetime
 
 

@@ -78,7 +78,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
-    'backend',
+    'markets',
     'users'
 ]
 

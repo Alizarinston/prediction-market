@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models import Market, Outcome, Position, Order
+from markets.models import Market, Outcome, Asset, Order
 
 
 class MarketSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
 
 class PositionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = Asset
         fields = ('id', 'outcome', 'market', 'portfolio', 'amount', 'closed')
 
 
