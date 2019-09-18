@@ -54,15 +54,14 @@ class Market(TimeStamped):
     def __str__(self):
         return '{}, resolved: {}'.format(self.name[:constants.market_name_preview_length] + '...', str(self.resolved))
 
-    def resolve(self) -> None:
+    def resolve(self, winner: Outcome) -> None:
         """ Resolve market by setting outcomes probabilities """
 
-        for outcome in self.outcomes.results.all():
-            if outcome.winning:
-                outcome.probability = 1
-            else:
-                outcome.probability = 0
+        winner.probability = 100
+        winner.save(update_fields=['probability'])
 
+        for outcome in self.outcomes.results.all().exclude(pk=winner.pk):
+            outcome.probability = 0
             outcome.save(update_fields=['probability'])
 
         self.resolved = True
