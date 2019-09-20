@@ -67,28 +67,26 @@ class Market(TimeStamped):
         self.resolved = True
         self.save(update_fields=['resolved'])
 
-    def get_cost(self, amount_delta: float) -> None:
+    def get_cost(self, outcome: Outcome, amount_delta: float) -> float:
         """ Get outcome cost """
 
-        pass
+        old_outcomes = self.outcomes.results.all()
+        old_amounts = [outcome.outstanding for outcome in old_outcomes]
 
-        '''
-        outcomes = self.outcomes.results.all()
-        old_amounts = [outcome.outstanding for outcome in outcomes]
+        outcome.outstanding += amount_delta
+        outcome.save(update_fields=['outstanding'])
 
-        for outcome in enumerate(outcomes):
-            if o.pk == self.pk:
-                new_outcomes[i].outstanding += amount_delta
+        new_outcomes = self.outcomes.results.all()
+        new_amounts = [outcome.outstanding for outcome in new_outcomes]
 
-        new_amounts = [o.outstanding for o in new_outcomes]
-        cost = cost_function(self.market.b, new_amounts) - cost_function(self.market.b, old_amounts)
-        probs = probabilities(self.market.b, new_amounts)
+        cost = cost_function(constants.b_constant, new_amounts) - cost_function(constants.b_constant, old_amounts)
+        outcome_probabilities = probabilities(constants.b_constant, new_amounts)
 
-        for i, o in enumerate(new_outcomes):
-            new_outcomes[i].probability = probs[i]
+        for i in range(len(new_outcomes)):
+            new_outcomes[i].probability = outcome_probabilities[i]
+            new_outcomes[i].save(update_fields=['probability'])
 
-        return cost, new_outcomes
-        '''
+        return cost
 
 
 class Asset(models.Model):
