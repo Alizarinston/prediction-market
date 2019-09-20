@@ -49,7 +49,7 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
-        coverage run -a manage.py test backend.tests --settings=config.settings.local
+        coverage run -a manage.py test markets.tests --settings=config.settings.local
         coverage run -a manage.py test users.tests --settings=config.settings.local
         coverage report
         codecov -t $CODECOV_TOKEN
