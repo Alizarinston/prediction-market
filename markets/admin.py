@@ -20,4 +20,4 @@ class AssetAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_filter = 'order_type',

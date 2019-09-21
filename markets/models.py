@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 
 from config import constants
+from users.models import MarketUser
+from . import exceptions
 from .helpers import cost_function, probabilities
 
 
@@ -46,13 +48,13 @@ class Market(TimeStamped):
     start_date = models.DateField()
     end_date = models.DateField()
     resolved = models.BooleanField(default=False)
-    outcomes = models.ForeignKey(Outcome, related_name='results', on_delete=models.CASCADE)
+    outcomes = models.ManyToManyField(Outcome, related_name='market')
 
     class Meta:
         db_table = 'markets'
 
     def __str__(self):
-        return '{}, resolved: {}'.format(self.name[:constants.market_name_preview_length] + '...', str(self.resolved))
+        return '{}, resolved: {}'.format(self.name[:constants.market_name_preview_length] + '...', self.resolved)
 
     def resolve(self, winner: Outcome) -> None:
         """ Resolve market by setting outcomes probabilities """
@@ -60,7 +62,7 @@ class Market(TimeStamped):
         winner.probability = 100
         winner.save(update_fields=['probability'])
 
-        for outcome in self.outcomes.results.all().exclude(pk=winner.pk):
+        for outcome in self.outcomes.exclude(pk=winner.pk):
             outcome.probability = 0
             outcome.save(update_fields=['probability'])
 
@@ -70,23 +72,20 @@ class Market(TimeStamped):
     def get_cost(self, outcome: Outcome, amount_delta: float) -> float:
         """ Get outcome cost """
 
-        old_outcomes = self.outcomes.results.all()
-        old_amounts = [outcome.outstanding for outcome in old_outcomes]
+        old_amounts = [outcome.outstanding for outcome in self.outcomes.all()]
 
         outcome.outstanding += amount_delta
         outcome.save(update_fields=['outstanding'])
 
-        new_outcomes = self.outcomes.results.all()
-        new_amounts = [outcome.outstanding for outcome in new_outcomes]
-
-        cost = cost_function(constants.b_constant, new_amounts) - cost_function(constants.b_constant, old_amounts)
+        outcomes = self.outcomes.all()
+        new_amounts = [outcome.outstanding for outcome in outcomes]
         outcome_probabilities = probabilities(constants.b_constant, new_amounts)
 
-        for i in range(len(new_outcomes)):
-            new_outcomes[i].probability = outcome_probabilities[i]
-            new_outcomes[i].save(update_fields=['probability'])
+        for i in range(len(outcomes)):
+            outcomes[i].probability = outcome_probabilities[i]
+            outcomes[i].save(update_fields=['probability'])
 
-        return cost
+        return cost_function(constants.b_constant, new_amounts) - cost_function(constants.b_constant, old_amounts)
 
 
 class Asset(models.Model):
@@ -100,73 +99,71 @@ class Asset(models.Model):
         db_table = 'assets'
 
     def __str__(self):
-        return '{}: {}'.format(self.outcome.description, str(self.amount))
+        return '{}: {}'.format(self.outcome.description, self.amount)
 
 
 class Order(TimeStamped):
     """ Instruction to buy or sell shares at the current price """
 
-    pass
+    # :field: order_type: bool, 0 - buy, 1 - sell
 
-    '''
-    amount = models.PositiveSmallIntegerField(default=0)
     order_type = models.BooleanField()
-    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, blank=True)
+    amount = models.PositiveSmallIntegerField(default=0)
+    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        self.market = self.outcome.market
-        if self.type == 'buy':
-            self._buy_save()
-            super(Order, self).save(*args, **kwargs)
-        elif self.type == 'sell':
-            self._sell_save()
-            super(Order, self).save(*args, **kwargs)
+    def __str__(self):
+        return 'Type: {}, amount: {}'.format(self.order_type, self.amount)
 
-    def _buy_save(self):
-        outcomes = Outcome.objects.filter(market=self.outcome.market)
-        try:
-            position = Asset.objects.get(outcome=self.outcome.id, portfolio=self.portfolio.id)
-            self.position = position
-        except Outcome.DoesNotExist:
-            position = Asset(
-                outcome=self.outcome,
-                market=self.outcome.market,
-                portfolio=self.portfolio,
-                amount=0,
-                closed=False,
-            )
-            self.position = position
-            self.position.save()
-        finally:
-            self.position = position
-        delta = self.amount
-        cost, new_outcomes = self.outcome.get_cost(delta)
-        if self.portfolio.cash - cost >= 0:
-            self.portfolio.cash -= cost
-            self.portfolio.save()
-            self.position.amount += self.amount
-            self.position.save()
-            for o in new_outcomes:
-                o.save()
+    def populate(self, outcome: Outcome, user: MarketUser) -> None:
+        """ Populate Order model before saving """
+
+        if not self.order_type:
+            self._buy(outcome, user)
         else:
-            raise NotEnoughFunds
+            self._sell(outcome, user)
 
-    def _sell_save(self):
-        outcomes = Outcome.objects.filter(market=self.outcome.market)
-        try:
-            position = Asset.objects.get(outcome=self.outcome.id, portfolio=self.portfolio.id)
-        except Outcome.DoesNotExist:
-            raise PositionDoesNotExist
-        self.position = position
-        delta = -self.amount
-        cost, new_outcomes = self.outcome.get_cost(delta)
-        if position.amount >= self.amount:
-            self.portfolio.cash -= cost
-            self.portfolio.save()
-            self.position.amount -= self.amount
-            self.position.save()
-            for o in new_outcomes:
-                o.save()
+    def _buy(self, outcome: Outcome, user: MarketUser) -> None:
+        """ Order buy case """
+
+        if self.asset is None:
+            self.asset = Asset.objects.create(outcome=outcome)
+
         else:
-            raise NotEnoughPositionAmount
-    '''
+            try:
+                self.asset = Asset.objects.get(outcome=outcome)
+
+            except Asset.DoesNotExist:
+                msg = 'Asset with specified outcome not found. Description: {}'.format(outcome.description)
+                raise exceptions.AssetDoesNotExist(msg)
+
+        cost = self.asset.outcome.market.first().get_cost(outcome, self.amount)
+
+        if user.cash - cost >= 0:
+            user.cash -= cost
+            user.save(update_fields=['cash'])
+            self.asset.amount += self.amount
+            self.asset.save(update_fields=['amount'])
+
+        else:
+            raise exceptions.NotEnoughCash
+
+    def _sell(self, outcome: Outcome, user: MarketUser) -> None:
+        """ Order sell case """
+
+        try:
+            self.asset = Asset.objects.get(outcome=outcome)
+
+        except Asset.DoesNotExist:
+            msg = 'Asset with specified outcome not found. Description: {}'.format(outcome.description)
+            raise exceptions.AssetDoesNotExist(msg)
+
+        cost = self.asset.outcome.market.first().get_cost(outcome, self.amount)
+
+        if self.asset.amount >= self.amount:
+            user.cash += cost
+            user.save(update_fields=['cash'])
+            self.asset.amount += self.amount
+            self.asset.save(update_fields=['amount'])
+
+        else:
+            raise exceptions.NotEnoughAssetAmount
