@@ -1,94 +1,66 @@
-from markets.models import Market, Outcome
-from markets.serializers import MarketSerializer
-from markets.serializers import OutcomeSerializer, PositionSerializer, OrderSerializer
-from rest_framework.views import APIView, Response
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions
+
+from .models import Market, Outcome, Asset, Order
+from .serializers import OutcomeSerializer, MarketSerializer, AssetSerializer, OrderSerializer
 
 
 class MarketList(generics.ListCreateAPIView):
+    """ Get markets list or create a market """
+
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class MarketDetail(generics.RetrieveUpdateDestroyAPIView):
+    """ Get markets details """
+
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
-class OutcomeList(APIView):
-    def get(self, request):
-        """
-        This view should return a list of all the outcomes,
-        if there is no 'market' keyword argument and
-        all outcomes for a particular market if there is a 'market
-        keyword argument.
-        """
-        market = request.GET.get('market', None)
-        if market:
-            outcomes = Outcome.objects.filter(market__id=market)
-        else:
-            outcomes = Outcome.objects.all()
-        serializer = OutcomeSerializer(outcomes, many=True)
-        return Response(serializer.data)
+class OutcomeList(generics.ListCreateAPIView):
+    """ Get outcomes list or create a outcome """
 
-
-class OutcomeDetail(generics.RetrieveAPIView):
     queryset = Outcome.objects.all()
     serializer_class = OutcomeSerializer
 
 
-class PositionList(generics.ListAPIView):
-    serializer_class = PositionSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+class OutcomeDetail(generics.RetrieveAPIView):
+    """ Get outcome details """
 
-    def get_queryset(self):
-        positions = self.request.user.portfolio.positions.all()
-        return positions
+    queryset = Outcome.objects.all()
+    serializer_class = OutcomeSerializer
 
 
-class PositionDetail(generics.RetrieveAPIView):
-    serializer_class = PositionSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+class AssetList(generics.ListAPIView):
+    """ Get asset list """
 
-    def get_queryset(self):
-        positions = self.request.user.portfolio.positions.all()
-        return positions
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AssetDetail(generics.RetrieveAPIView):
+    """ Get asset details """
+
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class OrderList(generics.ListCreateAPIView):
+    """ Get orders list or create a new order """
+
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
-
-    def post(self, request):
-        portfolio = request.user.portfolio
-        data = {**request.data, 'portfolio': portfolio.id}
-        serializer = OrderSerializer(data=data)
-        if portfolio:
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def get_queryset(self):
-        orders = self.request.user.portfolio.orders.all()
-        return orders
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class OrderDetail(generics.RetrieveAPIView):
-    serializer_class = OrderSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    """ Get order details """
 
-    def get_queryset(self):
-        orders = self.request.user.portfolio.orders.all()
-        return orders
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
