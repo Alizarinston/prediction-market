@@ -49,6 +49,10 @@ class Market(TimeStamped):
     end_date = models.DateField()
     resolved = models.BooleanField(default=False)
     outcomes = models.ManyToManyField(Outcome, related_name='market')
+    description = models.CharField(
+        max_length=constants.market_description_max_length,
+        validators=[MinLengthValidator(constants.market_description_min_length)]
+    )
 
     class Meta:
         db_table = 'markets'

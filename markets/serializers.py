@@ -13,7 +13,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
 class MarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
-        fields = 'id', 'created', 'name', 'start_date', 'end_date', 'resolved', 'outcomes'
+        fields = 'id', 'created', 'name', 'start_date', 'end_date', 'resolved', 'outcomes', 'description'
 
 
 class AssetSerializer(serializers.ModelSerializer):

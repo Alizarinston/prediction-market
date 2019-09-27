@@ -9,7 +9,7 @@ class MarketList(generics.ListCreateAPIView):
 
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 
 class MarketDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -17,7 +17,7 @@ class MarketDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 
 class OutcomeList(generics.ListCreateAPIView):

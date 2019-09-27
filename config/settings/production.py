@@ -85,7 +85,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth.registration',
     'markets',
-    'users'
+    'users',
+    'corsheaders'
 ]
 
 SITE_ID = 1
@@ -93,6 +94,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 AUTH_USER_MODEL = 'users.MarketUser'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -199,3 +201,5 @@ if not len(broker_url):
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_ALLOW_ALL = True
