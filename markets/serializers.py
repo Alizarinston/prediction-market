@@ -8,10 +8,16 @@ class OutcomeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Outcome
-        fields = 'id', 'outstanding', 'probability', 'description', 'is_winner'
+        fields = 'outstanding', 'probability', 'description', 'is_winner'
 
 
-class MarketSerializer(serializers.ModelSerializer):
+class MarketListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Market
+        fields = 'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved'
+
+
+class MarketDetailSerializer(serializers.ModelSerializer):
     outcomes = OutcomeSerializer(many=True)
 
     class Meta:

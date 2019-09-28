@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from json import loads
 
-from ..serializers import OutcomeSerializer, MarketSerializer
+from ..serializers import OutcomeSerializer, MarketDetailSerializer
 
 TEST_DATA_PATH = 'markets/tests/test_data.json'
 
@@ -23,7 +23,7 @@ class SerializersTestCase(APITestCase):
         serializer = OutcomeSerializer(data=self.outcome_data)
         self.assertTrue(serializer.is_valid())
 
-        serializer = MarketSerializer(data=self.market_data)
+        serializer = MarketDetailSerializer(data=self.market_data)
         self.assertTrue(serializer.is_valid())
         market = serializer.create(serializer.validated_data)
         self.assertEqual(market.name, self.market_data['name'])

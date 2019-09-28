@@ -1,28 +1,22 @@
 {
     "outcome": {
-        "id": 1,
         "outstanding": 10,
         "probability": 100,
         "description": "test outcome"
     },
 
     "market": {
-        "id": 1,
         "name": "Market name.",
-        "created": "2019-10-01T13:20:30+03:00",
         "start_date": "2019-09-01",
         "end_date": "2019-10-01",
-        "proposal": false,
 
         "outcomes": [
             {
-                "id": 1,
                 "outstanding": 10,
                 "description": "test outcome"
             },
 
             {
-                "id": 2,
                 "outstanding": 10,
                 "description": "second test outcome"
             }
