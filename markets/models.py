@@ -65,7 +65,7 @@ class Market(TimeStamped):
         db_table = 'markets'
 
     def __str__(self):
-        return '{}, resolved: {}'.format(self.name[:constants.market_name_preview_length] + '...', self.resolved)
+        return '{}, resolved: {}'.format(self.name, self.resolved)
 
     def resolve(self, winner: Outcome) -> None:
         """ Resolve market by setting outcomes probabilities """
