@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Outcome, Market, Proposal, Asset, Order
+from .models import Outcome, Market, Asset, Order
 
 
 @admin.register(Outcome)
@@ -11,12 +11,6 @@ class OutcomeAdmin(admin.ModelAdmin):
 class MarketAdmin(admin.ModelAdmin):
     search_fields = 'name',
     list_filter = 'start_date', 'end_date', 'resolved'
-
-
-@admin.register(Proposal)
-class ProposalAdmin(admin.ModelAdmin):
-    search_fields = 'name',
-    list_filter = 'start_date', 'end_date', 'supply'
 
 
 @admin.register(Asset)

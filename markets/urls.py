@@ -6,8 +6,6 @@ from . import views
 urlpatterns = [
     path('markets/', views.MarketList.as_view()),
     path('markets/<int:pk>/', views.MarketDetail.as_view()),
-    path('proposals/', views.ProposalList.as_view()),
-    path('proposals/<int:pk>/', views.ProposalDetail.as_view()),
     path('outcomes/', views.OutcomeList.as_view()),
     path('outcomes/<int:pk>/', views.OutcomeDetail.as_view()),
     path('positions/', views.AssetList.as_view()),

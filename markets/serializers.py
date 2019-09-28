@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Outcome, Market, Proposal, Asset, Order
+from .models import Outcome, Market, Asset, Order
 
 
 class OutcomeSerializer(serializers.ModelSerializer):
@@ -14,12 +14,6 @@ class MarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
         fields = 'id', 'created', 'name', 'start_date', 'end_date', 'resolved', 'outcomes', 'description'
-
-
-class ProposalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Proposal
-        fields = 'id', 'name', 'start_date', 'end_date', 'outcomes', 'description', 'anon', 'supply'
 
 
 class AssetSerializer(serializers.ModelSerializer):
