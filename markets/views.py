@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 
-from .models import Market, Outcome, Asset, Order
-from .serializers import OutcomeSerializer, MarketSerializer, AssetSerializer, OrderSerializer
+from .models import Market, Proposal, Outcome, Asset, Order
+from .serializers import OutcomeSerializer, MarketSerializer, ProposalSerializer, AssetSerializer, OrderSerializer
 
 
 class MarketList(generics.ListCreateAPIView):
@@ -17,6 +17,22 @@ class MarketDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+
+
+class ProposalList(generics.ListCreateAPIView):
+    """ Get proposals list or create a proposal """
+
+    queryset = Proposal.objects.all()
+    serializer_class = ProposalSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+
+
+class ProposalDetail(generics.RetrieveAPIView):
+    """ Get proposals list or create a proposal """
+
+    queryset = Proposal.objects.all()
+    serializer_class = ProposalSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
 

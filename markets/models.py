@@ -92,6 +92,30 @@ class Market(TimeStamped):
         return cost_function(constants.b_constant, new_amounts) - cost_function(constants.b_constant, old_amounts)
 
 
+class Proposal(TimeStamped):
+    """ A model that represents a proposal for a future market """
+
+    name = models.CharField(
+        max_length=constants.market_name_max_length,
+        validators=[MinLengthValidator(constants.market_name_min_length)]
+    )
+    supply = models.FloatField(default=0)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    outcomes = models.ManyToManyField(Outcome, related_name='proposal')
+    description = models.CharField(
+        max_length=constants.market_description_max_length,
+        validators=[MinLengthValidator(constants.market_description_min_length)]
+    )
+    anon = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'proposal'
+
+    def __str__(self):
+        return '{}, supply: {}'.format(self.name[:constants.market_name_preview_length] + '...', self.supply)
+
+
 class Asset(models.Model):
     """ User`s asset model. The total number of purchased outcome of a particular user """
 

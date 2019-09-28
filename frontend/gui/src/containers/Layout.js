@@ -22,12 +22,16 @@ class CustomLayout extends React.Component {
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="1">
-              <Icon type="pie-chart" />
-              <span>Markets</span>
+              <Link to="/">
+                <Icon type="pie-chart" />
+                <span>Markets</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="desktop" />
-              <span>Option 2</span>
+              <Link to="/proposals/">
+                <Icon type="desktop" />
+                <span>Proposals</span>
+              </Link>
             </Menu.Item>
             <SubMenu
               key="sub1"
@@ -66,6 +70,7 @@ class CustomLayout extends React.Component {
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
               <Breadcrumb.Item><Link to="/">Markets</Link></Breadcrumb.Item>
+              <Breadcrumb.Item><Link to="/proposals/">Proposals</Link></Breadcrumb.Item>
             </Breadcrumb>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
                 {this.props.children}
