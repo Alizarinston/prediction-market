@@ -1,6 +1,8 @@
-from rest_framework import viewsets, mixins, permissions
+from rest_framework import viewsets, mixins, permissions, status
+from rest_framework.decorators import action
+from rest_framework.views import Response
 
-from .models import Market, Asset, Order
+from .models import Outcome, Market, Asset, Order
 from .serializers import MarketListSerializer, MarketDetailSerializer, AssetSerializer, OrderSerializer
 
 
@@ -23,6 +25,33 @@ class MarketViewSet(mixins.CreateModelMixin,
 
         except (KeyError, AttributeError):
             return super().get_serializer_class()
+
+    @action(detail=True, methods=['patch'])
+    def resolve(self, request, pk=None):
+        """ Resolve specified market by given outcome """
+
+        instance = self.get_object()
+
+        if instance.resolved or instance.proposal:
+            return Response(data={'detail': 'Wrong pk.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        outcome_pk = request.data.get('outcome_pk')
+
+        if outcome_pk is None:
+            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            outcome = Outcome.objects.get(pk=outcome_pk)
+
+        except Outcome.DoesNotExist:
+            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if outcome not in instance.outcomes.all():
+            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance.resolve(outcome)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):

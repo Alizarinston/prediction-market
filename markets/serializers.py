@@ -8,7 +8,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Outcome
-        fields = 'outstanding', 'probability', 'description', 'is_winner'
+        fields = 'id', 'outstanding', 'probability', 'description', 'is_winner'
 
 
 class MarketListSerializer(serializers.ModelSerializer):
