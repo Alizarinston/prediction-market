@@ -1,0 +1,72 @@
+[
+    {
+        "model": "users.MarketUser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$100000$NQP4kg5qSuPS$JhwoEubrUNLt5dOWgtRvJZ5edP145/CMGVcSXr2S7iQ=",
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_superuser": true,
+            "is_active": true,
+            "date_joined": "2019-09-28T19:07:26.668Z",
+            "cash": 0.0
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 1,
+        "fields": {
+            "outstanding": 10,
+            "probability": 25,
+            "description": "first outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 2,
+        "fields": {
+            "outstanding": 15,
+            "probability": 25,
+            "description": "second outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 3,
+        "fields": {
+            "outstanding": 5,
+            "probability": 25,
+            "description": "third outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 4,
+        "fields": {
+            "outstanding": 20,
+            "probability": 25,
+            "description": "fourth outcome"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 1,
+        "fields": {
+            "name": "Market name.",
+            "created": "2019-10-01T13:20:30+03:00",
+            "start_date": "2019-09-01",
+            "end_date": "2019-10-01",
+            "proposal": false,
+            "outcomes": [1, 2, 3, 4],
+            "description": "Market description."
+        }
+    }
+]

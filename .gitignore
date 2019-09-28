@@ -1,4 +1,3 @@
-migrations
-*.json
 *.log
 run_*.py
+secret.json

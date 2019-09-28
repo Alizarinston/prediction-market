@@ -78,10 +78,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
-    'markets',
-    'users',
     'corsheaders',
-    'django_extensions'
+    'markets',
+    'users'
 ]
 
 SITE_ID = 1
@@ -109,6 +108,10 @@ STATIC_VERSION = '1.0.0'
 STATICFILES_DIRS = (
     BASE_DIR.child('assets'),
 )
+
+FIXTURE_DIRS = [
+    BASE_DIR.child('fixtures'),
+]
 
 TEMPLATES = [
     {

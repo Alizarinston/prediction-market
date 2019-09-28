@@ -4,5 +4,12 @@
 
 Simple prediction market on django and django-rest-framework.
 
+## Installation
+- Install requirements: `pip install -r requirements.txt`.
+- Create `market` database.
+- Run migrations: `python manage.py migrate`
+- Populate database: `python manage.py loaddata data.json`
+- Login with default admin credentials: `admin/market_admin`
+
 ## REST API specs:
 * 'api/auth': [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html).

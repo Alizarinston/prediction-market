@@ -41,15 +41,13 @@ jobs:
     
     - name: Run migrations
       run: |
-        python manage.py makemigrations markets --settings=config.settings.local
-        python manage.py makemigrations users --settings=config.settings.local
-        python manage.py migrate --settings=config.settings.local
+        python manage.py migrate
     
     - name: Run tests
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
-        coverage run -a manage.py test markets.tests --settings=config.settings.local
-        coverage run -a manage.py test users.tests --settings=config.settings.local
+        coverage run -a manage.py test markets.tests
+        coverage run -a manage.py test users.tests
         coverage report
         codecov -t $CODECOV_TOKEN
