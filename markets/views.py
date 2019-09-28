@@ -1,10 +1,13 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, mixins, permissions
 
 from .models import Market, Asset, Order
 from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
 
 
-class MarketViewSet(viewsets.ModelViewSet):
+class MarketViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
     permission_classes = [permissions.IsAuthenticated]
