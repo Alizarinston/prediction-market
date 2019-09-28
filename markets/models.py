@@ -34,7 +34,10 @@ class Outcome(models.Model):
         return self.description
 
     def is_winner(self) -> bool:
-        return self.probability == 100
+        if self.market.first().resolved:
+            return self.probability == 100
+
+        return False
 
 
 class Market(TimeStamped):
