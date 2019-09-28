@@ -8,8 +8,8 @@ import ProposalDetail from "./containers/ProposalDetailView";
 
 const BaseRouter = () => (
     <div>
-        <Route exact path='/' component={MarketList}/>
-        <Route exact path='/:marketID' component={MarketDetail}/>
+        <Route exact path='/markets/' component={MarketList}/>
+        <Route exact path='/markets/:marketID' component={MarketDetail}/>
         <Route exact path='/proposals/' component={ProposalList}/>
         <Route exact path='/proposals/:proposalID' component={ProposalDetail}/>
     </div>
