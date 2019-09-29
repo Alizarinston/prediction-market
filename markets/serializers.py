@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from .models import Outcome, Market, Asset, Order
 
 
@@ -27,6 +29,17 @@ class MarketDetailSerializer(serializers.ModelSerializer):
             'id', 'created', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'outcomes',
             'description'
         )
+
+    def validate(self, attrs):
+        # validate start_date and end_date
+
+        if 'start_date' not in attrs or 'end_date' not in attrs:
+            raise ValidationError
+
+        if attrs['start_date'] >= attrs['end_date']:
+            raise ValidationError
+
+        return super().validate(attrs)
 
     def create(self, validated_data: dict) -> Market:
         outcomes = validated_data.pop('outcomes')
