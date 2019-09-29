@@ -13,7 +13,7 @@ Simple prediction market on django and django-rest-framework.
 
 ## API specs:
 * `api/auth`: [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html).
-* `api/markets`: provides such markets actions as: `create()`, `retrieve()` and `list()`.
+* `api/markets`: provides all actions as: `create()`, `retrieve()`, `update()`, `partial_update()` and `list()`.
 * `api/markets/<market_id>/resolve/`: PATCH allowed, resolve market by "outcome_pk" field.
 * `api/assets`: provides read only actions: `list()` and `retrieve()`.
 * `api/orders`: provides read only actions: `list()` and `retrieve()`.

@@ -5,12 +5,10 @@ from .models import Outcome, Market, Asset, Order
 
 
 class OutcomeSerializer(serializers.ModelSerializer):
-    is_winner = serializers.BooleanField(required=False)
-    probability = serializers.FloatField(required=False)
-
     class Meta:
         model = Outcome
         fields = 'id', 'outstanding', 'probability', 'description', 'is_winner'
+        read_only_fields = 'outstanding', 'probability', 'is_winner'
 
 
 class MarketListSerializer(serializers.ModelSerializer):
@@ -29,6 +27,8 @@ class MarketDetailSerializer(serializers.ModelSerializer):
             'id', 'created', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'outcomes',
             'description'
         )
+
+        read_only_fields = 'created', 'supply', 'proposal', 'resolved'
 
     def validate(self, attrs):
         # validate start_date and end_date

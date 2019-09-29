@@ -1,17 +1,15 @@
-from rest_framework import viewsets, mixins, permissions, status
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.views import Response
 
 from datetime import datetime
 
 from .models import Outcome, Market, Asset, Order
+from .permissions import UpdateAndIsAdmin
 from .serializers import MarketListSerializer, MarketDetailSerializer, AssetSerializer, OrderSerializer
 
 
-class MarketViewSet(mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    viewsets.GenericViewSet):
+class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketDetailSerializer
 
@@ -19,7 +17,7 @@ class MarketViewSet(mixins.CreateModelMixin,
         'list': MarketListSerializer
     }
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
 
     def get_serializer_class(self):
         try:
@@ -28,7 +26,7 @@ class MarketViewSet(mixins.CreateModelMixin,
         except (KeyError, AttributeError):
             return super().get_serializer_class()
 
-    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAdminUser])
+    @action(detail=True, methods=['patch'])
     def resolve(self, request, pk=None):
         """ Resolve specified market by given outcome """
 
@@ -62,10 +60,10 @@ class MarketViewSet(mixins.CreateModelMixin,
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = permissions.IsAuthenticated,
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = permissions.IsAuthenticated,
