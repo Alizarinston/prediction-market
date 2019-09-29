@@ -28,7 +28,7 @@ class MarketDetailSerializer(serializers.ModelSerializer):
             'description'
         )
 
-        read_only_fields = 'created', 'supply', 'proposal', 'resolved'
+        read_only_fields = 'created', 'resolved'
 
     def validate(self, attrs):
         # validate start_date and end_date
@@ -43,6 +43,11 @@ class MarketDetailSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict) -> Market:
         outcomes = validated_data.pop('outcomes')
+
+        for key in 'proposal', 'supply':
+            if key in validated_data:
+                validated_data.pop(key)
+
         market = Market.objects.create(**validated_data)
         probability = 100 / len(outcomes)
 
