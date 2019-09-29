@@ -1,6 +1,8 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link } from 'react-router-dom';
+import * as actions from "../store/actions/auth";
+import { connect } from 'react-redux';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -65,7 +67,33 @@ class CustomLayout extends React.Component {
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
+          <Header className="header">
+      <div className="logo" />
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        defaultSelectedKeys={['2']}
+        style={{ lineHeight: '64px' }}
+      >
+          {
+            this.props.isAuthenticated ?
+
+                <Menu.Item key="3" onClick={this.props.logout}>
+                    Logout
+                </Menu.Item>
+
+                :
+
+                <Menu.Item key="3">
+                    <Link to="/login">Login</Link>
+                </Menu.Item>
+          }
+        <Menu.Item key="1">Coming soon</Menu.Item>
+        <Menu.Item key="2">Coming soon</Menu.Item>
+        
+      </Menu>
+    </Header>
+          {/*<Header style={{ background: '#fff', padding: 0 }} />*/}
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
@@ -83,4 +111,11 @@ class CustomLayout extends React.Component {
   }
 }
 
-export default CustomLayout;
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(actions.logout())
+    }
+};
+
+export default connect(null, mapDispatchToProps)(CustomLayout);
+
