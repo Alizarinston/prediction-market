@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.views import Response
+from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
@@ -55,6 +56,23 @@ class MarketViewSet(viewsets.ModelViewSet):
         instance.resolve(outcome)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+class MarketFilteredList(ListAPIView):
+    queryset = Market.objects.all()
+    serializer_class = MarketListSerializer
+    permission_classes = permissions.IsAuthenticated,
+
+    def get_queryset(self):
+        proposal = self.kwargs['proposal']
+
+        if proposal == 'true':
+            proposal = True
+
+        else:
+            proposal = False
+
+        return Market.objects.filter(proposal=proposal)
 
 
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
