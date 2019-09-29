@@ -12,8 +12,8 @@ Simple prediction market on django and django-rest-framework.
 - Login with default admin credentials: `admin/market_admin`
 
 ## API specs:
-* `api/auth`: [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html).
-* `api/markets`: provides all actions as: `create()`, `retrieve()`, `update()`, `partial_update()` and `list()`.
-* `api/markets/<market_id>/resolve/`: PATCH allowed, resolve market by "outcome_pk" field.
-* `api/assets`: provides read only actions: `list()` and `retrieve()`.
-* `api/orders`: provides read only actions: `list()` and `retrieve()`.
+* `api/auth/`: [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html).
+* `api/markets/`: provides all actions: `create()`, `retrieve()`, `update()`, `partial_update()` and `list()`.
+* `api/markets/<market_id>/resolve/`: only `PATCH` allowed, resolve market by "outcome_pk" field.
+* `api/assets/`: provides read only actions: `list()` and `retrieve()`.
+* `api/orders/`: provides read only actions: `list()` and `retrieve()`.
