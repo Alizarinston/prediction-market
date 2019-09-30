@@ -46,7 +46,7 @@ const Markets = (props) => {
               title={<a href={`/markets/${item.id}`}>{item.name}</a>}
               description={item.description}
             />
-            {item.content}
+              {item.end_date}
           </List.Item>
         )}
       />

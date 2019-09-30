@@ -10,7 +10,7 @@ class ProposalList extends React.Component {
     };
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/proposals/')
+        axios.get('http://127.0.0.1:8000/api/markets/proposal/true')
             .then(res => {
                 this.setState({
                     proposals: res.data

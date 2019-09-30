@@ -11,25 +11,24 @@ class App extends Component {
 
   componentDidMount() {
     this.props.onTryAutoSignup();
-    
   }
 
   render() {
     return (
-    <div>
-      <Router>
-        <CustomLayout {...this.props}>
-          <BaseRouter/>
-        </CustomLayout>
-      </Router>
-    </div>
-  );
+      <div>
+        <Router>
+          <CustomLayout {...this.props}>
+            <BaseRouter/>
+          </CustomLayout>
+        </Router>
+      </div>
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-      isAuthenticated: state.token !== null
+    isAuthenticated: state.token !== null
   }
 };
 
