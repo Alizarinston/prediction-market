@@ -10,7 +10,7 @@ class MarketList extends React.Component {
         markets: []
     };
 
-    fetchArticles = () => {
+    fetchMarkets = () => {
     axios.get("http://127.0.0.1:8000/api/markets/proposal/false/").then(res => {
       this.setState({
         markets: res.data
@@ -19,12 +19,12 @@ class MarketList extends React.Component {
 };
 
     componentDidMount() {
-    this.fetchArticles();
+    this.fetchMarkets();
 }
 
     componentWillReceiveProps(newProps) {
     if (newProps.token) {
-      this.fetchArticles();
+      this.fetchMarkets();
     }
 }
 

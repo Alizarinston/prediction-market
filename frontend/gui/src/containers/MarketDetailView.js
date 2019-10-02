@@ -26,6 +26,8 @@ class MarketDetail extends React.Component {
 
 
     componentWillReceiveProps(newProps) {
+        // console.log("newProp: " + newProps.token);
+        // console.log("thisProp: " + this.props.token);
         if (newProps.token) {
 
             axios.defaults.headers = {

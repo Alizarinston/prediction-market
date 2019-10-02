@@ -11,10 +11,8 @@ class ProposalDetail extends React.Component {
 
     componentDidMount() {
         const proposalID = this.props.match.params.proposalID;
-        console.log(this.props.match.params);
         axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`)
             .then(res => {
-                console.log(res.data);
                 // if (!res.data.proposal) {
                 //     res.data = []
                 //     // тут нужно вызвать ошибку, there is no such proposal

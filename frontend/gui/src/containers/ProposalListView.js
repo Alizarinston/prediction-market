@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import Proposals from '../components/Proposal';
+import { Link } from 'react-router-dom';
 
 class ProposalList extends React.Component {
 
@@ -10,7 +11,7 @@ class ProposalList extends React.Component {
     };
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/markets/proposal/true')
+        axios.get('http://127.0.0.1:8000/api/markets/proposal/true/')
             .then(res => {
                 this.setState({
                     proposals: res.data
@@ -20,7 +21,11 @@ class ProposalList extends React.Component {
 
     render () {
         return (
-            <Proposals data={this.state.proposals}/>
+            <div>
+                <Proposals data={this.state.proposals}/>
+                <br/>
+                <h2><Link to="/proposal/create/">Create a proposal</Link></h2>
+            </div>
         )
     }
 }

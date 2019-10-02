@@ -18,7 +18,7 @@ class MarketViewSet(viewsets.ModelViewSet):
         'list': MarketListSerializer
     }
 
-    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+    # permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
 
     def get_serializer_class(self):
         try:
@@ -61,7 +61,7 @@ class MarketViewSet(viewsets.ModelViewSet):
 class MarketFilteredList(ListAPIView):
     queryset = Market.objects.all()
     serializer_class = MarketListSerializer
-    permission_classes = permissions.IsAuthenticated,
+    # permission_classes = permissions.IsAuthenticated,
 
     def get_queryset(self):
         proposal = self.kwargs['proposal']
