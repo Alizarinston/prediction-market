@@ -3,14 +3,14 @@ import { Form, Input, Icon, Button } from "antd";
 
 const FormItem = Form.Item;
 
-let uuid = 0;
+let uuid = 2;
 class DynamicFieldSet extends React.Component {
   remove = k => {
     const { form } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue("keys");
     // We need at least one passenger
-    if (keys.length === 1) {
+    if (keys.length === 2) {
       return;
     }
 
@@ -50,7 +50,7 @@ class DynamicFieldSet extends React.Component {
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
-    getFieldDecorator("keys", { initialValue: [] });
+    getFieldDecorator("keys", { initialValue: [0,1] });
     const keys = getFieldValue("keys");
     const formItems = keys.map((k) => {
       return (
@@ -74,11 +74,11 @@ class DynamicFieldSet extends React.Component {
               style={{ width: "60%", marginRight: 8 }}
             />
           )}
-          {keys.length > 1 ? (
+          {keys.length > 2 ? (
             <Icon
               className="dynamic-delete-button"
               type="minus-circle-o"
-              disabled={keys.length === 1}
+              disabled={keys.length === 2}
               onClick={() => this.remove(k)}
             />
           ) : null}
