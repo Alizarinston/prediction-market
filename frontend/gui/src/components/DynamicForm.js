@@ -1,5 +1,8 @@
 import React from "react";
-import { Form, Input, Icon, Button } from "antd";
+import { Form as f } from 'semantic-ui-react'
+import { Input, Icon } from 'semantic-ui-react'
+import { Form, Button } from "antd";
+
 
 const FormItem = Form.Item;
 
@@ -7,14 +10,11 @@ let uuid = 2;
 class DynamicFieldSet extends React.Component {
   remove = k => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue("keys");
-    // We need at least one passenger
     if (keys.length === 2) {
       return;
     }
 
-    // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== k)
     });
@@ -22,30 +22,13 @@ class DynamicFieldSet extends React.Component {
 
   add = () => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue("keys");
     const nextKeys = keys.concat(uuid);
     uuid++;
-    // can use data-binding to set
-    // important! notify form to detect changes
     form.setFieldsValue({
       keys: nextKeys
     });
   };
-
-  // handleSubmit2 = e => {
-  //   e.preventDefault();
-  //   const outcomes = e.target.value;
-  //   console.log(outcomes);
-  //   e.stopPropagation();
-  //   // return false
-  //   // e.stopPropagation();
-  //   // this.props.form.validateFields((err, values) => {
-  //   //   if (!err) {
-  //   //     console.log("Received values of form: ", values);
-  //   //   }
-  //   // });
-  // };
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -54,7 +37,7 @@ class DynamicFieldSet extends React.Component {
     const keys = getFieldValue("keys");
     const formItems = keys.map((k) => {
       return (
-        <FormItem
+        <f.Field
           required={false}
           key={k}
         >
@@ -69,7 +52,7 @@ class DynamicFieldSet extends React.Component {
             ]
           })(
             <Input
-              name="outcomes"//{`outcomes${k}`}
+              name="outcomes"
               placeholder="outcome description"
               style={{ width: "60%", marginRight: 8 }}
             />
@@ -77,12 +60,12 @@ class DynamicFieldSet extends React.Component {
           {keys.length > 2 ? (
             <Icon
               className="dynamic-delete-button"
-              type="minus-circle-o"
+              name={"minus circle"}
               disabled={keys.length === 2}
               onClick={() => this.remove(k)}
             />
           ) : null}
-        </FormItem>
+        </f.Field>
       );
     });
     return (
@@ -90,10 +73,8 @@ class DynamicFieldSet extends React.Component {
         {formItems}
         <FormItem>
           <Button type="dashed" onClick={this.add} style={{ width: "60%" }}>
-            <Icon type="plus" /> Add outcome
+            <Icon name="plus" /> Add outcome
           </Button>
-        </FormItem>
-        <FormItem>
         </FormItem>
       </div>
     );

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import { Card } from 'antd';
+import {Grid, Image, Rail, Segment} from "semantic-ui-react";
 
 class MarketDetail extends React.Component {
 
@@ -52,17 +53,37 @@ class MarketDetail extends React.Component {
 
     render () {
         return (
-            <Card title={this.state.market.name}>
-                <p>{this.state.market.description}</p>
-                <p>{this.state.market.end_date}</p>
-            </Card>
+            <Grid centered columns={3}>
+                <Grid.Column>
+                    <Segment>
+                        <Image src='/images/wireframe/paragraph.png' />
+
+                        <Rail dividing position='left'>
+                            <Segment>Left Rail Content</Segment>
+                        </Rail>
+
+                        <Card title={this.state.market.name}>
+                            <p>{this.state.market.description}</p>
+                            <p>{this.state.market.end_date}</p>
+                        </Card>
+
+                        <Rail dividing position='right'>
+                            <Segment>Right Rail Content</Segment>
+                        </Rail>
+                    </Segment>
+                </Grid.Column>
+            </Grid>
+            // <Card title={this.state.market.name}>
+            //     <p>{this.state.market.description}</p>
+            //     <p>{this.state.market.end_date}</p>
+            // </Card>
         )
     }
 }
 
 const mapStateToProps = state => {
   return {
-    token: state.token
+    token: state.auth.token
   };
 };
 

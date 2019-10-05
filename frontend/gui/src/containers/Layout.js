@@ -1,121 +1,142 @@
-import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import { Link, withRouter} from 'react-router-dom';
-import * as actions from "../store/actions/auth";
-import { connect } from 'react-redux';
-
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+import React from "react";
+import {
+  Container,
+  Divider,
+  Dropdown,
+  Grid,
+  Header,
+  Image,
+  List,
+  Menu,
+  Segment
+} from "semantic-ui-react";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../store/actions/auth";
 
 class CustomLayout extends React.Component {
-  state = {
-    collapsed: false,
-  };
-
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
-  };
-
   render() {
+    const { authenticated } = this.props;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1">
-              <Link to="/markets/">
-                <Icon type="pie-chart" />
-                <span>Markets</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/proposals/">
-                <Icon type="desktop" />
-                <span>Proposals</span>
-              </Link>
-            </Menu.Item>
-            <SubMenu
-              key="sub1"
-              title={
-                <span>
-                  <Icon type="user" />
-                  <span>User</span>
-                </span>
-              }
-            >
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              title={
-                <span>
-                  <Icon type="team" />
-                  <span>Team</span>
-                </span>
-              }
-            >
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9">
-              <Icon type="file" />
-              <span>File</span>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header className="header">
-      <div className="logo" />
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['2']}
-        style={{ lineHeight: '64px' }}
-      >
-          {
-            this.props.isAuthenticated ?
+      <div>
+        <Menu fixed="top" inverted>
+          <Container>
+              {authenticated ? (
+                  <Link to="/">
+                      <Menu.Item header>Profile</Menu.Item>
+                  </Link>
+              ) : (<Link to="/">
+                  <Menu.Item header>Home</Menu.Item>
+              </Link>)}
+              {authenticated ? (
+                  <React.Fragment>
+                      <Link to="/proposals/">
+                          <Menu.Item header>Proposal</Menu.Item>
+                      </Link>
+                      <Link to="/markets/">
+                          <Menu.Item header>Markets</Menu.Item>
+                      </Link>
+                      <Menu.Item header onClick={() => this.props.logout()}>
+                          Logout
+                      </Menu.Item>
+                  </React.Fragment>
+              ) : (
+                  <React.Fragment>
+                      <Link to="/login">
+                          <Menu.Item header>Login</Menu.Item>
+                      </Link>
+                      <Link to="/signup">
+                          <Menu.Item header>Signup</Menu.Item>
+                      </Link>
+                  </React.Fragment>
+              )}
+          </Container>
+        </Menu>
 
-                <Menu.Item key="3" onClick={this.props.logout}>
-                    Logout
-                </Menu.Item>
+        {this.props.children}
 
-                :
+        <Segment
+          inverted
+          vertical
+          style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
+        >
+          <Container textAlign="center">
+            <Grid divided inverted stackable>
+              <Grid.Column width={3}>
+                <Header inverted as="h4" content="Group 1" />
+                <List link inverted>
+                  <List.Item as="a">Link One</List.Item>
+                  <List.Item as="a">Link Two</List.Item>
+                  <List.Item as="a">Link Three</List.Item>
+                  <List.Item as="a">Link Four</List.Item>
+                </List>
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <Header inverted as="h4" content="Group 2" />
+                <List link inverted>
+                  <List.Item as="a">Link One</List.Item>
+                  <List.Item as="a">Link Two</List.Item>
+                  <List.Item as="a">Link Three</List.Item>
+                  <List.Item as="a">Link Four</List.Item>
+                </List>
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <Header inverted as="h4" content="Group 3" />
+                <List link inverted>
+                  <List.Item as="a">Link One</List.Item>
+                  <List.Item as="a">Link Two</List.Item>
+                  <List.Item as="a">Link Three</List.Item>
+                  <List.Item as="a">Link Four</List.Item>
+                </List>
+              </Grid.Column>
+              <Grid.Column width={7}>
+                <Header inverted as="h4" content="Footer Header" />
+                <p>
+                  Extra space for a call to action inside the footer that could
+                  help re-engage users.
+                </p>
+              </Grid.Column>
+            </Grid>
 
-                <Menu.Item key="3">
-                    <Link to="/login">Login</Link>
-                </Menu.Item>
-          }
-        <Menu.Item key="1">Coming soon</Menu.Item>
-        <Menu.Item key="2">Coming soon</Menu.Item>
-        
-      </Menu>
-    </Header>
-          {/*<Header style={{ background: '#fff', padding: 0 }} />*/}
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
-              <Breadcrumb.Item><Link to="/markets/">Markets</Link></Breadcrumb.Item>
-              <Breadcrumb.Item><Link to="/proposals/">Proposals</Link></Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                {this.props.children}
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2019 Created by Alex Crim</Footer>
-        </Layout>
-      </Layout>
+            <Divider inverted section />
+            <Image centered size="mini" src="/logo.png" />
+            <List horizontal inverted divided link size="small">
+              <List.Item as="a" href="#">
+                Site Map
+              </List.Item>
+              <List.Item as="a" href="#">
+                Contact Us
+              </List.Item>
+              <List.Item as="a" href="#">
+                Terms and Conditions
+              </List.Item>
+              <List.Item as="a" href="#">
+                Privacy Policy
+              </List.Item>
+            </List>
+          </Container>
+        </Segment>
+      </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        logout: () => dispatch(actions.logout())
-    }
+const mapStateToProps = state => {
+  return {
+    authenticated: state.auth.token !== null
+  };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(CustomLayout));
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout())
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CustomLayout)
+);
 

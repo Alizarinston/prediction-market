@@ -1,40 +1,38 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import { DatePicker } from 'antd';
-import moment from 'moment';
 import axios from 'axios';
 import WrappedDynamicFieldSet from "./DynamicForm";
+import { Button, Checkbox, Form } from 'semantic-ui-react'
+import {
+  DatesRangeInput
+} from 'semantic-ui-calendar-react';
 
-const { RangePicker } = DatePicker;
 
 class CustomForm extends React.Component {
 
     state = {
-        startD: null,
-        endD: null,
-        anon: false
+        anon: false,
+        datesRange: ''
     };
 
-    onChange = (e) => {
+    onChange = (event, data) => {
         this.setState({
-            anon: e.target.checked
+            anon: data.checked
         });
     };
 
-    handleChangeDebut = (range) => {
-        this.setState({
-            startD: range[0].format('YYYY-MM-DD'),
-            endD: range[1].format('YYYY-MM-DD')
-        });
-    };
+    handleChange = (event, {name, value}) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value });
+    }
+  };
 
     handleFormSubmit = (event, requestType) => {
         event.preventDefault();
         const title = event.target.elements.title.value;
         const description = event.target.elements.description.value;
         const anon = this.state.anon;
-        const start_date = this.state.startD;
-        const end_date = this.state.endD;
+        const start_date = this.state.datesRange.substring(0,10);
+        const end_date = this.state.datesRange.substring(13,23);
 
         const out = event.target.elements.outcomes;
         const outcomes = [];
@@ -44,6 +42,8 @@ class CustomForm extends React.Component {
             }
             outcomes.push({"description": out[i].value});
         }
+
+        console.log(title, description, anon, outcomes, start_date, end_date)
 
         switch (requestType) {
             case 'post':
@@ -65,34 +65,44 @@ class CustomForm extends React.Component {
     render() {
         return (
           <div>
-            <Form onSubmit={(event) => this.handleFormSubmit(
+              <Form onSubmit={(event) => this.handleFormSubmit(
                 event,
                 this.props.requestType)}>
-              <Form.Item label="Title">
-                <Input name="title" placeholder="Put a title here" />
-              </Form.Item>
-              <Form.Item label="Date">
-              <RangePicker
-          ranges={{
-            Today: [moment(), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-          }}
-          onChange={this.handleChangeDebut}
-        />
-              </Form.Item>
-              <Form.Item label="Outcomes">
-                  <WrappedDynamicFieldSet />
-              </Form.Item>
-              <Form.Item label="Description">
-                <Input name="description" placeholder="Enter some content" />
-              </Form.Item>
-              <Checkbox onChange={this.onChange} label="Anon">
-                Anon
-              </Checkbox>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
-              </Form.Item>
-            </Form>
+
+                <Form.Field>
+                  <label>Title</label>
+                  <input name="title" placeholder='Put a title here' />
+                </Form.Field>
+
+                <Form.Field>
+                    <label>Date</label>
+                    <DatesRangeInput
+                      dateFormat={"YYYY-MM-DD"}
+                      name="datesRange"
+                      placeholder="From - To"
+                      value={this.state.datesRange}
+                      iconPosition="left"
+                      onChange={this.handleChange}
+                    />
+                </Form.Field>
+
+                <Form.Field>
+                  <label>Description</label>
+                  <input name="description" placeholder='Enter some content' />
+                </Form.Field>
+
+                  <Form.Field>
+                      <label>Outcomes</label>
+                      <WrappedDynamicFieldSet />
+                  </Form.Field>
+
+                <Form.Field>
+                  <Checkbox toggle onChange={this.onChange} label="Anon" />
+                </Form.Field>
+
+                <Button type="primary" htmltype="submit">{this.props.btnText}</Button>
+
+              </Form>
           </div>
         );
     }

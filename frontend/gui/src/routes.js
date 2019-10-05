@@ -8,17 +8,20 @@ import ProposalDetail from "./containers/ProposalDetailView";
 import ProposalCreate from "./containers/ProposalCreateView";
 import Login from './containers/Login';
 import Signup from './containers/Signup';
+import HomepageLayout from './containers/Home';
+import Hoc from './hoc/hoc';
 
 const BaseRouter = () => (
-    <div>
-        <Route exact path='/markets/' component={MarketList}/>{" "}
+    <Hoc>
+        <Route exact path='/markets/' component={MarketList}/>
         <Route exact path='/markets/:marketID' component={MarketDetail}/>
-        <Route exact path='/proposals/' component={ProposalList}/>{" "}
-        <Route exact path='/proposals/:proposalID' component={ProposalDetail}/>{" "}
+        <Route exact path='/proposals/' component={ProposalList}/>
+        <Route exact path='/proposals/:proposalID' component={ProposalDetail}/>
         <Route exact path='/proposal/create/' component={ProposalCreate}/>
-        <Route exact path='/login/' component={Login}/>{" "}
-        <Route exact path='/signup/' component={Signup}/>{" "}
-    </div>
+        <Route path='/login' component={Login}/>
+        <Route path='/signup' component={Signup}/>
+        <Route exact path='/' component={HomepageLayout}/>
+    </Hoc>
 );
 
 export default BaseRouter;

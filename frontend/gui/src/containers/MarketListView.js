@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {createRef} from 'react';
 import axios from 'axios';
 // import { connect } from 'react-redux';
-
 import Markets from '../components/Market';
+import {Grid, Rail, Sticky, Menu, Dropdown, Ref} from "semantic-ui-react";
+
 
 class MarketList extends React.Component {
+    contextRef = createRef();
 
     state = {
         markets: []
@@ -47,7 +49,40 @@ class MarketList extends React.Component {
 
     render () {
         return (
-            <Markets data={this.state.markets}/>
+            <div>
+                <br/><br/>
+                <Grid centered columns={2}>
+                    <Ref innerRef={this.contextRef}>
+                        <Grid.Column>
+                            <Sticky context={this.contextRef} offset={100}>
+                                <Rail dividing position='left'>
+
+                                    <Menu vertical>
+                                        <Menu.Item>Categories</Menu.Item>
+                                        <Dropdown text='Messages' pointing='left' className='link item'>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item>Inbox</Dropdown.Item>
+                                                <Dropdown.Item>Starred</Dropdown.Item>
+                                                <Dropdown.Item>Sent Mail</Dropdown.Item>
+                                                <Dropdown.Item>Drafts (143)</Dropdown.Item>
+                                                <Dropdown.Divider />
+                                                <Dropdown.Item>Spam (1009)</Dropdown.Item>
+                                                <Dropdown.Item>Trash</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Menu.Item>Browse</Menu.Item>
+                                        <Menu.Item>Help</Menu.Item>
+                                    </Menu>
+
+                                </Rail>
+                            </Sticky>
+
+                            <Markets data={this.state.markets}/>
+
+                        </Grid.Column>
+                    </Ref>
+                </Grid>
+            </div>
         )
     }
 }
