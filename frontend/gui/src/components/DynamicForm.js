@@ -54,7 +54,7 @@ class DynamicFieldSet extends React.Component {
             <Input
               name="outcomes"
               placeholder="outcome description"
-              style={{ width: "60%", marginRight: 8 }}
+              style={{ width: "90%", marginRight: 8 }}
             />
           )}
           {keys.length > 2 ? (

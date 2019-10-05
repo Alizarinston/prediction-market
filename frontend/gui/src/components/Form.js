@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import WrappedDynamicFieldSet from "./DynamicForm";
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Message, TextArea, Segment, Grid } from 'semantic-ui-react'
 import {
   DatesRangeInput
 } from 'semantic-ui-calendar-react';
@@ -11,7 +11,8 @@ class CustomForm extends React.Component {
 
     state = {
         anon: false,
-        datesRange: ''
+        datesRange: '',
+        err: false,
     };
 
     onChange = (event, data) => {
@@ -43,7 +44,7 @@ class CustomForm extends React.Component {
             outcomes.push({"description": out[i].value});
         }
 
-        console.log(title, description, anon, outcomes, start_date, end_date)
+        // console.log(title, description, anon, outcomes, start_date, end_date);
 
         switch (requestType) {
             case 'post':
@@ -57,53 +58,73 @@ class CustomForm extends React.Component {
                     description: description
                 })
                     .then(res => console.log(res))
-                    .catch(error => console.error(error));
+                    .catch(error =>
+                        console.error(error),
+                        this.setState({
+                            err: true
+                        }));
         }
 
     };
 
     render() {
         return (
-          <div>
-              <Form onSubmit={(event) => this.handleFormSubmit(
-                event,
-                this.props.requestType)}>
 
-                <Form.Field>
-                  <label>Title</label>
-                  <input name="title" placeholder='Put a title here' />
-                </Form.Field>
+            <Grid columns={3} divided>
+                <Grid.Column/>
+                    <Grid.Column>
 
-                <Form.Field>
-                    <label>Date</label>
-                    <DatesRangeInput
-                      dateFormat={"YYYY-MM-DD"}
-                      name="datesRange"
-                      placeholder="From - To"
-                      value={this.state.datesRange}
-                      iconPosition="left"
-                      onChange={this.handleChange}
-                    />
-                </Form.Field>
+                        <Segment>
+                          <Form error={this.state.err} onSubmit={(event) => this.handleFormSubmit(
+                            event,
+                            this.props.requestType)}>
 
-                <Form.Field>
-                  <label>Description</label>
-                  <input name="description" placeholder='Enter some content' />
-                </Form.Field>
+                            <Form.Field>
+                              <label>Title</label>
+                              <input name="title" placeholder='Put a title here' />
+                            </Form.Field>
 
-                  <Form.Field>
-                      <label>Outcomes</label>
-                      <WrappedDynamicFieldSet />
-                  </Form.Field>
+                            <Form.Field>
+                                <label>Date</label>
+                                <DatesRangeInput
+                                  dateFormat={"YYYY-MM-DD"}
+                                  name="datesRange"
+                                  placeholder="From - To"
+                                  value={this.state.datesRange}
+                                  iconPosition="left"
+                                  onChange={this.handleChange}
+                                />
+                            </Form.Field>
 
-                <Form.Field>
-                  <Checkbox toggle onChange={this.onChange} label="Anon" />
-                </Form.Field>
+                            <Form.Field>
+                              <label>Description</label>
+                              <TextArea name="description" placeholder='Enter some content' style={{ minHeight: 100 }} />
+                            </Form.Field>
 
-                <Button type="primary" htmltype="submit">{this.props.btnText}</Button>
+                              <Form.Field>
+                                  <label>Outcomes</label>
+                                  <WrappedDynamicFieldSet />
+                              </Form.Field>
 
-              </Form>
-          </div>
+                            <Form.Field>
+                              <Checkbox toggle onChange={this.onChange} label="Anon" />
+                            </Form.Field>
+
+                            <Button type="primary" htmltype="submit">{this.props.btnText}</Button>
+
+                            <Message
+                                error
+                                header='All fields required!'
+                                content='You should fill in all required fields.'
+                            />
+
+                          </Form>
+                        </Segment>
+
+                    </Grid.Column>
+                <Grid.Column/>
+            </Grid>
+
         );
     }
 }
