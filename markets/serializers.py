@@ -14,7 +14,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
 class MarketListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
-        fields = 'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved'
+        fields = 'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'description'
 
 
 class MarketDetailSerializer(serializers.ModelSerializer):
