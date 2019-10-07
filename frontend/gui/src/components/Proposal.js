@@ -21,9 +21,9 @@ const Proposals = (props) => {
             {props.data.map(item => (
                 <div>
                     <br/><br/>
-                    <Segment.Group stacked key={item.id} piled raised>
+                    <Segment.Group stacked key={item.id} piled raised size={"large"}>
 
-                        <Segment padded>
+                        <Segment padded stacked>
 
                             <Label as='a' color='red' tag attached={"top right"}>
                                 <Icon name={"futbol"}/>
@@ -33,7 +33,6 @@ const Proposals = (props) => {
                             {
                                 <a href={`/markets/${item.id}`}>
                                     <Header as='h2' textAlign={"center"}>
-                                        {/*<Image floated={"left"} circular src='https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' />*/}
                                         {item.name}
                                     </Header>
                                 </a>
@@ -49,9 +48,9 @@ const Proposals = (props) => {
                             </Container>
                         </Segment>
 
-                        <Segment>
-                            <Label attached='bottom' ribbon>
-                                <Statistic.Group size={"mini"}>
+                        <Segment basic raised>
+                            <Label attached='bottom' ribbon color={checkColor(new Date(Date.now()).getDate(), new Date(item.end_date).getDate())}>
+                                <Statistic.Group>
 
                                     <Statistic>
                                         <Statistic.Value>
@@ -74,11 +73,12 @@ const Proposals = (props) => {
                                 </Statistic.Group>
                             </Label>
 
+                            <Progress percent={new Date(Date.now()).getDate() * 100 / new Date(item.end_date).getDate()}
+                                      attached={"bottom"}
+                                      color={checkColor(new Date(Date.now()).getDate(), new Date(item.end_date).getDate())}/>
+
                         </Segment>
 
-                        <Progress percent={new Date(Date.now()).getDate() * 100 / new Date(item.end_date).getDate()}
-                                  attached={"bottom"}
-                                  color={checkColor(new Date(Date.now()).getDate(), new Date(item.end_date).getDate())}/>
 
                         <Rail dividing position='right'>
                             <Segment>Right Rail Content</Segment>

@@ -52,7 +52,6 @@ class CustomForm extends React.Component {
                     name: title,
                     start_date: start_date,
                     end_date: end_date,
-                    supply: 0,
                     anon: anon,
                     outcomes: outcomes,
                     description: description
