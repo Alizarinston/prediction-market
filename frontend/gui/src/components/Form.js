@@ -13,6 +13,7 @@ class CustomForm extends React.Component {
         anon: false,
         datesRange: '',
         err: false,
+        success: false,
         stateValue: null
     };
 
@@ -50,6 +51,15 @@ class CustomForm extends React.Component {
 
         // console.log(title, description, anon, outcomes, start_date, end_date, category);
 
+        if (title === '') {
+            this.setState({err: true});
+            return false
+        } else {
+            this.setState({err: false, success: true});
+        }
+
+        // need much more
+
         switch (requestType) {
             case 'post':
                 return axios.post('http://127.0.0.1:8000/api/markets/', {
@@ -63,10 +73,7 @@ class CustomForm extends React.Component {
                 })
                     .then(res => console.log(res))
                     .catch(error =>
-                        console.error(error),
-                        this.setState({
-                            err: true
-                        }));
+                        console.error(error));
         }
 
     };
@@ -85,7 +92,7 @@ class CustomForm extends React.Component {
                     <Grid.Column>
 
                         <Segment>
-                          <Form error={this.state.err} onSubmit={(event) => this.handleFormSubmit(
+                          <Form error={this.state.err} success={this.state.success} onSubmit={(event) => this.handleFormSubmit(
                             event,
                             this.props.requestType)}>
 
@@ -130,6 +137,12 @@ class CustomForm extends React.Component {
                                 error
                                 header='All fields required!'
                                 content='You should fill in all required fields.'
+                            />
+
+                            <Message
+                                success
+                                header='Your proposal were created successful'
+                                content='You can now see it in proposal list'
                             />
 
                           </Form>
