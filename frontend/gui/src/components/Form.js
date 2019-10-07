@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import WrappedDynamicFieldSet from "./DynamicForm";
-import { Button, Checkbox, Form, Message, TextArea, Segment, Grid } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Message, TextArea, Segment, Grid, Select } from 'semantic-ui-react'
 import {
   DatesRangeInput
 } from 'semantic-ui-calendar-react';
@@ -13,7 +13,10 @@ class CustomForm extends React.Component {
         anon: false,
         datesRange: '',
         err: false,
+        stateValue: null
     };
+
+    handleSelectChange=(e,{value})=>this.setState({stateValue:value});
 
     onChange = (event, data) => {
         this.setState({
@@ -31,6 +34,7 @@ class CustomForm extends React.Component {
         event.preventDefault();
         const title = event.target.elements.title.value;
         const description = event.target.elements.description.value;
+        const category = this.state.stateValue;
         const anon = this.state.anon;
         const start_date = this.state.datesRange.substring(0,10);
         const end_date = this.state.datesRange.substring(13,23);
@@ -44,7 +48,7 @@ class CustomForm extends React.Component {
             outcomes.push({"description": out[i].value});
         }
 
-        // console.log(title, description, anon, outcomes, start_date, end_date);
+        // console.log(title, description, anon, outcomes, start_date, end_date, category);
 
         switch (requestType) {
             case 'post':
@@ -54,6 +58,7 @@ class CustomForm extends React.Component {
                     end_date: end_date,
                     anon: anon,
                     outcomes: outcomes,
+                    categories: category,
                     description: description
                 })
                     .then(res => console.log(res))
@@ -67,6 +72,12 @@ class CustomForm extends React.Component {
     };
 
     render() {
+        const categoryOptions = [
+            { key: 'F', value: 'Finances', text: 'Finances' },
+            { key: 'P', value: 'Politics', text: 'Politics' },
+            { key: 'S', value: 'Sports', text: 'Sports' },
+            { key: 'O', value: 'Other', text: 'Other' },
+        ];
         return (
 
             <Grid columns={3} divided>
@@ -107,6 +118,10 @@ class CustomForm extends React.Component {
 
                             <Form.Field>
                               <Checkbox toggle onChange={this.onChange} label="Anon" />
+                            </Form.Field>
+
+                            <Form.Field>
+                                <Select placeholder='Select category' options={categoryOptions} onChange={this.handleSelectChange}/>
                             </Form.Field>
 
                             <Button type="primary" htmltype="submit">{this.props.btnText}</Button>

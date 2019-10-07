@@ -66,7 +66,8 @@
             "end_date": "2019-10-01",
             "proposal": false,
             "outcomes": [1, 2, 3, 4],
-            "description": "Market description."
+            "description": "Market description.",
+            "categories": "Other"
         }
     }
 ]

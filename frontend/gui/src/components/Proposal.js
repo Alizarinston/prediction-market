@@ -13,6 +13,30 @@ const Proposals = (props) => {
         }
     }
 
+    function category(itemCategory) {
+        if (itemCategory === 'Sports') {
+            return ({
+                icon: "futbol",
+                color: 'green'
+            })
+        } else if (itemCategory === 'Politics') {
+            return ({
+                icon: "handshake",
+                color: 'blue'
+            })
+        } else if (itemCategory === 'Finances') {
+            return ({
+                icon: "dollar",
+                color: 'red'
+            })
+        } else if (itemCategory === 'Other') {
+            return ({
+                icon: "hourglass",
+                color: 'grey'
+            })
+        }
+    }
+
 
     return (
 
@@ -21,13 +45,13 @@ const Proposals = (props) => {
             {props.data.map(item => (
                 <div>
                     <br/><br/>
-                    <Segment.Group stacked key={item.id} piled raised size={"large"}>
+                    <Segment.Group stacked key={item.id} piled raised>
 
-                        <Segment padded stacked>
+                        <Segment padded stacked size={"huge"}>
 
-                            <Label as='a' color='red' tag attached={"top right"}>
-                                <Icon name={"futbol"}/>
-                                Sport
+                            <Label as='a' color={category(item.categories)['color']} tag attached={"top right"} size={"small"}>
+                                <Icon name={category(item.categories)['icon']}/>
+                                {item.categories}
                             </Label>
 
                             {
@@ -40,7 +64,7 @@ const Proposals = (props) => {
 
                         </Segment>
 
-                        <Segment padded size={"huge"}>
+                        <Segment padded>
                             <Container text textAlign={"center"}>
                                 <p>
                                     {item.description}

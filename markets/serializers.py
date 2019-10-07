@@ -14,7 +14,10 @@ class OutcomeSerializer(serializers.ModelSerializer):
 class MarketListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
-        fields = 'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'description'
+        fields = (
+            'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'description',
+            'categories'
+        )
 
 
 class MarketDetailSerializer(serializers.ModelSerializer):
@@ -25,7 +28,7 @@ class MarketDetailSerializer(serializers.ModelSerializer):
 
         fields = (
             'id', 'created', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'outcomes',
-            'description'
+            'description', 'categories'
         )
 
         read_only_fields = 'created', 'resolved'
