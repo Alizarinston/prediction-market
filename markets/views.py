@@ -1,31 +1,34 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions
+from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import action
 from rest_framework.views import Response
-from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
 from .models import Outcome, Market, Asset, Order
 from .permissions import UpdateAndIsAdmin
-from .serializers import MarketListSerializer, MarketDetailSerializer, AssetSerializer, OrderSerializer
+from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
 
 
 class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
-    serializer_class = MarketDetailSerializer
+    serializer_class = MarketSerializer
+    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
 
-    serializer_action_classes = {
-        'list': MarketListSerializer
-    }
+    def get_queryset(self):
+        """ Filter queryset by url parameters """
 
-    # permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+        filters = {}
+        proposal = self.request.query_params.get('proposal')
+        category = self.request.query_params.get('category')
 
-    def get_serializer_class(self):
-        try:
-            return self.serializer_action_classes[self.action]
+        if proposal is not None:
+            filters['proposal'] = True if proposal == 'true' else False
 
-        except (KeyError, AttributeError):
-            return super().get_serializer_class()
+        if category is not None:
+            filters['category'] = category
+
+        return Market.objects.filter(**filters)
 
     @action(detail=True, methods=['patch'])
     def resolve(self, request, pk=None):
@@ -33,46 +36,25 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         instance = self.get_object()
 
-        if instance.resolved or instance.proposal:
-            return Response(data={'detail': 'Wrong pk.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if datetime.now().date() < instance.end_date:
-            return Response(data={'detail': 'Wrong pk.'}, status=status.HTTP_400_BAD_REQUEST)
+        if instance.resolved or instance.proposal or datetime.now().date() < instance.end_date:
+            raise ValidationError(detail='Wrong pk.')
 
         outcome_pk = request.data.get('outcome_pk')
 
         if outcome_pk is None:
-            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         try:
             outcome = Outcome.objects.get(pk=outcome_pk)
 
         except Outcome.DoesNotExist:
-            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         if outcome not in instance.outcomes.all():
-            return Response(data={'detail': 'Wrong outcome_pk.'}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         instance.resolve(outcome)
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-
-
-class MarketFilteredList(ListAPIView):
-    queryset = Market.objects.all()
-    serializer_class = MarketListSerializer
-    # permission_classes = permissions.IsAuthenticated,
-
-    def get_queryset(self):
-        proposal = self.kwargs['proposal']
-
-        if proposal == 'true':
-            proposal = True
-
-        else:
-            proposal = False
-
-        return Market.objects.filter(proposal=proposal)
+        return Response(self.get_serializer(instance).data)
 
 
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):

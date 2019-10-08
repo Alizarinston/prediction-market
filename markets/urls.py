@@ -1,17 +1,10 @@
-from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework.routers import SimpleRouter
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
-router = SimpleRouter()
-router.register('markets', views.MarketViewSet)
-router.register('assets', views.AssetViewSet)
-router.register('orders', views.OrderViewSet)
+router = DefaultRouter()
+router.register(r'markets', views.MarketViewSet)
+router.register(r'assets', views.AssetViewSet)
+router.register(r'orders', views.OrderViewSet)
 
-urlpatterns = [
-    path('markets/proposal/<str:proposal>/', views.MarketFilteredList.as_view()),
-]
-
-urlpatterns += router.urls
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = router.urls

@@ -11,16 +11,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
         read_only_fields = 'outstanding', 'probability', 'is_winner'
 
 
-class MarketListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Market
-        fields = (
-            'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'description',
-            'categories', 'outcomes'
-        )
-
-
-class MarketDetailSerializer(serializers.ModelSerializer):
+class MarketSerializer(serializers.ModelSerializer):
     outcomes = OutcomeSerializer(many=True)
 
     class Meta:
@@ -28,16 +19,13 @@ class MarketDetailSerializer(serializers.ModelSerializer):
 
         fields = (
             'id', 'created', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'outcomes',
-            'description', 'categories'
+            'category', 'description'
         )
 
         read_only_fields = 'created', 'resolved'
 
-    def validate(self, attrs):
+    def validate(self, attrs) -> dict:
         # validate start_date and end_date
-
-        if 'start_date' not in attrs or 'end_date' not in attrs:
-            raise ValidationError
 
         if attrs['start_date'] >= attrs['end_date']:
             raise ValidationError

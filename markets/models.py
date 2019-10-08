@@ -1,11 +1,13 @@
 from django.db import models
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
-from model_utils import Choices
 
 from config import constants
 from users.models import MarketUser
 from . import exceptions
 from .helpers import cost_function, probabilities
+
+
+CATEGORIES = ('FIN', 'Finances'), ('POL', 'Politics'), ('SPO', 'Sports'), ('OTH', 'Other')
 
 
 class TimeStamped(models.Model):
@@ -44,8 +46,6 @@ class Outcome(models.Model):
 class Market(TimeStamped):
     """ A model that represents a prediction of an event occurring in future """
 
-    CATEGORIES = Choices('Finances', 'Politics', 'Sports', 'Other')
-
     name = models.CharField(
         max_length=constants.market_name_max_length,
         validators=[MinLengthValidator(constants.market_name_min_length)]
@@ -58,7 +58,13 @@ class Market(TimeStamped):
     proposal = models.BooleanField(default=True)
     resolved = models.BooleanField(default=False)
     outcomes = models.ManyToManyField(Outcome, related_name='market')
-    categories = models.CharField(choices=CATEGORIES, max_length=100, default=CATEGORIES.Other)
+
+    category = models.CharField(
+        choices=CATEGORIES,
+        default=CATEGORIES[3][0],
+        max_length=constants.category_length,
+        validators=[MinLengthValidator(constants.category_length)]
+    )
 
     description = models.CharField(
         max_length=constants.market_description_max_length,
