@@ -16,7 +16,7 @@ class MarketListSerializer(serializers.ModelSerializer):
         model = Market
         fields = (
             'id', 'name', 'start_date', 'end_date', 'supply', 'anon', 'proposal', 'resolved', 'description',
-            'categories'
+            'categories', 'outcomes'
         )
 
 

@@ -3,7 +3,8 @@ import axios from 'axios';
 
 import Proposals from '../components/Proposal';
 import { Link } from 'react-router-dom';
-import {Grid, Rail, Sticky, Menu, Dropdown, Ref} from "semantic-ui-react";
+import {Grid, Rail, Sticky, Menu, Dropdown, Ref, Button, Modal } from "semantic-ui-react";
+import CustomForm from '../components/Form';
 
 class ProposalList extends React.Component {
 
@@ -52,10 +53,22 @@ class ProposalList extends React.Component {
                                 </Rail>
                             </Sticky>
 
+                            <br/>
+
+                            <Modal size={"small"} trigger={<Button>Test</Button>}>
+                                    <CustomForm
+                                        requestType="post"
+                                        btnText="Create"/>
+                            </Modal>
+
+                            <Link to="/proposal/create/">
+                                <Button>
+                                    Create a proposal
+                                </Button>
+                            </Link>
+
                             <Proposals data={this.state.proposals}/>
 
-                            <br/>
-                            <h2><Link to="/proposal/create/">Create a proposal</Link></h2>
                         </Grid.Column>
                     </Ref>
                 </Grid>

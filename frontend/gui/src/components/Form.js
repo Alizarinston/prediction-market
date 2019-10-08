@@ -86,10 +86,10 @@ class CustomForm extends React.Component {
             { key: 'O', value: 'Other', text: 'Other' },
         ];
         return (
-
+/*
             <Grid columns={3} divided>
                 <Grid.Column/>
-                    <Grid.Column>
+                    <Grid.Column>*/
 
                         <Segment>
                           <Form error={this.state.err} success={this.state.success} onSubmit={(event) => this.handleFormSubmit(
@@ -114,7 +114,7 @@ class CustomForm extends React.Component {
                             </Form.Field>
 
                             <Form.Field>
-                              <label>Description</label>
+                              <label>Description / Resolution source</label>
                               <TextArea name="description" placeholder='Enter some content' style={{ minHeight: 100 }} />
                             </Form.Field>
 
@@ -148,9 +148,9 @@ class CustomForm extends React.Component {
                           </Form>
                         </Segment>
 
-                    </Grid.Column>
+                    /*</Grid.Column>
                 <Grid.Column/>
-            </Grid>
+            </Grid>*/
 
         );
     }
