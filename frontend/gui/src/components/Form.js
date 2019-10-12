@@ -49,7 +49,7 @@ class CustomForm extends React.Component {
             outcomes.push({"description": out[i].value});
         }
 
-        // console.log(title, description, anon, outcomes, start_date, end_date, category);
+        console.log(title, description, anon, outcomes, start_date, end_date, category);
 
         if (title === '') {
             this.setState({err: true});
@@ -68,7 +68,7 @@ class CustomForm extends React.Component {
                     end_date: end_date,
                     anon: anon,
                     outcomes: outcomes,
-                    categories: category,
+                    category: category,
                     description: description
                 })
                     .then(res => console.log(res))
@@ -80,10 +80,10 @@ class CustomForm extends React.Component {
 
     render() {
         const categoryOptions = [
-            { key: 'F', value: 'Finances', text: 'Finances' },
-            { key: 'P', value: 'Politics', text: 'Politics' },
-            { key: 'S', value: 'Sports', text: 'Sports' },
-            { key: 'O', value: 'Other', text: 'Other' },
+            { key: 'FIN', value: 'FIN', text: 'Finances' },
+            { key: 'POL', value: 'POL', text: 'Politics' },
+            { key: 'SPO', value: 'SPO', text: 'Sports' },
+            { key: 'OTH', value: 'OTH', text: 'Other' },
         ];
         return (
 /*
