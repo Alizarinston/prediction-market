@@ -28,7 +28,7 @@ class MarketViewSet(viewsets.ModelViewSet):
         if category is not None:
             filters['category'] = category
 
-        return Market.objects.filter(**filters)
+        return Market.objects.filter(**filters).order_by('-created')
 
     @action(detail=True, methods=['patch'])
     def resolve(self, request, pk=None):
@@ -58,12 +58,12 @@ class MarketViewSet(viewsets.ModelViewSet):
 
 
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Asset.objects.all()
+    queryset = Asset.objects.order_by('id')
     serializer_class = AssetSerializer
     permission_classes = permissions.IsAuthenticated,
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.order_by('-created')
     serializer_class = OrderSerializer
     permission_classes = permissions.IsAuthenticated,

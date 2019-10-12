@@ -27,14 +27,14 @@ class ViewSetsTestCase(APITestCase):
         force_authenticate(request, self.user)
         response = MarketViewSet.as_view(actions={'get': 'list'})(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]['name'], data['market']['name'])
-        self.assertEqual(response.data[0]['proposal'], False)
+        self.assertEqual(response.data['results'][0]['name'], data['market']['name'])
+        self.assertEqual(response.data['results'][0]['proposal'], False)
 
         request = self.factory.get('api/markets/?proposal=true')
         force_authenticate(request, self.user)
         response = MarketViewSet.as_view(actions={'get': 'list'})(request)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(not len(response.data))
+        self.assertTrue(not len(response.data['results']))
 
     def test_market_retrieve(self):
         request = self.factory.get('api/markets/{}/'.format(self.market.pk))

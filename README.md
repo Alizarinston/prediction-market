@@ -18,6 +18,23 @@ Simple prediction market on django and django-rest-framework.
 * `api/assets/`: provides read only actions: `list()` and `retrieve()`.
 * `api/orders/`: provides read only actions: `list()` and `retrieve()`.
 
+### Pagination
+
+Default pagination structure:
+```json
+{
+    "count": "results length",
+    "next": "next page url",
+    "previous": "previous page url",
+    "results": ["result0", "result1", "..."]
+}
+```
+
+* page max size: 50.
+* ordering: from newest to oldest.
+
+### Filters
+
 Markets filter parameters: `proposal`, `category`.
 
 For example, filter markets by category `Other` and proposal `True`:
