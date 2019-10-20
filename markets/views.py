@@ -13,7 +13,7 @@ from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
 class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+    # permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
 
     def get_queryset(self):
         """ Filter queryset by url parameters """
@@ -60,7 +60,7 @@ class MarketViewSet(viewsets.ModelViewSet):
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Asset.objects.order_by('id')
     serializer_class = AssetSerializer
-    permission_classes = permissions.IsAuthenticated,
+    # permission_classes = permissions.IsAuthenticated,
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
