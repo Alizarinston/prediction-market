@@ -72,8 +72,8 @@ class OrderSerializer(serializers.ModelSerializer):
         try:
             instance.populate(outcome)
 
-        except MarketBaseError:
-            raise ValidationError({'detail': 'Order population error.'})
+        except MarketBaseError as e:
+            raise ValidationError({'detail': e.msg})
 
         instance.save()
         return instance

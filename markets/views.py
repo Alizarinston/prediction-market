@@ -37,21 +37,21 @@ class MarketViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
 
         if instance.resolved or instance.proposal or datetime.now().date() < instance.end_date:
-            raise ValidationError(detail='Wrong pk.')
+            raise ValidationError({'detail': 'Wrong pk.'})
 
         outcome_pk = request.data.get('outcome_pk')
 
         if outcome_pk is None:
-            raise ValidationError(detail='Wrong outcome_pk.')
+            raise ValidationError({'detail': 'Wrong outcome_pk.'})
 
         try:
             outcome = Outcome.objects.get(pk=outcome_pk)
 
         except Outcome.DoesNotExist:
-            raise ValidationError(detail='Wrong outcome_pk.')
+            raise ValidationError({'detail': 'Wrong outcome_pk.'})
 
         if outcome not in instance.outcomes.all():
-            raise ValidationError(detail='Wrong outcome_pk.')
+            raise ValidationError({'detail': 'Wrong outcome_pk.'})
 
         instance.resolve(outcome)
         return Response(self.get_serializer(instance).data)
