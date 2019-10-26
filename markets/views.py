@@ -67,4 +67,3 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.order_by('-created')
     serializer_class = OrderSerializer
     permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
-
