@@ -41,7 +41,7 @@ class MarketSerializer(serializers.ModelSerializer):
                 validated_data.pop(key)
 
         market = Market.objects.create(**validated_data)
-        probability = 100 / len(outcomes)
+        probability = 1 / len(outcomes)
 
         for outcome_data in outcomes:
             outcome_data['probability'] = probability
