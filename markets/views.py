@@ -3,6 +3,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import action
 from rest_framework.views import Response
 
+from django.utils.translation import ugettext_lazy as _
+
 from datetime import datetime
 
 from .models import Outcome, Market, Asset, Order
@@ -37,21 +39,21 @@ class MarketViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
 
         if instance.resolved or instance.proposal or datetime.now().date() < instance.end_date:
-            raise ValidationError({'detail': 'Wrong pk.'})
+            raise ValidationError({'id': _('Invalid input.')})
 
-        outcome_pk = request.data.get('outcome_pk')
+        outcome_pk = request.data.get('outcome_pk', None)
 
         if outcome_pk is None:
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError({'outcome_pk': _('Invalid input.')})
 
         try:
             outcome = Outcome.objects.get(pk=outcome_pk)
 
         except Outcome.DoesNotExist:
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError({'outcome_pk': _('Invalid input.')})
 
         if outcome not in instance.outcomes.all():
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError({'outcome_pk': _('Invalid input.')})
 
         instance.resolve(outcome)
         return Response(self.get_serializer(instance).data)

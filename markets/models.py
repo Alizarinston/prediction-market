@@ -110,7 +110,7 @@ class Market(TimeStamped):
 
 
 class Asset(models.Model):
-    """ User`s asset model. The total number of purchased outcome of a particular user """
+    """ The total number of purchased outcome """
 
     amount = models.PositiveSmallIntegerField(default=0)
     closed = models.BooleanField(default=False)

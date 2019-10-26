@@ -1,6 +1,5 @@
 *.log
 run_*.py
-secret.json
 
 # dependencies
 /node_modules
