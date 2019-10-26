@@ -1,8 +1,9 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import action
-from rest_framework.views import Response
+from rest_framework.views import APIView, Response
 
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from datetime import datetime
@@ -10,6 +11,18 @@ from datetime import datetime
 from .models import Outcome, Market, Order
 from .permissions import UpdateAndIsAdmin
 from .serializers import MarketSerializer, OrderSerializer
+
+
+class Settings(APIView):
+    """ Server settings view """
+
+    @staticmethod
+    def get(_request):
+        return Response({
+            'version': settings.API_VERSION,
+            'lang': settings.LANGUAGE_CODE,
+            'languages': [language[0] for language in settings.LANGUAGES]
+        })
 
 
 class MarketViewSet(viewsets.ModelViewSet):
@@ -63,3 +76,25 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.order_by('-created')
     serializer_class = OrderSerializer
     permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+
+    def get_queryset(self):
+        """ Filter queryset by url parameters """
+
+        filters = {}
+        user = self.request.query_params.get('user')
+        order_type = self.request.query_params.get('type')
+
+        if user is not None:
+            filters['user__pk'] = user
+
+        if order_type is not None:
+            filters['order_type'] = True if order_type == 'sell' else False
+
+        return Order.objects.filter(**filters).order_by('-created')
+
+    @action(methods=['GET'], detail=False, url_path=r'asset/(?P<outcome_pk>[\d]+)')
+    def asset(self, _request, outcome_pk):
+        """ Get outcome`s asset """
+
+        outcome = generics.get_object_or_404(Outcome, pk=outcome_pk)
+        return Response({'asset': Order.calculate_asset(outcome)})
