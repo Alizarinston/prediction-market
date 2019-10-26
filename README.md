@@ -10,8 +10,8 @@ Simple prediction market on django and django-rest-framework.
 - Run migrations: `python manage.py migrate`;
 - Populate database: `python manage.py loaddata data.json`;
 - Login with default admin credentials: `admin/admin`;
-- If you want to use custom config set `MARKET_CONF` env variable to your config name,
-config should be in `config` folder, otherwise `default.ini` config will be user.
+- If you want to use custom config set `MARKET_CONF` environment variable to your config name,
+config should be in the `config` folder, otherwise `default.ini` will be used.
 
 
 ## API specs:
