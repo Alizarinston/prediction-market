@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Outcome, Market, Asset, Order
+from .models import Outcome, Market, Order
 
 
 class OutcomeInline(admin.TabularInline):
@@ -19,11 +19,6 @@ class MarketAdmin(admin.ModelAdmin):
     exclude = 'outcomes',
     readonly_fields = 'created',
     inlines = OutcomeInline,
-
-
-@admin.register(Asset)
-class AssetAdmin(admin.ModelAdmin):
-    list_filter = 'closed',
 
 
 @admin.register(Order)

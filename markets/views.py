@@ -7,9 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from datetime import datetime
 
-from .models import Outcome, Market, Asset, Order
+from .models import Outcome, Market, Order
 from .permissions import UpdateAndIsAdmin
-from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
+from .serializers import MarketSerializer, OrderSerializer
 
 
 class MarketViewSet(viewsets.ModelViewSet):
@@ -57,12 +57,6 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         instance.resolve(outcome)
         return Response(self.get_serializer(instance).data)
-
-
-class AssetViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Asset.objects.order_by('id')
-    serializer_class = AssetSerializer
-    permission_classes = permissions.IsAuthenticated,
 
 
 class OrderViewSet(viewsets.ModelViewSet):

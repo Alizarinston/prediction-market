@@ -19,7 +19,3 @@ class NotEnoughCash(MarketBaseError):
 class NotEnoughAssetAmount(MarketBaseError):
     def __init__(self):
         super().__init__(msg=_('Asset has not enough amount.'))
-
-
-class AssetDoesNotExist(MarketBaseError):
-    pass

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from .exceptions import MarketBaseError
-from .models import Outcome, Market, Asset, Order
+from .models import Outcome, Market, Order
 
 
 class OutcomeSerializer(serializers.ModelSerializer):
@@ -51,26 +51,16 @@ class MarketSerializer(serializers.ModelSerializer):
         return market
 
 
-class AssetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Asset
-        fields = 'id', 'amount', 'closed', 'outcome'
-
-
 class OrderSerializer(serializers.ModelSerializer):
-    outcome = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Outcome.objects.all())
-
     class Meta:
         model = Order
-        fields = 'id', 'created', 'order_type', 'amount', 'asset', 'user', 'outcome'
-        read_only_fields = 'asset',
+        fields = 'id', 'created', 'order_type', 'amount', 'user', 'outcome'
 
     def create(self, validated_data):
-        outcome = validated_data.pop('outcome')
         instance = self.Meta.model(**validated_data)
 
         try:
-            instance.populate(outcome)
+            instance.populate()
 
         except MarketBaseError as e:
             raise ValidationError({'detail': e.msg})

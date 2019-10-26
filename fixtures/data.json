@@ -3,7 +3,7 @@
         "model": "users.MarketUser",
         "pk": 1,
         "fields": {
-            "password": "pbkdf2_sha256$100000$NQP4kg5qSuPS$JhwoEubrUNLt5dOWgtRvJZ5edP145/CMGVcSXr2S7iQ=",
+            "password": "pbkdf2_sha256$150000$OGSpcDbd7n5J$bf81nFpDg6X6WfrvBVcuRyAJEaCOtrj1hVF6smdz6Ik=",
             "username": "admin",
             "first_name": "",
             "last_name": "",
@@ -71,23 +71,13 @@
     },
 
     {
-        "model": "markets.Asset",
-        "pk": 1,
-        "fields": {
-            "amount": 10,
-            "closed": false,
-            "outcome": 1
-        }
-    },
-
-    {
         "model": "markets.Order",
         "pk": 1,
         "fields": {
             "created": "2019-10-01T13:20:30+03:00",
             "order_type": false,
             "amount": 5,
-            "asset": 1,
+            "outcome": 1,
             "user": 1
         }
     }
