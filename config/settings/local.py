@@ -22,7 +22,6 @@ SECRET_KEY = secret_dict['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1']
 
 # Logging configuration
 
@@ -98,7 +97,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication'
     ),
 
     'DEFAULT_RENDERER_CLASSES': (
@@ -136,8 +135,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # BASE_DIR.child('templates'),
-            # os.path.join(BASE_DIR, 'build'),
             BASE_DIR.child('build')
         ],
         'APP_DIRS': True,
@@ -220,11 +217,11 @@ if not len(broker_url):
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static')
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CSRF_COOKIE_NAME = "csrftoken"
-
+CSRF_COOKIE_NAME = 'csrftoken'

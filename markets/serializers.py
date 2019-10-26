@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from .exceptions import MarketBaseError
 from .models import Outcome, Market, Asset, Order
 
 
@@ -57,8 +58,22 @@ class AssetSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    asset = AssetSerializer()
+    outcome = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Outcome.objects.all())
 
     class Meta:
         model = Order
-        fields = 'id', 'created', 'order_type', 'amount', 'asset'
+        fields = 'id', 'created', 'order_type', 'amount', 'asset', 'user', 'outcome'
+        read_only_fields = 'asset',
+
+    def create(self, validated_data):
+        outcome = validated_data.pop('outcome')
+        instance = self.Meta.model(**validated_data)
+
+        try:
+            instance.populate(outcome)
+
+        except MarketBaseError:
+            raise ValidationError({'detail': 'Order population error.'})
+
+        instance.save()
+        return instance

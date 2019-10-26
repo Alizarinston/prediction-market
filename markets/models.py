@@ -126,49 +126,45 @@ class Asset(models.Model):
 class Order(TimeStamped):
     """ Instruction to buy or sell shares at the current price """
 
-    # :field: order_type: bool, 0 - buy, 1 - sell
+    # :field: order_type: bool, False - buy, True - sell
 
     order_type = models.BooleanField()
     amount = models.PositiveSmallIntegerField(default=0)
-    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, null=True, blank=True)
+    asset = models.ForeignKey(Asset, related_name='order', on_delete=models.CASCADE)
+    user = models.ForeignKey(MarketUser, related_name='orders', on_delete=models.PROTECT)
 
     def __str__(self):
         return 'Type: {}, amount: {}'.format(self.order_type, self.amount)
 
-    def populate(self, outcome: Outcome, user: MarketUser) -> None:
+    def populate(self, outcome: Outcome) -> None:
         """ Populate Order model before saving """
 
         if not self.order_type:
-            self._buy(outcome, user)
+            self._buy(outcome)
         else:
-            self._sell(outcome, user)
+            self._sell(outcome)
 
-    def _buy(self, outcome: Outcome, user: MarketUser) -> None:
+    def _buy(self, outcome: Outcome) -> None:
         """ Order buy case """
 
-        if self.asset is None:
+        try:
+            self.asset = Asset.objects.get(outcome=outcome)
+
+        except Asset.DoesNotExist:
             self.asset = Asset.objects.create(outcome=outcome)
-
-        else:
-            try:
-                self.asset = Asset.objects.get(outcome=outcome)
-
-            except Asset.DoesNotExist:
-                msg = 'Asset with specified outcome not found. Description: {}'.format(outcome.description)
-                raise exceptions.AssetDoesNotExist(msg)
 
         cost = self.asset.outcome.market.first().get_cost(outcome, self.amount)
 
-        if user.cash - cost >= 0:
-            user.cash -= cost
-            user.save(update_fields=['cash'])
+        if self.user.cash - cost >= 0:
+            self.user.cash -= cost
+            self.user.save(update_fields=['cash'])
             self.asset.amount += self.amount
             self.asset.save(update_fields=['amount'])
 
         else:
             raise exceptions.NotEnoughCash
 
-    def _sell(self, outcome: Outcome, user: MarketUser) -> None:
+    def _sell(self, outcome: Outcome) -> None:
         """ Order sell case """
 
         try:
@@ -181,8 +177,8 @@ class Order(TimeStamped):
         cost = self.asset.outcome.market.first().get_cost(outcome, self.amount)
 
         if self.asset.amount >= self.amount:
-            user.cash += cost
-            user.save(update_fields=['cash'])
+            self.user.cash += cost
+            self.user.save(update_fields=['cash'])
             self.asset.amount += self.amount
             self.asset.save(update_fields=['amount'])
 

@@ -21,7 +21,7 @@ from utils import secret_dict
 SECRET_KEY = secret_dict['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Logging configuration
 
@@ -222,11 +222,11 @@ if not len(broker_url):
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static')
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CSRF_COOKIE_NAME = "csrftoken"
-
+CSRF_COOKIE_NAME = 'csrftoken'

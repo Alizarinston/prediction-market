@@ -13,7 +13,7 @@ from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
 class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    # permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+    permission_classes = UpdateAndIsAdmin,
 
     def get_queryset(self):
         """ Filter queryset by url parameters """
@@ -30,7 +30,7 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         return Market.objects.filter(**filters).order_by('-created')
 
-    @action(detail=True, methods=['patch'])
+    @action(methods=['patch'], detail=True)
     def resolve(self, request, pk=None):
         """ Resolve specified market by given outcome """
 
@@ -60,10 +60,11 @@ class MarketViewSet(viewsets.ModelViewSet):
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Asset.objects.order_by('id')
     serializer_class = AssetSerializer
-    # permission_classes = permissions.IsAuthenticated,
+    permission_classes = permissions.IsAuthenticated,
 
 
-class OrderViewSet(viewsets.ReadOnlyModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.order_by('-created')
     serializer_class = OrderSerializer
-    permission_classes = permissions.IsAuthenticated,
+    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+

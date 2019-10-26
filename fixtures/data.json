@@ -68,5 +68,27 @@
             "outcomes": [1, 2, 3, 4],
             "description": "Market description."
         }
+    },
+
+    {
+        "model": "markets.Asset",
+        "pk": 1,
+        "fields": {
+            "amount": 10,
+            "closed": false,
+            "outcome": 1
+        }
+    },
+
+    {
+        "model": "markets.Order",
+        "pk": 1,
+        "fields": {
+            "created": "2019-10-01T13:20:30+03:00",
+            "order_type": false,
+            "amount": 5,
+            "asset": 1,
+            "user": 1
+        }
     }
 ]
