@@ -1,3 +1,6 @@
+from django.utils.translation import ugettext_lazy as _
+
+
 class MarketBaseError(Exception):
     """ Prediction market base exception """
 
@@ -10,13 +13,9 @@ class MarketBaseError(Exception):
 
 class NotEnoughCash(MarketBaseError):
     def __init__(self):
-        super().__init__(msg='User has not enough cash')
+        super().__init__(msg=_('User has not enough cash.'))
 
 
 class NotEnoughAssetAmount(MarketBaseError):
     def __init__(self):
-        super().__init__(msg='Asset has not enough amount')
-
-
-class AssetDoesNotExist(MarketBaseError):
-    pass
+        super().__init__(msg=_('Asset has not enough amount.'))

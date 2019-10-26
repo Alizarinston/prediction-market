@@ -1,12 +1,16 @@
+import logging
+
 from django.test import TestCase
-from utils import secret_dict, OpenWeatherMap
+from django.conf import settings
+
+logging.disable(logging.CRITICAL)
 
 
 class OWMCase(TestCase):
     """ Test OpenWeatherMap API client """
 
     def setUp(self) -> None:
-        self.api = OpenWeatherMap(secret_dict['owm_id'])
+        self.api = settings.OWM_CLIENT
 
     def test_city_temperature(self):
         response = self.api.city_temperature('Kyiv')

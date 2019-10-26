@@ -23,12 +23,6 @@ jobs:
         postgresql version: '11'
         postgresql db: 'market'
     
-    - name: Copy secret
-      env:
-        SECRET: ${{ secrets.SECRET }}
-      run: |
-        echo `echo $SECRET | base64 --decode` > config/secret.json
-    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -47,7 +41,6 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
-        coverage run -a manage.py test markets.tests
-        coverage run -a manage.py test users.tests
+        coverage run --source='.' manage.py test
         coverage report
         codecov -t $CODECOV_TOKEN
