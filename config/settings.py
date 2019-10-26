@@ -33,7 +33,7 @@ DEBUG = True if config.get('django', 'debug') == 'true' else False
 ALLOWED_HOSTS = [host for host in config.get('django', 'hosts').split()]
 
 ROOT_URLCONF = 'config.urls'
-AUTH_USER_MODEL = 'users.MarketUser'
+AUTH_USER_MODEL = 'markets.MarketUser'
 
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = False
@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     # own apps
 
     'markets',
-    'users',
 ]
 
 # Logging configuration
@@ -129,7 +128,7 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
 
 REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+    'USER_DETAILS_SERIALIZER': 'markets.serializers.UserSerializer',
 }
 
 MIDDLEWARE = [

@@ -1,13 +1,22 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 
 from config import constants
-from users.models import MarketUser
 from . import exceptions
 from .helpers import cost_function, probabilities
 
 
 CATEGORIES = ('FIN', 'Finances'), ('POL', 'Politics'), ('SPO', 'Sports'), ('OTH', 'Other')
+
+
+class MarketUser(AbstractUser):
+    """ Prediction market custom user model """
+
+    cash = models.FloatField(default=0)
+
+    class Meta:
+        db_table = 'users'
 
 
 class TimeStamped(models.Model):

@@ -1,6 +1,6 @@
 [
     {
-        "model": "users.MarketUser",
+        "model": "markets.MarketUser",
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$150000$OGSpcDbd7n5J$bf81nFpDg6X6WfrvBVcuRyAJEaCOtrj1hVF6smdz6Ik=",

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from .exceptions import MarketBaseError
-from .models import Outcome, Market, Order
+from .models import Outcome, Market, Order, MarketUser
 
 
 class OutcomeSerializer(serializers.ModelSerializer):
@@ -67,3 +67,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = MarketUser
+        fields = 'username', 'cash', 'orders'
+        read_only_fields = 'cash', 'orders'
