@@ -13,7 +13,7 @@ from .serializers import MarketSerializer, AssetSerializer, OrderSerializer
 class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = UpdateAndIsAdmin,
+    # permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
 
     def get_queryset(self):
         """ Filter queryset by url parameters """
@@ -30,28 +30,28 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         return Market.objects.filter(**filters).order_by('-created')
 
-    @action(methods=['patch'], detail=True)
+    @action(detail=True, methods=['patch'])
     def resolve(self, request, pk=None):
         """ Resolve specified market by given outcome """
 
         instance = self.get_object()
 
         if instance.resolved or instance.proposal or datetime.now().date() < instance.end_date:
-            raise ValidationError({'detail': 'Wrong pk.'})
+            raise ValidationError(detail='Wrong pk.')
 
         outcome_pk = request.data.get('outcome_pk')
 
         if outcome_pk is None:
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         try:
             outcome = Outcome.objects.get(pk=outcome_pk)
 
         except Outcome.DoesNotExist:
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         if outcome not in instance.outcomes.all():
-            raise ValidationError({'detail': 'Wrong outcome_pk.'})
+            raise ValidationError(detail='Wrong outcome_pk.')
 
         instance.resolve(outcome)
         return Response(self.get_serializer(instance).data)
@@ -60,10 +60,10 @@ class MarketViewSet(viewsets.ModelViewSet):
 class AssetViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Asset.objects.order_by('id')
     serializer_class = AssetSerializer
-    permission_classes = permissions.IsAuthenticated,
+    # permission_classes = permissions.IsAuthenticated,
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.order_by('-created')
     serializer_class = OrderSerializer
-    permission_classes = permissions.IsAuthenticated, UpdateAndIsAdmin
+    # permission_classes = permissions.IsAuthenticated,

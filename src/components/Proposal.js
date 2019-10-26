@@ -66,7 +66,7 @@ const Proposals = (props) => {
             {props.data.map((item, k)=> (
                 <div key={k}>
                     <br/><br/><br/>
-                    <Popup position={"bottom center"} hoverable flowing basic pinned
+                    <Popup hideOnScroll position={"bottom center"} hoverable flowing basic pinned
                         trigger={
                             <Card link fluid>
                                 <Segment.Group stacked piled raised>
