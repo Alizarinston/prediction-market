@@ -5,11 +5,14 @@
 Simple prediction market on django and django-rest-framework.
 
 ## Installation
-- Install requirements: `pip install -r requirements.txt`
-- Create `market` database.
-- Run migrations: `python manage.py migrate`
-- Populate database: `python manage.py loaddata data.json`
-- Login with default admin credentials: `admin/admin`
+- Install requirements: `pip install -r requirements.txt`;
+- Create `market` database;
+- Run migrations: `python manage.py migrate`;
+- Populate database: `python manage.py loaddata data.json`;
+- Login with default admin credentials: `admin/admin`;
+- If you want to use custom config set `MARKET_CONF` env variable to your config name,
+config should be in `config` folder, otherwise `default.ini` config will be user.
+
 
 ## API specs:
 * `api/settings/`: API settings info, only `GET` allowed;
