@@ -36,4 +36,4 @@ class CustomUserAdmin(UserAdmin):
     ordering = '-date_joined',
 
 
-CustomUserAdmin.fieldsets += ('MarketUser fields', {'fields': ('cash',)}),
+CustomUserAdmin.fieldsets += ('MarketUser fields', {'fields': ('cash', 'wallet')}),

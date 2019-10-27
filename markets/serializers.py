@@ -74,5 +74,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MarketUser
-        fields = 'username', 'cash', 'orders'
-        read_only_fields = 'cash', 'orders'
+        fields = 'username', 'cash', 'wallet', 'orders'
+        read_only_fields = 'cash', 'wallet', 'orders'

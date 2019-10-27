@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 
@@ -13,7 +14,11 @@ CATEGORIES = ('FIN', 'Finances'), ('POL', 'Politics'), ('SPO', 'Sports'), ('OTH'
 class MarketUser(AbstractUser):
     """ Prediction market custom user model """
 
+    # :field wallet: dict, user`s outcomes wallet in format:
+    #   {outcome.pk: amount,}
+
     cash = models.FloatField(default=0)
+    wallet = JSONField(default=dict, blank=True)
 
     class Meta:
         db_table = 'users'
@@ -32,7 +37,7 @@ class Outcome(models.Model):
     """ The model of a variant of a market prediction """
 
     outstanding = models.PositiveSmallIntegerField(default=0)
-    probability = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    probability = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)])
 
     description = models.CharField(
         max_length=constants.outcome_description_max_length,
@@ -109,13 +114,13 @@ class Market(TimeStamped):
 
         outcomes = self.outcomes.all()
         new_amounts = [outcome.outstanding for outcome in outcomes]
-        outcome_probabilities = probabilities(constants.b_constant, new_amounts)
+        outcome_probabilities = probabilities(new_amounts)
 
         for i in range(len(outcomes)):
             outcomes[i].probability = outcome_probabilities[i]
             outcomes[i].save(update_fields=['probability'])
 
-        return cost_function(constants.b_constant, new_amounts) - cost_function(constants.b_constant, old_amounts)
+        return cost_function(new_amounts) - cost_function(old_amounts)
 
 
 class Order(TimeStamped):
@@ -144,9 +149,17 @@ class Order(TimeStamped):
 
         cost = self.outcome.market.first().get_cost(self.outcome, self.amount)
 
-        if self.user.cash - cost >= 0:
+        if self.user.cash >= cost:
             self.user.cash -= cost
-            self.user.save(update_fields=['cash'])
+            outcome_pk = str(self.outcome.pk)
+
+            if outcome_pk in self.user.wallet:
+                self.user.wallet[outcome_pk] += self.amount
+
+            else:
+                self.user.wallet[outcome_pk] = self.amount
+
+            self.user.save(update_fields=['cash', 'wallet'])
 
         else:
             raise exceptions.NotEnoughCash
@@ -154,11 +167,12 @@ class Order(TimeStamped):
     def _sell(self) -> None:
         """ Order sell case """
 
-        cost = self.outcome.market.first().get_cost(self.outcome, self.amount)
+        outcome_pk = str(self.outcome.pk)
 
-        if self.calculate_asset(self.outcome) >= self.amount:
-            self.user.cash += cost
-            self.user.save(update_fields=['cash'])
+        if outcome_pk in self.user.wallet and self.user.wallet[outcome_pk] >= self.amount:
+            self.user.cash += self.outcome.market.first().get_cost(self.outcome, self.amount)
+            self.user.wallet[outcome_pk] -= self.amount
+            self.user.save(update_fields=['cash', 'wallet'])
 
         else:
             raise exceptions.NotEnoughAssetAmount
