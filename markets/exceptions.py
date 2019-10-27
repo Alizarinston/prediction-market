@@ -16,6 +16,6 @@ class NotEnoughCash(MarketBaseError):
         super().__init__(msg=_('User has not enough cash.'))
 
 
-class NotEnoughAssetAmount(MarketBaseError):
+class NotEnoughOutcomeAmount(MarketBaseError):
     def __init__(self):
-        super().__init__(msg=_('Asset has not enough amount.'))
+        super().__init__(msg=_('User`s wallet has not enough outcome`s amount.'))

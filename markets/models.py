@@ -175,7 +175,7 @@ class Order(TimeStamped):
             self.user.save(update_fields=['cash', 'wallet'])
 
         else:
-            raise exceptions.NotEnoughAssetAmount
+            raise exceptions.NotEnoughOutcomeAmount
 
     @staticmethod
     def calculate_asset(outcome: Outcome) -> int:

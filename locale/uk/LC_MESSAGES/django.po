@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 17:39+0300\n"
+"POT-Creation-Date: 2019-10-27 17:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: .\config\settings.py:225
+#: .\config\settings.py:224
 msgid "English"
 msgstr "Англійська"
 
-#: .\config\settings.py:226
+#: .\config\settings.py:225
 msgid "Russian"
 msgstr "Російська"
 
-#: .\config\settings.py:227
+#: .\config\settings.py:226
 msgid "Ukrainian"
 msgstr "Українська"
 
@@ -38,10 +38,10 @@ msgid "User has not enough cash."
 msgstr "Користувачеві не вистачає коштів."
 
 #: .\markets\exceptions.py:21
-msgid "Asset has not enough amount."
-msgstr "Актив має недостатню кількість."
+msgid "User`s wallet has not enough outcome`s amount."
+msgstr "У гаманці користувача недостатньо активів цього результату."
 
-#: .\markets\views.py:42 .\markets\views.py:47 .\markets\views.py:53
-#: .\markets\views.py:56
+#: .\markets\views.py:60 .\markets\views.py:65 .\markets\views.py:71
+#: .\markets\views.py:74
 msgid "Invalid input."
 msgstr "Невірний ввід."
