@@ -8,8 +8,8 @@ from .models import Outcome, Market, Order, MarketUser
 class OutcomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Outcome
-        fields = 'id', 'outstanding', 'probability', 'description', 'is_winner'
-        read_only_fields = 'outstanding', 'probability', 'is_winner'
+        fields = 'id', 'amount', 'probability', 'description', 'is_winner'
+        read_only_fields = 'amount', 'probability', 'is_winner'
 
 
 class MarketSerializer(serializers.ModelSerializer):

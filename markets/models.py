@@ -36,7 +36,7 @@ class TimeStamped(models.Model):
 class Outcome(models.Model):
     """ The model of a variant of a market prediction """
 
-    outstanding = models.PositiveSmallIntegerField(default=0)
+    amount = models.PositiveIntegerField(default=0)
     probability = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)])
 
     description = models.CharField(
@@ -107,13 +107,13 @@ class Market(TimeStamped):
     def get_cost(self, outcome: Outcome, amount_delta: float) -> float:
         """ Get outcome cost """
 
-        old_amounts = [outcome.outstanding for outcome in self.outcomes.all()]
+        old_amounts = [outcome.amount for outcome in self.outcomes.all()]
 
-        outcome.outstanding += amount_delta
-        outcome.save(update_fields=['outstanding'])
+        outcome.amount += amount_delta
+        outcome.save(update_fields=['amount'])
 
         outcomes = self.outcomes.all()
-        new_amounts = [outcome.outstanding for outcome in outcomes]
+        new_amounts = [outcome.amount for outcome in outcomes]
         outcome_probabilities = probabilities(new_amounts)
 
         for i in range(len(outcomes)):
@@ -129,7 +129,7 @@ class Order(TimeStamped):
     # :field: order_type: bool, False - buy, True - sell
 
     order_type = models.BooleanField()
-    amount = models.PositiveSmallIntegerField(default=0)
+    amount = models.PositiveIntegerField(default=0)
     outcome = models.ForeignKey(Outcome, related_name='order', on_delete=models.PROTECT)
     user = models.ForeignKey(MarketUser, related_name='orders', on_delete=models.PROTECT)
 
@@ -170,7 +170,7 @@ class Order(TimeStamped):
         outcome_pk = str(self.outcome.pk)
 
         if outcome_pk in self.user.wallet and self.user.wallet[outcome_pk] >= self.amount:
-            self.user.cash += self.outcome.market.first().get_cost(self.outcome, self.amount)
+            self.user.cash += self.outcome.market.first().get_cost(self.outcome, -self.amount)
             self.user.wallet[outcome_pk] -= self.amount
             self.user.save(update_fields=['cash', 'wallet'])
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-27 17:10+0200\n"
+"POT-Creation-Date: 2019-10-27 17:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,10 @@ msgstr "У пользователя недостаточно денег."
 #: .\markets\exceptions.py:21
 msgid "User`s wallet has not enough outcome`s amount."
 msgstr "В кошельке пользователя недостаточно активов этого исхода."
+
+#: .\markets\helpers.py:16 .\markets\helpers.py:27
+msgid "Transaction error."
+msgstr "Ошибка транзакции."
 
 #: .\markets\views.py:60 .\markets\views.py:65 .\markets\views.py:71
 #: .\markets\views.py:74

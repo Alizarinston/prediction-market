@@ -20,7 +20,7 @@
         "model": "markets.Outcome",
         "pk": 1,
         "fields": {
-            "outstanding": 10,
+            "amount": 10,
             "probability": 25,
             "description": "first outcome"
         }
@@ -30,7 +30,7 @@
         "model": "markets.Outcome",
         "pk": 2,
         "fields": {
-            "outstanding": 15,
+            "amount": 15,
             "probability": 25,
             "description": "second outcome"
         }
@@ -40,7 +40,7 @@
         "model": "markets.Outcome",
         "pk": 3,
         "fields": {
-            "outstanding": 5,
+            "amount": 5,
             "probability": 25,
             "description": "third outcome"
         }
@@ -50,7 +50,7 @@
         "model": "markets.Outcome",
         "pk": 4,
         "fields": {
-            "outstanding": 20,
+            "amount": 20,
             "probability": 25,
             "description": "fourth outcome"
         }

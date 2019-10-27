@@ -34,7 +34,7 @@ class OpenWeatherMap(object):
         response = self._request(self._uri + city)
 
         if response is not None:
-            return response['main']['temp']
+            return float(response['main']['temp'])
 
     @staticmethod
     def _parse_errors(response: dict) -> (dict, None):
