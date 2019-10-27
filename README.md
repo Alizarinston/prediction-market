@@ -16,9 +16,10 @@ config should be in the `config` folder, otherwise `default.ini` will be used.
 
 ## API specs:
 * `api/settings/`: API settings info, only `GET` allowed;
-* `api/auth/`: [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html).
-* `api/markets/`: provides all actions for `Market` model.
-* `api/markets/<market_id>/resolve/`: only `PATCH` allowed, resolve market by `outcome_pk` field.
+* `api/auth/`: [rest auth endpoints](https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html);
+* `api/outcomes/`: read-only actions for `Outcome` model;
+* `api/markets/`: provides all actions for `Market` model;
+* `api/markets/<market_id>/resolve/`: only `PATCH` allowed, resolve market by `outcome_pk` field;
 * `api/orders/`: provides all actions for `Order` model;
 * `api/orders/asset/<outcome_pk>/`: get asset (total amount from all orders) for specific outcome.
 

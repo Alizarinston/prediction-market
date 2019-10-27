@@ -10,7 +10,7 @@ from datetime import datetime
 
 from .models import Outcome, Market, Order
 from .permissions import UpdateAndIsAdmin
-from .serializers import MarketSerializer, OrderSerializer
+from .serializers import OutcomeSerializer, MarketSerializer, OrderSerializer
 
 
 class Settings(APIView):
@@ -23,6 +23,11 @@ class Settings(APIView):
             'lang': settings.LANGUAGE_CODE,
             'languages': [language[0] for language in settings.LANGUAGES]
         })
+
+
+class OutcomeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Outcome.objects.order_by('id')
+    serializer_class = OutcomeSerializer
 
 
 class MarketViewSet(viewsets.ModelViewSet):
