@@ -29,6 +29,6 @@ class SerializersTestCase(APITestCase):
         self.assertEqual(market.name, self.market_data['name'])
         self.assertEqual(market.description, self.market_data['description'])
         self.assertEqual(market.outcomes.first().description, data['market']['outcomes'][0]['description'])
-        self.assertEqual(market.outcomes.first().probability, 50)
+        self.assertEqual(market.outcomes.first().probability, 0.5)
         self.assertEqual(market.outcomes.all()[1].description, data['market']['outcomes'][1]['description'])
-        self.assertEqual(market.outcomes.all()[1].probability, 50)
+        self.assertEqual(market.outcomes.all()[1].probability, 0.5)
