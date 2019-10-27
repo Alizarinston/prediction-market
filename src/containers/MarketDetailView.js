@@ -26,29 +26,29 @@ class MarketDetail extends React.Component {
 // }
 
 
-    componentWillReceiveProps(newProps) {
-        // console.log("newProp: " + newProps.token);
-        // console.log("thisProp: " + this.props.token);
-        if (newProps.token) {
+        componentWillReceiveProps(newProps) {
+            // console.log("newProp: " + newProps.token);
+            // console.log("thisProp: " + this.props.token);
+            if (newProps.token) {
 
-            axios.defaults.headers = {
-                "Content-Type": "application/json",
-                Authorization: `Token ${newProps.token}`
-            };
+                axios.defaults.headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${newProps.token}`
+                };
 
-            const marketID = this.props.match.params.marketID;
-            axios.get(`http://127.0.0.1:8000/api/markets/${marketID}/`)
+                const marketID = this.props.match.params.marketID;
+                axios.get(`http://127.0.0.1:8000/api/markets/${marketID}/`)
 
-                .then(res => {
-                    this.setState({
-                        market: res.data
-                    });
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                    .then(res => {
+                        this.setState({
+                            market: res.data
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
         }
-    }
 
 
     render () {

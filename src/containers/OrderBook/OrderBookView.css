@@ -1,0 +1,24 @@
+.App {
+  margin: auto;
+  width: 540px;
+}
+
+.OrderBook {
+  float: left;
+  width: 250px;
+  text-align: center;
+  padding: 10px;
+}
+
+table {
+  background-color: #98e6e6;
+  border-radius: 15px;
+}
+
+.Purchases {
+  background-color: #80ffdf;
+  clear: both;
+  width: 520px;
+  padding: 10px;
+  border-radius: 15px;
+}

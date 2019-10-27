@@ -2,13 +2,31 @@ import React from 'react';
 import axios from 'axios';
 
 import { Card } from 'antd';
-import { Grid, Image, Rail, Segment } from 'semantic-ui-react'
-
+import {Grid, Image, Segment, Button, Progress, Label, Container} from 'semantic-ui-react'
+import Intro from './chart/intro';
+import OrderBook from './OrderBook/OrderBookView';
+import OrderForm from '../components/OrderForm';
+import OutcomeList from './OutcomeListView';
 
 class ProposalDetail extends React.Component {
 
+    constructor(props) {
+    super(props);
+
+    this.handler = this.handler.bind(this)
+  }
+
+
+    handler(e) {
+        this.setState({
+          id: e.target.id,
+          descr: e.target.value
+      });
+    }
+
     state = {
-        proposal: {}
+        proposal: [],
+        outcomes: ['null']
     };
 
     componentDidMount() {
@@ -20,37 +38,55 @@ class ProposalDetail extends React.Component {
                 //     // тут нужно вызвать ошибку, there is no such proposal
                 // }
                 this.setState({
-                    proposal: res.data
+                    proposal: res.data,
+                    outcomes: res.data.outcomes,
+                    descr: res.data.outcomes[0].description,
+                    id: res.data.outcomes[0].id
                 });
             })
     }
 
     render () {
         return (
-            <Grid centered columns={3}>
-                <Grid.Column>
-                    <Segment>
-                        <Image src='/images/wireframe/paragraph.png' />
+            <div>
+                <br/><br/><br/>
+                <Grid columns={3}>
+                    <Grid.Column floated={"left"}>
+                        <Segment>
 
-                        <Rail dividing position='left'>
-                            <Segment>Left Rail Content</Segment>
-                        </Rail>
+                            <Intro/>
 
-                        <Card title={this.state.proposal.name}>
-                            <p>{this.state.proposal.description}</p>
-                            <p>Supply: {this.state.proposal.supply} Cash</p>
-                        </Card>
+                        </Segment>
+                    </Grid.Column>
 
-                        <Rail dividing position='right'>
-                            <Segment>Right Rail Content</Segment>
-                        </Rail>
-                    </Segment>
-                </Grid.Column>
-            </Grid>
-            // <Card title={this.state.proposal.name}>
-            //     <p>{this.state.proposal.description}</p>
-            //     <p>Supply: {this.state.proposal.supply} Cash</p>
-            // </Card>
+                    <Grid.Column stretched width={6}>
+                        <Segment>
+
+                            <Card title={this.state.proposal.name}>
+                                <p>{this.state.proposal.description}</p>
+                                <p>Supply: {this.state.proposal.supply} Cash</p>
+                            </Card>
+
+                        </Segment>
+                        <Segment>
+
+                            <OrderForm
+                                requestType="post"
+                                outcome={this.state.id}
+                                descr={this.state.descr}/>
+
+                            <OrderBook/>
+
+                        </Segment>
+                    </Grid.Column>
+
+                    <Grid.Column floated={"right"} width={4}>
+
+                        <OutcomeList data={this.state.outcomes} handler = {this.handler}/>
+
+                    </Grid.Column>
+                </Grid>
+            </div>
         )
     }
 }
