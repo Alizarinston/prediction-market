@@ -13,10 +13,10 @@ class OrderForm extends React.Component {
 
         switch (requestType) {
             case 'post':
-                axios.defaults.headers = {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                };
+                // axios.defaults.headers = {
+                //     "Content-Type": "application/json",
+                //     Authorization: `Token ${this.props.token}`
+                // };
                 return axios.post('http://127.0.0.1:8000/api/orders/', {
                     order_type: orderType,
                     amount: amount,

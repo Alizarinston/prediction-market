@@ -132,6 +132,7 @@ class Order(TimeStamped):
     amount = models.PositiveIntegerField(default=0)
     outcome = models.ForeignKey(Outcome, related_name='order', on_delete=models.PROTECT)
     user = models.ForeignKey(MarketUser, related_name='orders', on_delete=models.PROTECT)
+    price = models.FloatField(default=0)
 
     def __str__(self):
         return 'Type: {}, amount: {}'.format(self.order_type, self.amount)
@@ -155,9 +156,11 @@ class Order(TimeStamped):
 
             if outcome_pk in self.user.wallet:
                 self.user.wallet[outcome_pk] += self.amount
+                self.price = cost
 
             else:
                 self.user.wallet[outcome_pk] = self.amount
+                self.price = cost
 
             self.user.save(update_fields=['cash', 'wallet'])
 
@@ -170,7 +173,9 @@ class Order(TimeStamped):
         outcome_pk = str(self.outcome.pk)
 
         if outcome_pk in self.user.wallet and self.user.wallet[outcome_pk] >= self.amount:
-            self.user.cash += self.outcome.market.first().get_cost(self.outcome, -self.amount)
+            cost = self.outcome.market.first().get_cost(self.outcome, -self.amount)
+            self.user.cash += cost
+            self.price = -cost
             self.user.wallet[outcome_pk] -= self.amount
             self.user.save(update_fields=['cash', 'wallet'])
 

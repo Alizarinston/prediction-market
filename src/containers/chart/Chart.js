@@ -42,7 +42,7 @@ class CandleStickChartForDiscontinuousIntraDay extends React.Component {
 		const xExtents = [start, end];
 
 		return (
-			<ChartCanvas height={400}
+			<ChartCanvas height={568} // default: 400
 				ratio={ratio}
 				width={width}
 				margin={{ left: 80, right: 80, top: 10, bottom: 30 }}
@@ -65,7 +65,8 @@ class CandleStickChartForDiscontinuousIntraDay extends React.Component {
 						orient="left"
 						displayFormat={format(".4s")} />
 
-					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"} />
+					{/*<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"} />*/}
+					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? "#FF0000" : "#6BA583"} />
 
 					<CurrentCoordinate yAccessor={d => d.volume} fill="#9B0A47" />
 
@@ -89,11 +90,13 @@ class CandleStickChartForDiscontinuousIntraDay extends React.Component {
 						orient="right"
 						displayFormat={format(".2f")} />
 
-					<CandlestickSeries />
+					{/*<CandlestickSeries />*/}
+					<CandlestickSeries fill={d => d.close > d.open ? "#FF0000" : "#6BA583"}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-						yAccessor={d => d.close} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"}/>
+						// yAccessor={d => d.close} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"}/>
+						yAccessor={d => d.close} fill={d => d.close > d.open ? "#FF0000" : "#6BA583"}/>
 
-					<OHLCTooltip origin={[-40, 0]} xDisplayFormat={timeFormat("%Y-%m-%d %H:%M:%S")}/>
+					<OHLCTooltip origin={[-40, 0]} xDisplayFormat={timeFormat("%H:%M:%S")}/>
 				</Chart>
 				<CrossHairCursor />
 			</ChartCanvas>

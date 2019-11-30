@@ -54,7 +54,7 @@ class MarketSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = 'id', 'created', 'order_type', 'amount', 'user', 'outcome'
+        fields = 'id', 'created', 'order_type', 'amount', 'user', 'outcome', 'price'
 
     def create(self, validated_data):
         instance = self.Meta.model(**validated_data)

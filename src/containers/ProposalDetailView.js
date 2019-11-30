@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Card } from 'antd';
 import {Grid, Image, Segment, Button, Progress, Label, Container} from 'semantic-ui-react'
 import Intro from './chart/intro';
-import OrderBook from './OrderBook/OrderBookView';
+import OrderBook from './OrderBook/OrderBookHistory'
 import OrderForm from '../components/OrderForm';
 import OutcomeList from './OutcomeListView';
 
@@ -54,17 +54,19 @@ class ProposalDetail extends React.Component {
                     <Grid.Column floated={"left"}>
                         <Segment>
 
-                            <Intro/>
+                            <Intro
+                                outcome={this.state.id}/>
 
                         </Segment>
+
                     </Grid.Column>
 
                     <Grid.Column stretched width={6}>
                         <Segment>
 
-                            <Card title={this.state.proposal.name}>
+                            <Card title={`${this.state.proposal.name}?`}>
+                                <p/>
                                 <p>{this.state.proposal.description}</p>
-                                <p>Supply: {this.state.proposal.supply} Cash</p>
                             </Card>
 
                         </Segment>
@@ -73,11 +75,18 @@ class ProposalDetail extends React.Component {
                             <OrderForm
                                 requestType="post"
                                 outcome={this.state.id}
-                                descr={this.state.descr}/>
-
-                            <OrderBook/>
+                                descr={this.state.descr}
+                                />
 
                         </Segment>
+
+                        <Segment>
+
+                        <OrderBook
+                                outcome={this.state.id}/>
+
+                        </Segment>
+
                     </Grid.Column>
 
                     <Grid.Column floated={"right"} width={4}>

@@ -28,11 +28,12 @@ class OutcomeList extends React.Component{
       'black',
     ];
 
+    // default height: 316
     render() {
         return (
             <div>
                 <Segment>
-                <pre style={{height: 316, overflowY: NumScroll(this.props.data.length)}}>
+                <pre style={{height: 540, overflowY: NumScroll(this.props.data.length)}}>
 
 
                     {this.props.data.map((o, num) => (
@@ -47,7 +48,7 @@ class OutcomeList extends React.Component{
                                         Price: {parseFloat(o.probability).toFixed(3) + '$'}
                                     </Label>
                                     <Label tag size={'tiny'} attached={"top right"} as='a' color={this.colors[num % 13]}>
-                                        Balance: {o.outstanding}
+                                        Balance: {o.amount}
                                     </Label>
                                 </Button>
 

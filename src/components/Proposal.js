@@ -106,7 +106,7 @@ const Proposals = (props) => {
                                     <Link to={`/proposals/${item.id}`}>
                                         <Segment basic raised>
                                             <Label attached='bottom' ribbon
-                                                   color={checkColor(new Date(Date.now()).getDate(), new Date(item.end_date).getDate())}>
+                                                   color={checkColor(new Date(Date.now()).getTime(), new Date(item.end_date).getTime())}>
                                                 <Statistic.Group>
 
                                                     <Statistic>
@@ -134,7 +134,7 @@ const Proposals = (props) => {
                                             <Progress
                                                 percent={new Date(Date.now()).getDate() * 100 / new Date(item.end_date).getDate()}
                                                 attached={"bottom"}
-                                                color={checkColor(new Date(Date.now()).getDate(), new Date(item.end_date).getDate())}/>
+                                                color={checkColor(new Date(Date.now()).getTime(), new Date(item.end_date).getTime())}/>
 
                                         </Segment>
                                     </Link>
