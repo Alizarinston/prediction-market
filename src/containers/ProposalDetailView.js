@@ -36,13 +36,16 @@ class ProposalDetail extends React.Component {
 
     componentDidMount() {
         const proposalID = this.props.match.params.proposalID;
-        // axios.get(`http://127.0.0.1:8000/api/auth/user/`)
-        //     .then(res => {
-        //         this.setState({
-        //             auth: res.data,
-        //         });
-        //         // console.log(this.state.auth.cash)
-        //     });
+        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
+            .then(res => {
+                this.setState({
+                    auth: res.data,
+                    wallet: res.data.wallet
+                });
+            });
         axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
             , {headers: {
                     "Content-Type": "application/json",
