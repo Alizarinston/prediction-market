@@ -78,9 +78,11 @@ class Countdown extends Component {
     const countDown = this.state;
 
     return (
-          <Label attached={"bottom right"}>
+        // {/*<Label attached={"bottom right"}>*/}
+          <span>
               <Icon name='calendar times outline' />
-              {` Remaining:  ${this.addLeadingZeros(countDown.days)}`}
+              Remaining:  <br/>
+              {`${this.addLeadingZeros(countDown.days)}`}
               <sup>{countDown.days === 1 ? ' Day' : ' Days'}</sup>
               {` ${this.addLeadingZeros(countDown.hours)}`}
               <sup>{' Hrs '}</sup>
@@ -88,7 +90,8 @@ class Countdown extends Component {
               <sup>{' Min '}</sup>
               {this.addLeadingZeros(countDown.sec)}
               <sup>{' Sec '}</sup>
-          </Label>
+          </span>
+          // {/*</Label>*/}
     );
   }
 }

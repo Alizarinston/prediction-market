@@ -7,6 +7,9 @@ import Intro from './chart/intro';
 import OrderBook from './OrderBook/OrderBookHistory'
 import OrderForm from '../components/OrderForm';
 import OutcomeList from './OutcomeListView';
+import connect from "react-redux/es/connect/connect";
+// import { Redirect } from "react-router-dom";
+import Login from './Login';
 
 class ProposalDetail extends React.Component {
 
@@ -26,12 +29,26 @@ class ProposalDetail extends React.Component {
 
     state = {
         proposal: [],
-        outcomes: ['null']
+        outcomes: ['null'],
+        auth: [],
+        wallet: []
     };
 
     componentDidMount() {
         const proposalID = this.props.match.params.proposalID;
-        axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`)
+        // axios.get(`http://127.0.0.1:8000/api/auth/user/`)
+        //     .then(res => {
+        //         this.setState({
+        //             auth: res.data,
+        //         });
+        //         // console.log(this.state.auth.cash)
+        //     });
+        axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
+            , {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }}
+                )
             .then(res => {
                 // if (!res.data.proposal) {
                 //     res.data = []
@@ -43,10 +60,44 @@ class ProposalDetail extends React.Component {
                     descr: res.data.outcomes[0].description,
                     id: res.data.outcomes[0].id
                 });
-            })
+            }).catch(err => console.log("error " + err));
     }
 
+    componentDidUpdate(prevProps) {
+	    if (this.props !== prevProps)
+	    {
+	        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
+            .then(res => {
+                this.setState({
+                    auth: res.data,
+                    wallet: res.data.wallet
+                });
+            });
+	        const proposalID = this.props.match.params.proposalID;
+	        axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
+            .then(res => {
+                this.setState({
+                    proposal: res.data,
+                    outcomes: res.data.outcomes,
+                    descr: res.data.outcomes[0].description,
+                    id: res.data.outcomes[0].id
+                });
+            }).catch(err => console.log("error " + err));
+	    }
+	}
+
     render () {
+        if (this.props.token == null) {
+			// return <Redirect to="/login" />;
+            return <Login/>
+		}
+
         return (
             <div>
                 <br/><br/><br/>
@@ -76,6 +127,8 @@ class ProposalDetail extends React.Component {
                                 requestType="post"
                                 outcome={this.state.id}
                                 descr={this.state.descr}
+                                auth={this.state.auth.id}
+                                userID={this.props.userID}
                                 />
 
                         </Segment>
@@ -83,7 +136,8 @@ class ProposalDetail extends React.Component {
                         <Segment>
 
                         <OrderBook
-                                outcome={this.state.id}/>
+                                outcome={this.state.id}
+                                />
 
                         </Segment>
 
@@ -91,7 +145,7 @@ class ProposalDetail extends React.Component {
 
                     <Grid.Column floated={"right"} width={4}>
 
-                        <OutcomeList data={this.state.outcomes} handler = {this.handler}/>
+                        <OutcomeList data={this.state.outcomes} handler={this.handler} wallet={this.state.wallet}/>
 
                     </Grid.Column>
                 </Grid>
@@ -100,4 +154,12 @@ class ProposalDetail extends React.Component {
     }
 }
 
-export default ProposalDetail;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token,
+      userID: state.auth.userID,
+  };
+};
+
+// export default ProposalDetail;
+export default connect(mapStateToProps)(ProposalDetail);

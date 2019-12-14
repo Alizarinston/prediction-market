@@ -16,10 +16,12 @@ import { logout } from "../store/actions/auth";
 
 class CustomLayout extends React.Component {
   render() {
-    const { authenticated } = this.props;
+    const { authenticated, username, cash } = this.props;
+
     return (
       <div>
-        <Menu fixed="top" inverted>
+        <Menu fixed="top" inverted size={"large"}>
+          {/*<Container>*/}
           <Container>
               {authenticated ? (
                   <Link to="/">
@@ -36,21 +38,51 @@ class CustomLayout extends React.Component {
                       <Link to="/markets/">
                           <Menu.Item header>Markets</Menu.Item>
                       </Link>
-                      <Menu.Item header onClick={() => this.props.logout()}>
-                          Logout
-                      </Menu.Item>
+                      {/*<Menu.Item header onClick={() => this.props.logout()}>*/}
+                          {/*Logout*/}
+                      {/*</Menu.Item>*/}
                   </React.Fragment>
               ) : (
                   <React.Fragment>
-                      <Link to="/login">
+                    <Link to="/proposals/">
+                        <Menu.Item header>Proposal</Menu.Item>
+                    </Link>
+                      {/*<Link to="/login">
                           <Menu.Item header>Login</Menu.Item>
                       </Link>
                       <Link to="/signup">
                           <Menu.Item header>Signup</Menu.Item>
-                      </Link>
+                      </Link>*/}
                   </React.Fragment>
               )}
           </Container>
+
+              {authenticated ? (
+                  <React.Fragment>
+                      <Menu.Menu position={'right'}>
+                      <Menu.Item>
+                          {username}
+                      </Menu.Item>
+                      <Menu.Item>
+                          Cash: {cash}
+                      </Menu.Item>
+                      <Menu.Item header onClick={() => this.props.logout()}>
+                        Logout
+                      </Menu.Item>
+                      </Menu.Menu>
+                  </React.Fragment>
+              ) : (
+                  <React.Fragment>
+                    <Link to="/login">
+                        <Menu.Item header>Login</Menu.Item>
+                    </Link>
+                    <Link to="/signup">
+                        <Menu.Item header>Signup</Menu.Item>
+                    </Link>
+                  </React.Fragment>
+              )}
+
+          {/*</Container>*/}
         </Menu>
 
         {this.props.children}
@@ -123,7 +155,9 @@ class CustomLayout extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    authenticated: state.auth.token !== null
+    authenticated: state.auth.token !== null,
+      username: state.auth.username,
+      cash: state.auth.cash,
   };
 };
 

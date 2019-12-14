@@ -66,7 +66,7 @@ class ChartComponent extends React.Component {
 
     state = {};
 
-	componentDidMount() {
+	componentWillReceiveProps(nextProps) {
 	    // let data = d.map((obj) => {
         //                 let date = obj.date;
         //                 obj.date = new Date(date);
@@ -79,22 +79,27 @@ class ChartComponent extends React.Component {
         //     "Content-Type": "application/json",
         //     Authorization: `Token ${this.props.token}`
         // };
-        axios.get('http://127.0.0.1:8000/api/orders')
-            .then(res => {
-                this.setState({
-                    orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+        if(this.props !== nextProps) {
+            axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
+                .then(res => {
+                    this.setState({
+                        orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+                    });
+
+                    f(this.state.orders, 10);
+
+                    let data = d.map((obj) => {
+                        let date = obj.date;
+                        obj.date = new Date(date);
+                        return obj
+                    });
+
+                    this.setState({ data });
                 });
-
-                f(this.state.orders, 10);
-
-                let data = d.map((obj) => {
-                    let date = obj.date;
-                    obj.date = new Date(date);
-                    return obj
-                });
-
-                this.setState({ data });
-            });
+        }
 
 	}
 
@@ -102,7 +107,10 @@ class ChartComponent extends React.Component {
 	    d = [{},{}];
 	    if (this.props.outcome !== prevProps.outcome && prevProps.outcome!==undefined)
 	    {
-	        axios.get('http://127.0.0.1:8000/api/orders')
+	        axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
                 .then(res => {
                     this.setState({
                         orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
@@ -134,10 +142,11 @@ class ChartComponent extends React.Component {
 	}
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     token: state.auth.token
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  };
+};
 
-export default ChartComponent;
+// export default ChartComponent;
+export default connect(mapStateToProps)(ChartComponent);

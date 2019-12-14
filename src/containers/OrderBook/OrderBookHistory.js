@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import { Table } from 'semantic-ui-react'
+import connect from "react-redux/es/connect/connect";
 
 /**
  * @return {string}
@@ -25,37 +26,45 @@ class OrderHistory extends React.Component {
 
     state = {};
 
-	componentDidMount() {
+	componentWillReceiveProps(nextProps) {
 	    d = [{},{}];
 
 	    // axios.defaults.headers = {
         //     "Content-Type": "application/json",
         //     Authorization: `Token ${this.props.token}`
         // };
-        axios.get('http://127.0.0.1:8000/api/orders')
-            .then(res => {
-                this.setState({
-                    orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
-                });
-            });
+        if(this.props !== nextProps){
 
-	}
-
-	componentDidUpdate(prevProps) {
-	    d = [{},{}];
-	    if (this.props.outcome !== prevProps.outcome && prevProps.outcome!==undefined)
-	    {
-	        axios.get('http://127.0.0.1:8000/api/orders')
+            axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
                 .then(res => {
                     this.setState({
                         orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
                     });
-                })
-	    }
+                });
+        }
 	}
 
+	/*componentDidUpdate(prevProps) {
+	    d = [{},{}];
+	    if (this.props.outcome !== prevProps.outcome && prevProps.outcome!==undefined)
+	    {
+	        axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
+                .then(res => {
+                    this.setState({
+                        orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+                    });
+                });
+	    }
+	}*/
+
 	render() {
-		if (this.state.orders == null) {
+		if (this.state.orders == null || this.props.token == null) {
 			return <div>Loading...</div>
 		}
 
@@ -90,4 +99,12 @@ class OrderHistory extends React.Component {
 	}
 }
 
-export default OrderHistory;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  };
+};
+
+// export default OrderHistory;
+export default connect(mapStateToProps)(OrderHistory);
+

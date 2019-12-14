@@ -7,10 +7,13 @@ export const authStart = () => {
     }
 };
 
-export const authSuccess = token => {
+export const authSuccess = (token, username, cash, userID) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        token: token
+        token: token,
+        username: username,
+        cash: cash,
+        userID: userID,
     }
 };
 
@@ -24,6 +27,9 @@ export const authFail = error => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userID');
+    localStorage.removeItem('cash');
     return {
         type: actionTypes.AUTH_LOGOUT
     };
@@ -46,11 +52,28 @@ export const authLogin = (username, password) => {
         })
         .then(res => {
             const token = res.data.key;
-            const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-            localStorage.setItem('token', token);
-            localStorage.setItem('expirationDate', expirationDate);
-            dispatch(authSuccess(token));
-            dispatch(checkAuthTimeout(3600));
+
+            axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`
+                }})
+                    .then(res => {
+
+                        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('expirationDate', expirationDate);
+
+
+                        const username = res.data.username;
+                        const cash = res.data.cash;
+                        const userID = res.data.id;
+
+                        dispatch(authSuccess(token, username, cash, userID));
+                        // dispatch(authSuccess(token, username));
+                        dispatch(checkAuthTimeout(3600));
+                    });
+
+
         })
         .catch(err => {
             dispatch(authFail(err))
@@ -69,11 +92,29 @@ export const authSignup = (username, email, password1, password2) => {
         })
         .then(res => {
             const token = res.data.key;
-            const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-            localStorage.setItem('token', token);
-            localStorage.setItem('expirationDate', expirationDate);
-            dispatch(authSuccess(token));
-            dispatch(checkAuthTimeout(3600));
+
+
+
+            axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`
+                }})
+                    .then(res => {
+
+                        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('expirationDate', expirationDate);
+
+
+                        const username = res.data.username;
+                        const cash = res.data.cash;
+                        const userID = res.data.id;
+
+                        dispatch(authSuccess(token, username, cash, userID));
+                        // dispatch(authSuccess(token, username));
+                        dispatch(checkAuthTimeout(3600));
+                    });
+
         })
         .catch(err => {
             dispatch(authFail(err))
@@ -84,6 +125,10 @@ export const authSignup = (username, email, password1, password2) => {
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
+        // let username = null;
+        // let cash = null;
+        // let userID = null;
+
         if (token === undefined) {
             dispatch(logout());
         } else {
@@ -91,8 +136,48 @@ export const authCheckState = () => {
             if ( expirationDate <= new Date() ) {
                 dispatch(logout());
             } else {
-                dispatch(authSuccess(token));
-                dispatch(checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000) );
+                // axios.defaults.headers = {
+                //     "Content-Type": "application/json",
+                //     Authorization: `Token ${token}`
+                // };
+                axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`
+                }})
+                    .then(res => {
+                        const username = res.data.username;
+                        const cash = res.data.cash;
+                        const userID = res.data.id;
+
+                        // username = res.data.username;
+                        // cash = res.data.cash;
+                        // userID = res.data.id;
+                        // localStorage.setItem('username', username);
+                        // localStorage.setItem('cash', cash);
+                        // localStorage.setItem('userID', userID);
+                        dispatch(authSuccess(token, username, cash, userID));
+                        dispatch(checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000) );
+                    });
+
+                // username = localStorage.getItem('username');
+                // cash = localStorage.getItem('cash');
+                // userID = localStorage.getItem('userID');
+
+                // dispatch(authSuccess(token, username, cash, userID));
+                // dispatch(checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000) );
+
+                /*axios.defaults.headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`
+                };
+
+                console.log(token);
+                axios.get(`http://127.0.0.1:8000/api/auth/user/`)
+                    .then(res => {
+                        localStorage.setItem('user_id', res.data.id);
+                        // const user_id = localStorage.getItem('user_data');
+                        console.log(localStorage.getItem('user_data'))
+                    });*/
             }
         }
     }

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Proposals from '../components/Proposal';
 import { Link } from 'react-router-dom';
-import {Grid, Rail, Sticky, Menu, Dropdown, Ref, Button, Modal } from "semantic-ui-react";
+import {Grid, Rail, Sticky, Menu, Dropdown, Ref, Button, Modal, Segment } from "semantic-ui-react";
 import CustomForm from '../components/Form';
 
 class ProposalList extends React.Component {

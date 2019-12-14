@@ -63,10 +63,58 @@ const Proposals = (props) => {
 
         <div>
 
+            <br/><br/>
             {props.data.map((item, k)=> (
                 <div key={k}>
-                    <br/><br/><br/>
-                    <Popup hideOnScroll position={"bottom center"} hoverable flowing basic pinned
+                    {/*<br/><br/><br/>*/}
+                    <br/>
+                    <Link to={{pathname: `/proposals/${item.id}`}}>
+                        <Card link fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
+                            <Segment size={"massive"} textAlign={'center'} padded basic>
+
+                                {/*<Header as={'h3'} color={'grey'}>*/}
+                                    <Container textAlign={'left'}>
+                                        <p style={{color: "#17394d", transition: .3, margin: 0, fontFamily: "veranda", fontSize: 16, fontWeight: 400, letterSpacing: .1}}>
+                                            {item.name}
+                                        </p>
+                                    </Container>
+                                {/*</Header>*/}
+
+                                <Rail close={"very"} position='right' dividing size={"massive"}>
+                                    {/*<Segment padded style={{border: '1px solid #17394d', lineHeight: 100}}>*/}
+                                    <Card fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
+                                        <Segment textAlign={'center'} padded basic>
+                                        {/*<Header a={'h2'} color={'grey'}>*/}
+                                            <p style={{color: "#17394d"}}>
+                                                {/*<Statistic>*/}
+                                                    <Countdown date={item.end_date}/>
+                                                {/*</Statistic>*/}
+                                            </p>
+                                        </Segment>
+                                    </Card>
+                                        {/*</Header>*/}
+                                    {/*</Segment>*/}
+                                </Rail>
+
+                            </Segment>
+
+
+
+                        {/*<Link to={`/proposals/${item.id}`}>*/}
+                            {/*<Segment>*/}
+                                {/*<Container text textAlign={"center"}>*/}
+                                    {/*<Header as={"h3"}>*/}
+                                        {/*{item.description}*/}
+                                    {/*</Header>*/}
+                                {/*</Container>*/}
+                            {/*</Segment>*/}
+                        {/*</Link>*/}
+
+
+                        </Card>
+                    </Link>
+
+                    {/*<Popup hideOnScroll position={"bottom center"} hoverable flowing basic pinned
                         trigger={
                             <Card link fluid>
                                 <Segment.Group stacked piled raised>
@@ -142,17 +190,17 @@ const Proposals = (props) => {
 
                                     <Rail dividing position='right'>
                                         <Segment>
-                                            {/*<Popup trigger={<Segment/>} flowing hoverable>
+                                            <Popup trigger={<Segment/>} flowing hoverable>
 
                                                 {item.outcomes.map(o => (
                                                     <Segment key={o.id}>{o.description}</Segment>
                                                 ))}
 
-                                            </Popup>*/}
+                                            </Popup>
 
-                                            {/*{item.outcomes.map( o => (
+                                            {item.outcomes.map( o => (
                                    <Segment key={o.id}>{o.description}</Segment>
-                                ))}*/}
+                                ))}
 
                                         </Segment>
                                     </Rail>
@@ -162,18 +210,18 @@ const Proposals = (props) => {
                             </Card>
                         }>
 
-                        {/*<Grid padded columns={(6 < item.outcomes.length) ? (5 % item.outcomes.length) : item.outcomes.length}>*/}
+                        <Grid padded columns={(6 < item.outcomes.length) ? (5 % item.outcomes.length) : item.outcomes.length}>
                             {item.outcomes.map((o, num) => (
-                                //{/*<Grid.Column>*/}
+                                //<Grid.Column>
                                 <Button.Group labeled key={num} basic color={colors[num%13]} vertical attached={"bottom"} compact>
                                     <Button attached fluid>{o.description}</Button>
-                                    {/*<Progress percent={o.probability} attached={"bottom"} color={colors[num%13]}/>*/}
+                                    <Progress percent={o.probability} attached={"bottom"} color={colors[num%13]}/>
                                 </Button.Group>
                                 // <Column>
                             ))}
-                        {/*</Grid>*/}
+                        </Grid>
 
-                    </Popup>
+                    </Popup>*/}
                 </div>
 
             ))}

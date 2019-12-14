@@ -7,9 +7,26 @@ import connect from "react-redux/es/connect/connect";
 
 class OrderForm extends React.Component {
 
+    state = {
+        auth: []
+    };
+
     handleFormSubmit = (event, requestType, orderType) => {
         event.preventDefault();
         const amount = event.target.elements.quantity.value;
+        // console.log(this.props.token);
+
+        // axios.defaults.headers = {
+        //     "Content-Type": "application/json",
+        //     Authorization: `Token ${this.props.token}`
+        // };
+        // axios.get(`http://127.0.0.1:8000/api/auth/user/`)
+        //     .then(res => {
+        //         this.setState({
+        //             auth: res.data,
+        //         });
+        //         console.log(this.state.auth.id)
+        //     });
 
         switch (requestType) {
             case 'post':
@@ -21,8 +38,11 @@ class OrderForm extends React.Component {
                     order_type: orderType,
                     amount: amount,
                     outcome: this.props.outcome,
-                    user: 1
-                })
+                    user: this.props.userID //this.state.auth.id
+                }, {headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.props.token}`
+                }})
                     .then(res => console.log(res))
                     .catch(error =>
                         console.error(error.response));
@@ -84,5 +104,6 @@ const mapStateToProps = state => {
   };
 };
 
+// export default OrderForm;
 export default connect(mapStateToProps)(OrderForm);
 
