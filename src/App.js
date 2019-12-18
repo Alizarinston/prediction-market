@@ -7,8 +7,21 @@ import "semantic-ui-css/semantic.min.css";
 import CustomLayout from "./containers/Layout";
 
 class App extends Component {
-  componentDidMount() {
+
+  test() {
     this.props.onTryAutoSignup();
+  }
+
+  componentDidMount() {
+    if (!this.props.isAuthenticated) {
+
+        this.test();
+        this.timer = setInterval(() => this.test(), 500);
+    }
+  }
+
+  componentWillUnmount() {
+    this.timer = null;
   }
 
   render() {

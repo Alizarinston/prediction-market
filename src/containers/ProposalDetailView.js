@@ -34,9 +34,10 @@ class ProposalDetail extends React.Component {
         wallet: []
     };
 
-    componentDidMount() {
+    test() {
+        // if (this.state.id)
         const proposalID = this.props.match.params.proposalID;
-        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+            axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${this.props.token}`
                 }})
@@ -60,38 +61,94 @@ class ProposalDetail extends React.Component {
                 this.setState({
                     proposal: res.data,
                     outcomes: res.data.outcomes,
-                    descr: res.data.outcomes[0].description,
-                    id: res.data.outcomes[0].id
+                    // descr: res.data.outcomes[0].description,
+                    // id: res.data.outcomes[0].id
                 });
+                if (this.state.id === undefined || this.state.descr === undefined) {
+                    this.setState({
+                        descr: res.data.outcomes[0].description,
+                        id: res.data.outcomes[0].id
+                    })
+                }
             }).catch(err => console.log("error " + err));
+        }
+
+    componentDidMount() {
+        // const proposalID = this.props.match.params.proposalID;
+        // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+        //             "Content-Type": "application/json",
+        //             Authorization: `Token ${this.props.token}`
+        //         }})
+        //     .then(res => {
+        //         this.setState({
+        //             auth: res.data,
+        //             wallet: res.data.wallet
+        //         });
+        //     });
+        // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
+        //     , {headers: {
+        //             "Content-Type": "application/json",
+        //             Authorization: `Token ${this.props.token}`
+        //         }}
+        //         )
+        //     .then(res => {
+        //         // if (!res.data.proposal) {
+        //         //     res.data = []
+        //         //     // тут нужно вызвать ошибку, there is no such proposal
+        //         // }
+        //         this.setState({
+        //             proposal: res.data,
+        //             outcomes: res.data.outcomes,
+        //             descr: res.data.outcomes[0].description,
+        //             id: res.data.outcomes[0].id
+        //         });
+        //     }).catch(err => console.log("error " + err));
+
+        if (this.props.token) {
+
+            this.test();
+            this.timer = setInterval(() => this.test(), 500);
+        }
+    }
+
+    componentWillUnmount() {
+      this.timer = null;
     }
 
     componentDidUpdate(prevProps) {
 	    if (this.props !== prevProps)
 	    {
-	        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                }})
-            .then(res => {
-                this.setState({
-                    auth: res.data,
-                    wallet: res.data.wallet
-                });
-            });
-	        const proposalID = this.props.match.params.proposalID;
-	        axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`, {headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                }})
-            .then(res => {
-                this.setState({
-                    proposal: res.data,
-                    outcomes: res.data.outcomes,
-                    descr: res.data.outcomes[0].description,
-                    id: res.data.outcomes[0].id
-                });
-            }).catch(err => console.log("error " + err));
+	        // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            // .then(res => {
+            //     this.setState({
+            //         auth: res.data,
+            //         wallet: res.data.wallet
+            //     });
+            // });
+	        // const proposalID = this.props.match.params.proposalID;
+	        // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`, {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            // .then(res => {
+            //     this.setState({
+            //         proposal: res.data,
+            //         outcomes: res.data.outcomes,
+            //         descr: res.data.outcomes[0].description,
+            //         id: res.data.outcomes[0].id
+            //     });
+            // }).catch(err => console.log("error " + err));
+            if (this.props.token) {
+                this.test();
+                this.timer = setInterval(() => this.test(), 500);
+            }
+
+            // if (this.props.token) {
+            //     this.timer = setInterval(() => this.test(), 500);
+            // }
 	    }
 	}
 

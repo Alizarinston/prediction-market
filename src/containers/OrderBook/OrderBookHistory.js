@@ -26,15 +26,8 @@ class OrderHistory extends React.Component {
 
     state = {};
 
-	componentWillReceiveProps(nextProps) {
-	    d = [{},{}];
-
-	    // axios.defaults.headers = {
-        //     "Content-Type": "application/json",
-        //     Authorization: `Token ${this.props.token}`
-        // };
-        if(this.props !== nextProps){
-
+    test() {
+        {
             axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${this.props.token}`
@@ -44,6 +37,35 @@ class OrderHistory extends React.Component {
                         orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
                     });
                 });
+        }
+    }
+
+	componentWillReceiveProps(nextProps) {
+	    d = [{},{}];
+
+	    // axios.defaults.headers = {
+        //     "Content-Type": "application/json",
+        //     Authorization: `Token ${this.props.token}`
+        // };
+        if(this.props !== nextProps){
+
+            if (this.props.token) {
+                this.test();
+
+                // clearInterval(this.state.timer);
+                let timer = setInterval(() => this.test(), 500);
+                this.setState({ timer: timer })
+            }
+
+            // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            //     .then(res => {
+            //         this.setState({
+            //             orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+            //         });
+            //     });
         }
 	}
 
@@ -62,6 +84,10 @@ class OrderHistory extends React.Component {
                 });
 	    }
 	}*/
+
+	componentWillUnmount() {
+      clearInterval(this.state.timer);
+    }
 
 	render() {
 		if (this.state.orders == null || this.props.token == null) {

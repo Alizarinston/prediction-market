@@ -118,7 +118,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
 
     'DEFAULT_RENDERER_CLASSES': [
@@ -248,6 +248,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'build' / 'static',
+    BASE_DIR / 'build',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

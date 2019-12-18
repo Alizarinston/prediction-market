@@ -66,20 +66,8 @@ class ChartComponent extends React.Component {
 
     state = {};
 
-	componentWillReceiveProps(nextProps) {
-	    // let data = d.map((obj) => {
-        //                 let date = obj.date;
-        //                 obj.date = new Date(date);
-        //                 return obj
-        //             });
-        //             this.setState({ data });
-	    d = [{},{}];
-
-	    // axios.defaults.headers = {
-        //     "Content-Type": "application/json",
-        //     Authorization: `Token ${this.props.token}`
-        // };
-        if(this.props !== nextProps) {
+    test() {
+        {
             axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${this.props.token}`
@@ -100,32 +88,84 @@ class ChartComponent extends React.Component {
                     this.setState({ data });
                 });
         }
+    }
 
+	componentWillReceiveProps(nextProps) {
+	    // let data = d.map((obj) => {
+        //                 let date = obj.date;
+        //                 obj.date = new Date(date);
+        //                 return obj
+        //             });
+        //             this.setState({ data });
+	    d = [{},{}];
+
+        if(this.props !== nextProps) {
+
+            if (nextProps.token) {
+                this.test();
+                // this.state.timer = setInterval(() => this.test(), 500);
+
+                // clearInterval(this.state.timer);
+                let timer = setInterval(() => this.test(), 500);
+                this.setState({ timer: timer })
+            }
+
+            // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            //     .then(res => {
+            //         this.setState({
+            //             orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+            //         });
+            //
+            //         f(this.state.orders, 10);
+            //
+            //         let data = d.map((obj) => {
+            //             let date = obj.date;
+            //             obj.date = new Date(date);
+            //             return obj
+            //         });
+            //
+            //         this.setState({ data });
+            //     });
+        }
 	}
+
+	componentWillUnmount() {
+      clearInterval(this.state.timer);
+    }
 
 	componentDidUpdate(prevProps) {
 	    d = [{},{}];
 	    if (this.props.outcome !== prevProps.outcome && prevProps.outcome!==undefined)
 	    {
-	        axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                }})
-                .then(res => {
-                    this.setState({
-                        orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
-                    });
-
-                    f(this.state.orders, 10);
-
-                    let data = d.map((obj) => {
-                        let date = obj.date;
-                        obj.date = new Date(date);
-                        return obj
-                    });
-                    this.setState({ data });
-
-                })
+	        if (this.props.token || prevProps.token) {
+                this.test();
+                // this.timer = setInterval(() => this.test(), 500);
+                // clearInterval(this.state.timer);
+                let timer = setInterval(() => this.test(), 500);
+                this.setState({ timer: timer })
+            }
+	        // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            //     .then(res => {
+            //         this.setState({
+            //             orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
+            //         });
+            //
+            //         f(this.state.orders, 10);
+            //
+            //         let data = d.map((obj) => {
+            //             let date = obj.date;
+            //             obj.date = new Date(date);
+            //             return obj
+            //         });
+            //         this.setState({ data });
+            //
+            //     })
 	    }
 	}
 
