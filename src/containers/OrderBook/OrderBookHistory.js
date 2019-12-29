@@ -3,6 +3,29 @@ import axios from "axios";
 import { Table } from 'semantic-ui-react'
 import connect from "react-redux/es/connect/connect";
 
+function decimalAdjust(type, value, exp) {
+    // Если степень не определена, либо равна нулю...
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // Если значение не является числом, либо степень не является целым числом...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    // Сдвиг разрядов
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Обратный сдвиг
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+function round(value, exp) {
+  return decimalAdjust('round', value, exp);
+}
+
 /**
  * @return {string}
  */
@@ -16,9 +39,9 @@ var d = [{},{}];
 
 function convert(type) {
     if (type === false) {
-        return 'Buy'
+        return 'Купівля'
     } else {
-        return 'Sell'
+        return 'Продаж'
     }
 }
 
@@ -100,10 +123,10 @@ class OrderHistory extends React.Component {
                 <Table striped textAlign={'center'}>
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Time</Table.HeaderCell>
-                        <Table.HeaderCell>Type</Table.HeaderCell>
-                        <Table.HeaderCell>Volume</Table.HeaderCell>
-                        <Table.HeaderCell>Price</Table.HeaderCell>
+                        <Table.HeaderCell>Час</Table.HeaderCell>
+                        <Table.HeaderCell>Тип</Table.HeaderCell>
+                        <Table.HeaderCell>Кількість</Table.HeaderCell>
+                        <Table.HeaderCell>Вартість</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
 
@@ -113,7 +136,7 @@ class OrderHistory extends React.Component {
                             <Table.Cell>{new Date(ord.created).getHours()}:{new Date(ord.created).getMinutes()}</Table.Cell>
                             <Table.Cell>{convert(ord.order_type)}</Table.Cell>
                             <Table.Cell>{ord.amount}</Table.Cell>
-                            <Table.Cell>{ord.price}</Table.Cell>
+                            <Table.Cell>{round(ord.price, -2) + '$'}</Table.Cell>
                         </Table.Row>
                     </Table.Body>
                         ))}

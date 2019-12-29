@@ -17,7 +17,7 @@ class MarketUser(AbstractUser):
     # :field wallet: dict, user`s outcomes wallet in format:
     #   {outcome.pk: amount,}
 
-    cash = models.FloatField(default=0)
+    cash = models.FloatField(default=10)
     wallet = JSONField(default=dict, blank=True)
 
     class Meta:
@@ -174,7 +174,7 @@ class Order(TimeStamped):
 
         if outcome_pk in self.user.wallet and self.user.wallet[outcome_pk] >= self.amount:
             cost = self.outcome.market.first().get_cost(self.outcome, -self.amount)
-            self.user.cash += cost
+            self.user.cash += -cost
             self.price = -cost
             self.user.wallet[outcome_pk] -= self.amount
             self.user.save(update_fields=['cash', 'wallet'])

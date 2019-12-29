@@ -36,7 +36,8 @@ class ProposalDetail extends React.Component {
 
     test() {
         // if (this.state.id)
-        const proposalID = this.props.match.params.proposalID;
+        // const proposalID = this.props.match.params.proposalID;
+        const proposalID = this.props.match.params.marketID;
             axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${this.props.token}`

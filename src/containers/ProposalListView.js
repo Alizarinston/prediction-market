@@ -33,7 +33,7 @@ class ProposalList extends React.Component {
                             <Sticky context={this.contextRef} offset={100}>
                                 <Rail dividing position='left'>
 
-                                    <Menu vertical>
+                                    {/*<Menu vertical>
                                         <Menu.Item>Categories</Menu.Item>
                                         <Dropdown text='Messages' pointing='left' className='link item'>
                                             <Dropdown.Menu>
@@ -48,24 +48,24 @@ class ProposalList extends React.Component {
                                         </Dropdown>
                                         <Menu.Item>Browse</Menu.Item>
                                         <Menu.Item>Help</Menu.Item>
-                                    </Menu>
+                                    </Menu>*/}
 
                                 </Rail>
                             </Sticky>
 
                             <br/>
 
-                            <Modal size={"small"} trigger={<Button>Test</Button>}>
+                            {/*<Modal size={"small"} trigger={<Button>Test</Button>}>
                                     <CustomForm
                                         requestType="post"
                                         btnText="Create"/>
-                            </Modal>
+                            </Modal>*/}
 
-                            <Link to="/proposal/create/">
+                            {/*<Link to="/proposal/create/">
                                 <Button>
                                     Create a proposal
                                 </Button>
-                            </Link>
+                            </Link>*/}
 
                             <Proposals data={this.state.proposals}/>
 

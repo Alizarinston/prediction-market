@@ -14,6 +14,29 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../store/actions/auth";
 
+function decimalAdjust(type, value, exp) {
+    // Если степень не определена, либо равна нулю...
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // Если значение не является числом, либо степень не является целым числом...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    // Сдвиг разрядов
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Обратный сдвиг
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+function round(value, exp) {
+  return decimalAdjust('round', value, exp);
+}
+
 class CustomLayout extends React.Component {
   render() {
     const { authenticated, username, cash } = this.props;
@@ -32,9 +55,9 @@ class CustomLayout extends React.Component {
               </Link>)}
               {authenticated ? (
                   <React.Fragment>
-                      <Link to="/proposals/">
+                      {/*<Link to="/proposals/">
                           <Menu.Item header>Proposal</Menu.Item>
-                      </Link>
+                      </Link>*/}
                       <Link to="/markets/">
                           <Menu.Item header>Markets</Menu.Item>
                       </Link>
@@ -44,8 +67,11 @@ class CustomLayout extends React.Component {
                   </React.Fragment>
               ) : (
                   <React.Fragment>
-                    <Link to="/proposals/">
+                    {/*<Link to="/proposals/">
                         <Menu.Item header>Proposal</Menu.Item>
+                    </Link>*/}
+                    <Link to="/markets/">
+                        <Menu.Item header>Markets</Menu.Item>
                     </Link>
                       {/*<Link to="/login">
                           <Menu.Item header>Login</Menu.Item>
@@ -64,7 +90,7 @@ class CustomLayout extends React.Component {
                           {username}
                       </Menu.Item>
                       <Menu.Item>
-                          Cash: {cash}
+                          Гаманець: {round(cash, -2)}$
                       </Menu.Item>
                       <Menu.Item header onClick={() => this.props.logout()}>
                         Logout
@@ -92,7 +118,7 @@ class CustomLayout extends React.Component {
           vertical
           style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
         >
-          <Container textAlign="center">
+          {/*<Container textAlign="center">
             <Grid divided inverted stackable>
               <Grid.Column width={3}>
                 <Header inverted as="h4" content="Group 1" />
@@ -146,7 +172,7 @@ class CustomLayout extends React.Component {
                 Privacy Policy
               </List.Item>
             </List>
-          </Container>
+          </Container>*/}
         </Segment>
       </div>
     );

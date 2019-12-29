@@ -68,14 +68,14 @@ const Proposals = (props) => {
                 <div key={k}>
                     {/*<br/><br/><br/>*/}
                     <br/>
-                    <Link to={{pathname: `/proposals/${item.id}`}}>
+                    <Link to={{pathname: `/markets/${item.id}`}}>
                         <Card link fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
                             <Segment size={"massive"} textAlign={'center'} padded basic>
 
                                 {/*<Header as={'h3'} color={'grey'}>*/}
                                     <Container textAlign={'left'}>
                                         <p style={{color: "#17394d", transition: .3, margin: 0, fontFamily: "veranda", fontSize: 16, fontWeight: 400, letterSpacing: .1}}>
-                                            {item.name}
+                                            {item.name}?
                                         </p>
                                     </Container>
                                 {/*</Header>*/}

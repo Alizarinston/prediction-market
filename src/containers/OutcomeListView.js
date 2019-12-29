@@ -45,11 +45,11 @@ class OutcomeList extends React.Component{
                                             {o.description}
                                         </Container>
                                         <Label size={'tiny'} attached={"top left"} as='a' color={this.colors[num % 13]}>
-                                            Price: {parseFloat(o.probability).toFixed(3) + '$'}
+                                            Ціна: {parseFloat(o.probability).toFixed(2) + '$'}
                                         </Label>
                                         <Label tag size={'tiny'} attached={"top right"} as='a' color={this.colors[num % 13]}>
                                             {/*Balance: {o.amount}*/}
-                                            Balance: {(this.props.wallet[o.id]) ? this.props.wallet[o.id] : 0}
+                                            Баланс: {(this.props.wallet[o.id]) ? this.props.wallet[o.id] : 0}
                                         </Label>
                                     </Button>
 

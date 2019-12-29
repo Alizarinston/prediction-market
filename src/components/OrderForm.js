@@ -62,11 +62,11 @@ class OrderForm extends React.Component {
                               false)}>
 
                             <Form.Field>
-                              <label>Buy "{this.props.descr}"</label>
+                              <label>Купити "{this.props.descr}"</label>
                               <input name="quantity" placeholder='Put a quantity here' />
                             </Form.Field>
 
-                            <Button type="primary" htmltype="submit">{'Buy'}</Button>
+                            <Button type="primary" htmltype="submit">{'Купити'}</Button>
 
                           </Form>
                         </Segment>
@@ -82,11 +82,11 @@ class OrderForm extends React.Component {
                               true)}>
 
                             <Form.Field>
-                              <label>Sell "{this.props.descr}"</label>
+                              <label>Продати "{this.props.descr}"</label>
                               <input name="quantity" placeholder='Put a quantity here' />
                             </Form.Field>
 
-                            <Button type="primary" htmltype="submit">{'Sell'}</Button>
+                            <Button type="primary" htmltype="submit">{'Продати'}</Button>
 
                           </Form>
                         </Segment>

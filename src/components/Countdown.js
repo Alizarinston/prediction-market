@@ -81,15 +81,15 @@ class Countdown extends Component {
         // {/*<Label attached={"bottom right"}>*/}
           <span>
               <Icon name='calendar times outline' />
-              Remaining:  <br/>
+              Залишилось:  <br/>
               {`${this.addLeadingZeros(countDown.days)}`}
-              <sup>{countDown.days === 1 ? ' Day' : ' Days'}</sup>
+              <sup>{countDown.days <= 4 ? ' Дні' : ' Днів'}</sup>
               {` ${this.addLeadingZeros(countDown.hours)}`}
-              <sup>{' Hrs '}</sup>
+              <sup>{' Год '}</sup>
               {this.addLeadingZeros(countDown.min)}
-              <sup>{' Min '}</sup>
+              <sup>{' Хв '}</sup>
               {this.addLeadingZeros(countDown.sec)}
-              <sup>{' Sec '}</sup>
+              <sup>{' Сек '}</sup>
           </span>
           // {/*</Label>*/}
     );

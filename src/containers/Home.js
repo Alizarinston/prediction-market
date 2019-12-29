@@ -15,6 +15,7 @@ import {
   Sidebar,
   Visibility
 } from "semantic-ui-react";
+import logo from './000_01_AE_Aeneas.png';
 
 const getWidth = () => {
   const isSSR = typeof window === "undefined";
@@ -93,19 +94,18 @@ const HomepageLayout = () => (
         <Grid.Row>
           <Grid.Column width={8}>
             <Header as="h3" style={{ fontSize: "2em" }}>
-              We Help Companies and Companions
+              Aeneas Decentralized Oracle
             </Header>
             <p style={{ fontSize: "1.33em" }}>
-              We can give your company superpowers to do things that they never
-              thought possible. Let us delight your customers and empower your
-              needs... through pure data analytics.
+              Our prediction market platforms allow anyone to utilize forecasting applications.
+                These applications produce an entirely new asset class: conditional tokens,
+                which make event outcomes tradeable and are also a powerful tool for information discovery.
             </p>
             <Header as="h3" style={{ fontSize: "2em" }}>
-              We Make Bananas That Can Dance
+              Prediction Markets Based On LMSR
             </Header>
             <p style={{ fontSize: "1.33em" }}>
-              Yes that's right, you thought it was the stuff of dreams, but even
-              bananas can be bioengineered.
+              Kyiv Blockchain Forum 2019
             </p>
           </Grid.Column>
           <Grid.Column floated="right" width={6}>
@@ -113,18 +113,18 @@ const HomepageLayout = () => (
               bordered
               rounded
               size="large"
-              src="/images/wireframe/white-image.png"
+              src={logo}
             />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column textAlign="center">
-            <Button size="huge">Check Them Out</Button>
+            <Button size="huge">Check Active Markets</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </Segment>
-    <Segment style={{ padding: "0em" }} vertical>
+    {/*<Segment style={{ padding: "0em" }} vertical>
       <Grid celled="internally" columns="equal" stackable>
         <Grid.Row textAlign="center">
           <Grid.Column style={{ paddingBottom: "5em", paddingTop: "5em" }}>
@@ -146,8 +146,8 @@ const HomepageLayout = () => (
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </Segment>
-    <Segment style={{ padding: "8em 0em" }} vertical>
+    </Segment>*/}
+    {/*<Segment style={{ padding: "8em 0em" }} vertical>
       <Container text>
         <Header as="h3" style={{ fontSize: "2em" }}>
           Breaking The Grid, Grabs Your Attention
@@ -181,7 +181,7 @@ const HomepageLayout = () => (
           I'm Still Quite Interested
         </Button>
       </Container>
-    </Segment>
+    </Segment>*/}
   </ResponsiveContainer>
 );
 export default HomepageLayout;
