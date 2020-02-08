@@ -136,6 +136,72 @@
             "outcomes": [5,6,7,8],
             "description": "Джерело рішення: sport.ua"
         }
+    },
+    
+    {
+        "model": "markets.Outcome",
+        "pk": 9,
+        "fields": {
+            "amount": 10,
+            "probability": 25,
+            "description": "first outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 10,
+        "fields": {
+            "amount": 15,
+            "probability": 25,
+            "description": "second outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 11,
+        "fields": {
+            "amount": 5,
+            "probability": 25,
+            "description": "third outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 12,
+        "fields": {
+            "amount": 20,
+            "probability": 25,
+            "description": "fourth outcome"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 4,
+        "fields": {
+            "name": "Market name.",
+            "created": "2019-10-01T13:20:30+03:00",
+            "start_date": "2019-09-01",
+            "end_date": "2019-10-01",
+            "proposal": false,
+            "outcomes": [1, 2, 3, 4],
+            "description": "Market description."
+        }
+    },
+
+    {
+        "model": "markets.Order",
+        "pk": 1,
+        "fields": {
+            "created": "2019-10-01T13:20:30+03:00",
+            "order_type": false,
+            "amount": 5,
+            "outcome": 1,
+            "user": 1
+        }
     }
 
 ]
