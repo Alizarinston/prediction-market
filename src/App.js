@@ -5,8 +5,7 @@ import BaseRouter from "./routes";
 import * as actions from "./store/actions/auth";
 import "semantic-ui-css/semantic.min.css";
 import CustomLayout from "./containers/Layout";
-
-import WebSocketInstance from './websocket';
+import WebSocketInstance from "./websocket";
 
 class App extends Component {
 
@@ -15,23 +14,34 @@ class App extends Component {
   }
 
   componentDidMount() {
-    WebSocketInstance.connect();
-
     if (!this.props.isAuthenticated) {
 
         this.test();
         // this.timer = setInterval(() => this.test(), 500);
     }
+
   }
 
   componentWillUnmount() {
     // this.timer = null;
   }
 
+  constructor(props) {
+        super(props);
+        this.state = {};
+        WebSocketInstance.addCallbacks(this.setMessages.bind(this));
+        WebSocketInstance.fetchToken(this.props.token);
+  }
+
+  setMessages(username, cash) {
+    this.setState({ username: username,
+                    cash: cash});
+  }
+
   render() {
     return (
       <Router>
-        <CustomLayout {...this.props}>
+        <CustomLayout {...this.props} username={this.state.username} cash={this.state.cash}>
           <BaseRouter/>
         </CustomLayout>
       </Router>
@@ -41,7 +51,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.token !== null
+    isAuthenticated: state.auth.token !== null,
   };
 };
 

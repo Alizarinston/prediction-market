@@ -13,13 +13,15 @@ class WebSocketService {
     this.socketRef = null;
   }
 
-  connect() {
-    const path = 'ws://127.0.0.1:8000/ws/auth/basalt3/';
+  connect(token, userID) {
+      console.log("ID: ", userID);
+    const path = `ws://127.0.0.1:8000/ws/auth/${userID}/`;
     this.socketRef = new WebSocket(path);
     this.socketRef.onopen = () => {
       console.log('WebSocket open');
       this.sendMessage({
-        message: "Client send this message"
+          // message: "Client send this message",
+          token: token
     })
     };
     this.socketNewMessage(JSON.stringify({
@@ -27,22 +29,29 @@ class WebSocketService {
     }));
     this.socketRef.onmessage = e => {
       this.socketNewMessage(e.data);
-      console.log('Client receive: ', e.data)
+      console.log('Client receive: ', e.data);
+        // this.username = JSON.parse(e.data).username;
+        // this.cash = JSON.parse(e.data).cash;
+        // console.log('WTF: ', JSON.parse(e.data).command)
     };
     this.socketRef.onerror = e => {
       console.log(e.message);
     };
     this.socketRef.onclose = () => {
       console.log("WebSocket closed let's reopen");
-      this.connect();
+      this.connect(token, userID);
     };
   }
 
   socketNewMessage(data) {
     const parsedData = JSON.parse(data);
     const command = parsedData.command;
+    console.log('COMMAND: ', command);
     if (Object.keys(this.callbacks).length === 0) {
       return;
+    }
+    if (command === 'auth') {
+        this.callbacks[command](parsedData.username, parsedData.cash)
     }
     if (command === 'messages') {
       this.callbacks[command](parsedData.messages);
@@ -60,9 +69,12 @@ class WebSocketService {
     this.sendMessage({ command: 'new_message', from: message.from, message: message.content });
   }
 
-  addCallbacks(messagesCallback, newMessageCallback) {
-    this.callbacks['messages'] = messagesCallback;
-    this.callbacks['new_message'] = newMessageCallback;
+  fetchToken(token) {
+      this.sendMessage({ token: token })
+  }
+
+  addCallbacks(authCallback) {
+      this.callbacks['auth'] = authCallback;
   }
 
   sendMessage(data) {
