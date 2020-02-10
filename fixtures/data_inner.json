@@ -1,0 +1,207 @@
+[
+    {
+        "model": "markets.MarketUser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$150000$OGSpcDbd7n5J$bf81nFpDg6X6WfrvBVcuRyAJEaCOtrj1hVF6smdz6Ik=",
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_superuser": true,
+            "is_active": true,
+            "date_joined": "2019-09-28T19:07:26.668Z",
+            "cash": 100.0
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 1,
+        "fields": {
+            "amount": 0,
+            "probability": 0.50,
+            "description": "Так"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 2,
+        "fields": {
+            "amount": 0,
+            "probability": 0.50,
+            "description": "Ні"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 1,
+        "fields": {
+            "name": "Чи буде вищим за 1000 факторіал випадкового числа, взятого в діапазоні від 1 до 10",
+            "created": "2019-12-17T13:20:30+03:00",
+            "start_date": "2019-12-17",
+            "end_date": "2019-12-21",
+            "proposal": true,
+            "outcomes": [1, 2],
+            "description": "Джерело для отримання випадкового числа: https://generator-online.com/numbers/"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 3,
+        "fields": {
+            "amount": 0,
+            "probability": 0.50,
+            "description": "Так"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 4,
+        "fields": {
+            "amount": 0,
+            "probability": 0.50,
+            "description": "Ні"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 2,
+        "fields": {
+            "name": "Чи буде ціна криптовалюти Bitcoin (BTC) в доларах (USD) станом на 31 грудня 2019 року о 14:00 UTC вищою за $7000",
+            "created": "2019-12-17T13:20:30+03:00",
+            "start_date": "2019-12-17",
+            "end_date": "2019-12-31",
+            "proposal": true,
+            "outcomes": [3, 4],
+            "description": "Джерело рішення: Coin Market Cap"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 5,
+        "fields": {
+            "amount": 0,
+            "probability": 0.25,
+            "description": "Англія"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 6,
+        "fields": {
+            "amount": 0,
+            "probability": 0.25,
+            "description": "Бельгія"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 7,
+        "fields": {
+            "amount": 0,
+            "probability": 0.25,
+            "description": "Франція"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 8,
+        "fields": {
+            "amount": 0,
+            "probability": 0.25,
+            "description": "Хорватія"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 3,
+        "fields": {
+            "name": "Яка із команд, що беруть участь у півфіналах чемпіонату світу з футболу 2018 року, виграє Кубок світу",
+            "created": "2018-12-17T13:20:30+03:00",
+            "start_date": "2018-12-17",
+            "end_date": "2018-12-31",
+            "proposal": true,
+            "outcomes": [5,6,7,8],
+            "description": "Джерело рішення: sport.ua"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 9,
+        "fields": {
+            "amount": 10,
+            "probability": 25,
+            "description": "first outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 10,
+        "fields": {
+            "amount": 15,
+            "probability": 25,
+            "description": "second outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 11,
+        "fields": {
+            "amount": 5,
+            "probability": 25,
+            "description": "third outcome"
+        }
+    },
+
+    {
+        "model": "markets.Outcome",
+        "pk": 12,
+        "fields": {
+            "amount": 20,
+            "probability": 25,
+            "description": "fourth outcome"
+        }
+    },
+
+    {
+        "model": "markets.Market",
+        "pk": 4,
+        "fields": {
+            "name": "Market name.",
+            "created": "2019-10-01T13:20:30+03:00",
+            "start_date": "2019-09-01",
+            "end_date": "2019-10-01",
+            "proposal": false,
+            "outcomes": [9, 10, 11, 12],
+            "description": "Market description."
+        }
+    },
+
+    {
+        "model": "markets.Order",
+        "pk": 1,
+        "fields": {
+            "created": "2019-10-01T13:20:30+03:00",
+            "order_type": false,
+            "amount": 5,
+            "outcome": 9,
+            "user": 1
+        }
+    }
+
+]

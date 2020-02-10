@@ -77,6 +77,11 @@ class ChartComponent extends React.Component {
                         orders: res.data.results.filter(x => x['outcome'] === parseInt(this.props.outcome))
                     });
 
+                    if (this.state.orders.length === 0) {
+                        this.setState({
+                            orders: d
+                        })
+                    }
                     f(this.state.orders, 10);
 
                     let data = d.map((obj) => {

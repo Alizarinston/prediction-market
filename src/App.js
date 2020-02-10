@@ -6,6 +6,8 @@ import * as actions from "./store/actions/auth";
 import "semantic-ui-css/semantic.min.css";
 import CustomLayout from "./containers/Layout";
 
+import WebSocketInstance from './websocket';
+
 class App extends Component {
 
   test() {
@@ -13,15 +15,17 @@ class App extends Component {
   }
 
   componentDidMount() {
+    WebSocketInstance.connect();
+
     if (!this.props.isAuthenticated) {
 
         this.test();
-        this.timer = setInterval(() => this.test(), 500);
+        // this.timer = setInterval(() => this.test(), 500);
     }
   }
 
   componentWillUnmount() {
-    this.timer = null;
+    // this.timer = null;
   }
 
   render() {
