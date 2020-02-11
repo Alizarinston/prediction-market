@@ -3,6 +3,9 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from rest_framework.authtoken.models import Token
 from .models import MarketUser
+from django.db.models import signals
+from django.dispatch import receiver
+import channels.layers
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -28,34 +31,39 @@ class ChatConsumer(WebsocketConsumer):
         print('SERVER RECEIVE: ', text_data)
         print('USERID: ', self.user_id)
         text_data_json = json.loads(text_data)
-        # message = text_data_json['message']
-        token = ''
-        username = ''
-        cash = ''
-        if len(text_data_json) == 1:
-            token = text_data_json['token']
 
-        if str(token) == str(Token.objects.filter(user=self.user_id)[0]):
-            profile = MarketUser.objects.filter(pk=self.user_id)
-            username = profile[0].username
-            cash = profile[0].cash
-            print('user/cash: ', username, cash)
-        # print(username)
-        # print(cash)
+        self.validate_token(text_data_json)
+
+        if not self.scope['user'].id:
+            self.close()
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.user_group_name,
             {
                 'type': 'auth_message',
-                'username': username,
-                'cash': cash
+                'username': self.scope['user'].username,
+                'cash': self.scope['user'].cash
             }
         )
 
+    def validate_token(self, text_data_json):
+        """
+        Check if user is authenticated via Token.
+        """
+        if 'token' in text_data_json:
+            token = text_data_json['token']
+
+            if str(token) == str(Token.objects.filter(user=self.user_id)[0]):
+                profile = MarketUser.objects.filter(pk=self.user_id)
+                self.scope['user'] = profile[0]
+                print('user/cash: ', self.scope['user'].username, self.scope['user'].cash)
+
     # Receive message from room group
     def auth_message(self, event):
-        # message = event['message']
+        if not self.scope['user'].id:
+            self.close()
+
         username = event['username']
         cash = event['cash']
 
@@ -65,3 +73,19 @@ class ChatConsumer(WebsocketConsumer):
             'username': username,
             'cash': cash
         }))
+
+    @staticmethod
+    @receiver(signals.post_save, sender=MarketUser)
+    def test(sender, instance, **kwargs):
+        print('SOMETHING SENDER ', sender)
+        print('SOMETHING INSTANCE ', instance.id)
+        group_name = 'auth_%s' % instance.id
+        channel_layer = channels.layers.get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                'type': 'auth_message',
+                'username': instance.username,
+                'cash': instance.cash
+            }
+        )

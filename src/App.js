@@ -22,9 +22,9 @@ class App extends Component {
 
   }
 
-  componentWillUnmount() {
-    // this.timer = null;
-  }
+  // componentWillUnmount() {
+  //   // this.timer = null;
+  // }
 
   constructor(props) {
         super(props);

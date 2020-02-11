@@ -62,6 +62,9 @@ export const authLogin = (username, password) => {
 
                         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
                         localStorage.setItem('token', token);
+                        localStorage.setItem('username', res.data.username);
+                        localStorage.setItem('cash', res.data.cash);
+                        localStorage.setItem('userID', res.data.id);
                         localStorage.setItem('expirationDate', expirationDate);
 
 
@@ -132,7 +135,9 @@ export const authSignup = (username, email, password1, password2) => {
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
-        // const userID = localStorage.getItem('userID');
+        const username = localStorage.getItem('username');
+        const cash = localStorage.getItem('cash');
+        const userID = localStorage.getItem('userID');
         // let username = null;
         // let cash = null;
         // let userID = null;
@@ -144,6 +149,12 @@ export const authCheckState = () => {
             if ( expirationDate <= new Date() ) {
                 dispatch(logout());
             } else {
+                dispatch(authSuccess(token, username, cash, userID));
+                dispatch(
+                  checkAuthTimeout(
+                    (expirationDate.getTime() - new Date().getTime()) / 1000
+                  ));
+                WebSocketInstance.connect(token, userID);
                 // WebSocketInstance.connect(token, userID);
                 // dispatch(authSuccess(token, WebSocketInstance.username, WebSocketInstance.cash));
 
