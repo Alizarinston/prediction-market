@@ -71,7 +71,7 @@ export const authLogin = (username, password) => {
                         const username = res.data.username;
                         const cash = res.data.cash;
                         const userID = res.data.id;
-                        WebSocketInstance.connect(token, res.data.id); // token, userdID
+                        WebSocketInstance.connect(res.data.id, token); // token, userdID
 
                         dispatch(authSuccess(token, username, cash, userID));
                         // dispatch(authSuccess(token, username));
@@ -121,7 +121,7 @@ export const authSignup = (username, email, password1, password2) => {
                         const username = res.data.username;
                         const cash = res.data.cash;
                         const userID = res.data.id;
-                        WebSocketInstance.connect(token, res.data.id);
+                        WebSocketInstance.connect(res.data.id, token);
 
                         dispatch(authSuccess(token, username, cash, userID));
                         // dispatch(authSuccess(token, username));
@@ -157,7 +157,7 @@ export const authCheckState = () => {
                   checkAuthTimeout(
                     (expirationDate.getTime() - new Date().getTime()) / 1000
                   ));
-                WebSocketInstance.connect(token, userID);
+                WebSocketInstance.connect(userID, token);
                 // WebSocketInstance.connect(token, userID);
                 // dispatch(authSuccess(token, WebSocketInstance.username, WebSocketInstance.cash));
 

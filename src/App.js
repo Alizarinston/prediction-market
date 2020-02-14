@@ -27,10 +27,10 @@ class App extends Component {
   // }
 
   constructor(props) {
-        super(props);
-        this.state = {};
-        WebSocketInstance.addCallbacks(this.setMessages.bind(this));
-        WebSocketInstance.fetchToken(this.props.token);
+      super(props);
+      this.state = {};
+      WebSocketInstance.addCallbacks(this.setMessages.bind(this));
+      // WebSocketInstance.fetchToken(this.props.token);
   }
 
   setMessages(username, cash) {
@@ -52,6 +52,7 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.auth.token !== null,
+      token: state.auth.token
   };
 };
 

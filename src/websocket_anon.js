@@ -13,18 +13,16 @@ class WebSocketService {
     this.socketRef = null;
   }
 
-  connect(userID, token=null) {
-      console.log("ID: ", userID);
-    const path = `ws://127.0.0.1:8000/ws/auth/${userID}/`;
+  connect(channel) {
+      console.log("ID: ", channel);
+    const path = `ws://127.0.0.1:8000/ws/anon/${channel}/`;
     this.socketRef = new WebSocket(path);
     this.socketRef.onopen = () => {
       console.log('WebSocket open');
-      if (token) {
-          this.sendMessage({
-              // message: "Client send this message",
-              token: token
-          })
-      }
+        this.sendMessage({
+            // message: "Client send this message",
+            channel: channel
+        })
     };
     this.socketNewMessage(JSON.stringify({
       command: 'fetch_messages'
@@ -38,7 +36,7 @@ class WebSocketService {
     };
     this.socketRef.onclose = () => {
       console.log("WebSocket closed let's reopen");
-      this.connect(userID, token);
+      this.connect(channel);
     };
   }
 
@@ -49,8 +47,8 @@ class WebSocketService {
     if (Object.keys(this.callbacks).length === 0) {
       return;
     }
-    if (command === 'auth') {
-        this.callbacks[command](parsedData.username, parsedData.cash)
+    if (command === 'market') {
+        this.callbacks[command](parsedData.markets)
     }
     if (command === 'messages') {
       this.callbacks[command](parsedData.messages);
@@ -79,7 +77,7 @@ class WebSocketService {
   }
 
   addCallbacks(authCallback) {
-      this.callbacks['auth'] = authCallback;
+      this.callbacks['market'] = authCallback;
   }
 
   sendMessage(data) {

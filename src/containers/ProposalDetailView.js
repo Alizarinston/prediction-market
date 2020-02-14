@@ -108,12 +108,12 @@ class ProposalDetail extends React.Component {
         if (this.props.token) {
 
             this.test();
-            this.timer = setInterval(() => this.test(), 500);
+            // this.timer = setInterval(() => this.test(), 500);
         }
     }
 
     componentWillUnmount() {
-      this.timer = null;
+      // this.timer = null;
     }
 
     componentDidUpdate(prevProps) {
@@ -144,7 +144,7 @@ class ProposalDetail extends React.Component {
             // }).catch(err => console.log("error " + err));
             if (this.props.token) {
                 this.test();
-                this.timer = setInterval(() => this.test(), 500);
+                // this.timer = setInterval(() => this.test(), 500);
             }
 
             // if (this.props.token) {
