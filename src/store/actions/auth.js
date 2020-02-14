@@ -112,13 +112,16 @@ export const authSignup = (username, email, password1, password2) => {
 
                         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
                         localStorage.setItem('token', token);
-                        // localStorage.setItem('userID', res.data.id);
+                        localStorage.setItem('username', res.data.username);
+                        localStorage.setItem('cash', res.data.cash);
+                        localStorage.setItem('userID', res.data.id);
                         localStorage.setItem('expirationDate', expirationDate);
 
 
                         const username = res.data.username;
                         const cash = res.data.cash;
                         const userID = res.data.id;
+                        WebSocketInstance.connect(token, res.data.id);
 
                         dispatch(authSuccess(token, username, cash, userID));
                         // dispatch(authSuccess(token, username));
