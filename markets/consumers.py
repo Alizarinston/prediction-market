@@ -147,7 +147,6 @@ class AnonConsumer(AsyncWebsocketConsumer):
         markets = None
         if str(channel) == 'markets':
             markets = MarketSerializer(Market.objects.filter(proposal=True).order_by('-created'), many=True).data
-            # print(markets)
         else:
             await self.close()
 

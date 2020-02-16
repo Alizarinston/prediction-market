@@ -5,10 +5,10 @@ const initialState = {
   token: null,
   error: null,
   loading: false,
-    username: null,
-    cash: null,
-    userID: null,
-    wallet: []
+  username: null,
+  cash: null,
+  userID: null,
+  wallet: null
 };
 
 const authStart = (state, action) => {
@@ -23,9 +23,9 @@ const authSuccess = (state, action) => {
     token: action.token,
     error: null,
     loading: false,
-      username: action.username,
-      cash: action.cash,
-      userID: action.userID,
+    username: action.username,
+    cash: action.cash,
+    userID: action.userID,
   });
 };
 
@@ -39,13 +39,14 @@ const authFail = (state, action) => {
 const authLogout = (state, action) => {
   return updateObject(state, {
     token: null,
-      username: null,
-      cash: null,
-      userID: null,
+    username: null,
+    cash: null,
+    userID: null,
+    wallet: null,
   });
 };
 
-const setProfile = (state, action) => {
+const authUpdate = (state, action) => {
   return updateObject(state, {
     username: action.username,
     cash: action.cash,
@@ -63,8 +64,8 @@ const reducer = (state = initialState, action) => {
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
-    case actionTypes.SET_PROFILE:
-      return setProfile(state, action);
+    case actionTypes.AUTH_UPDATE:
+      return authUpdate(state, action);
     default:
       return state;
   }

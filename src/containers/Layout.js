@@ -13,7 +13,6 @@ import {
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../store/actions/auth";
-import WebSocketInstance from "../websocket";
 
 function decimalAdjust(type, value, exp) {
     // Если степень не определена, либо равна нулю...
@@ -40,26 +39,8 @@ function round(value, exp) {
 
 class CustomLayout extends React.Component {
 
-  //   constructor(props) {
-  //       super(props);
-  //       this.state = {};
-  //       WebSocketInstance.addCallbacks(this.setMessages.bind(this));
-  //       WebSocketInstance.fetchToken(this.props.token);
-  // }
-  //
-  // setMessages(username, cash) {
-  //   this.setState({ username: username,
-  //                   cash: cash});
-  // }
-
   render() {
-      // WebSocketInstance.connect(this.props.token);
-
-    // const { authenticated, username, cash } = this.props;
       const { authenticated, username, cash } = this.props;
-      // console.log('PROPS: ', this.props);
-      // const username = WebSocketInstance.username;
-      // const cash = WebSocketInstance.cash;
 
       return (
       <div>
@@ -202,11 +183,8 @@ class CustomLayout extends React.Component {
 const mapStateToProps = state => {
   return {
     authenticated: state.auth.token !== null,
-      token: state.auth.token,
       username: state.auth.username,
-      cash: state.auth.cash,
-      // username: state.auth.username,
-      // cash: state.auth.cash,
+      cash: state.auth.cash
   };
 };
 

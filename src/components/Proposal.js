@@ -6,115 +6,115 @@ import { Link } from 'react-router-dom';
 
 const Proposals = (props) => {
 
-    function checkColor(a, b) {
-        if (a < b) {
-            return "yellow"
-        } else {
-            return "red"
-        }
+  function checkColor(a, b) {
+    if (a < b) {
+      return "yellow"
+    } else {
+      return "red"
     }
+  }
 
-    function category(itemCategory) {
-        if (itemCategory === 'SPO') {
-            return ({
-                icon: "futbol",
-                color: 'green',
-                title: 'Sports'
-            })
-        } else if (itemCategory === 'POL') {
-            return ({
-                icon: "handshake",
-                color: 'blue',
-                title: 'Politics'
-            })
-        } else if (itemCategory === 'FIN') {
-            return ({
-                icon: "dollar",
-                color: 'red',
-                title: 'Finances'
-            })
-        } else if (itemCategory === 'OTH') {
-            return ({
-                icon: "question",
-                color: 'grey',
-                title: 'Other'
-            })
-        }
+  function getCategory(itemCategory) {
+    if (itemCategory === 'SPO') {
+      return ({
+        icon: "futbol",
+        color: 'green',
+        title: 'Sports'
+      })
+    } else if (itemCategory === 'POL') {
+      return ({
+        icon: "handshake",
+        color: 'blue',
+        title: 'Politics'
+      })
+    } else if (itemCategory === 'FIN') {
+      return ({
+        icon: "dollar",
+        color: 'red',
+        title: 'Finances'
+      })
+    } else if (itemCategory === 'OTH') {
+      return ({
+        icon: "question",
+        color: 'grey',
+        title: 'Other'
+      })
     }
+  }
 
-    const colors = [
-      'red',
-      'orange',
-      'yellow',
-      'olive',
-      'green',
-      'teal',
-      'blue',
-      'violet',
-      'purple',
-      'pink',
-      'brown',
-      'grey',
-      'black',
-    ];
-
-
-    return (
-
-        <div>
-
-            <br/><br/>
-            {props.data.map((item, k)=> (
-                <div key={k}>
-                    {/*<br/><br/><br/>*/}
-                    <br/>
-                    <Link to={{pathname: `/markets/${item.id}`}}>
-                        <Card link fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
-                            <Segment size={"massive"} textAlign={'center'} padded basic>
-
-                                {/*<Header as={'h3'} color={'grey'}>*/}
-                                    <Container textAlign={'left'}>
-                                        <p style={{color: "#17394d", transition: .3, margin: 0, fontFamily: "veranda", fontSize: 16, fontWeight: 400, letterSpacing: .1}}>
-                                            {item.name}?
-                                        </p>
-                                    </Container>
-                                {/*</Header>*/}
-
-                                <Rail close={"very"} position='right' dividing size={"massive"}>
-                                    {/*<Segment padded style={{border: '1px solid #17394d', lineHeight: 100}}>*/}
-                                    <Card fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
-                                        <Segment textAlign={'center'} padded basic>
-                                        {/*<Header a={'h2'} color={'grey'}>*/}
-                                            <p style={{color: "#17394d"}}>
-                                                {/*<Statistic>*/}
-                                                    <Countdown date={item.end_date}/>
-                                                {/*</Statistic>*/}
-                                            </p>
-                                        </Segment>
-                                    </Card>
-                                        {/*</Header>*/}
-                                    {/*</Segment>*/}
-                                </Rail>
-
-                            </Segment>
+  const colors = [
+    'red',
+    'orange',
+    'yellow',
+    'olive',
+    'green',
+    'teal',
+    'blue',
+    'violet',
+    'purple',
+    'pink',
+    'brown',
+    'grey',
+    'black',
+  ];
 
 
+  return (
 
-                        {/*<Link to={`/proposals/${item.id}`}>*/}
-                            {/*<Segment>*/}
-                                {/*<Container text textAlign={"center"}>*/}
-                                    {/*<Header as={"h3"}>*/}
-                                        {/*{item.description}*/}
-                                    {/*</Header>*/}
-                                {/*</Container>*/}
-                            {/*</Segment>*/}
-                        {/*</Link>*/}
+    <div>
+
+      <br/><br/>
+      {props.data.map((item, k)=> (
+        <div key={k}>
+          {/*<br/><br/><br/>*/}
+          <br/>
+          <Link to={{pathname: `/markets/${item.id}`}}>
+            <Card link fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
+              <Segment size={"massive"} textAlign={'center'} padded basic>
+
+                {/*<Header as={'h3'} color={'grey'}>*/}
+                <Container textAlign={'left'}>
+                  <p style={{color: "#17394d", transition: .3, margin: 0, fontFamily: "veranda", fontSize: 16, fontWeight: 400, letterSpacing: .1}}>
+                    {item.name}?
+                  </p>
+                </Container>
+                {/*</Header>*/}
+
+                <Rail close={"very"} position='right' dividing size={"massive"}>
+                  {/*<Segment padded style={{border: '1px solid #17394d', lineHeight: 100}}>*/}
+                  <Card fluid style={{border:'1px solid #17394d', boxShadow: 0}}>
+                    <Segment textAlign={'center'} padded basic>
+                      {/*<Header a={'h2'} color={'grey'}>*/}
+                      <p style={{color: "#17394d"}}>
+                        {/*<Statistic>*/}
+                        <Countdown date={item.end_date}/>
+                        {/*</Statistic>*/}
+                      </p>
+                    </Segment>
+                  </Card>
+                  {/*</Header>*/}
+                  {/*</Segment>*/}
+                </Rail>
+
+              </Segment>
 
 
-                        </Card>
-                    </Link>
 
-                    {/*<Popup hideOnScroll position={"bottom center"} hoverable flowing basic pinned
+              {/*<Link to={`/proposals/${item.id}`}>*/}
+              {/*<Segment>*/}
+              {/*<Container text textAlign={"center"}>*/}
+              {/*<Header as={"h3"}>*/}
+              {/*{item.description}*/}
+              {/*</Header>*/}
+              {/*</Container>*/}
+              {/*</Segment>*/}
+              {/*</Link>*/}
+
+
+            </Card>
+          </Link>
+
+          {/*<Popup hideOnScroll position={"bottom center"} hoverable flowing basic pinned
                         trigger={
                             <Card link fluid>
                                 <Segment.Group stacked piled raised>
@@ -123,10 +123,10 @@ const Proposals = (props) => {
                                         <Segment padded stacked size={"huge"}>
 
 
-                                            <Label as='a' color={category(item.category)['color']} tag
+                                            <Label as='a' color={getCategory(item.category)['color']} tag
                                                    attached={"top right"} size={"small"}>
-                                                <Icon name={category(item.category)['icon']}/>
-                                                {category(item.category)['title']}
+                                                <Icon name={getCategory(item.category)['icon']}/>
+                                                {getCategory(item.category)['title']}
                                             </Label>
 
 
@@ -222,13 +222,13 @@ const Proposals = (props) => {
                         </Grid>
 
                     </Popup>*/}
-                </div>
-
-            ))}
-
         </div>
 
-    )
+      ))}
+
+    </div>
+
+  )
 };
 
 export default Proposals;

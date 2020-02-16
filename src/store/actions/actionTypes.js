@@ -3,7 +3,7 @@ export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
-export const SET_PROFILE = "SET_PROFILE";
+export const AUTH_UPDATE = "AUTH_UPDATE";
 
 export const OPEN_ADD_CHAT_POPUP = "OPEN_ADD_CHAT_POPUP";
 export const CLOSE_ADD_CHAT_POPUP = "CLOSE_ADD_CHAT_POPUP";

@@ -6,39 +6,20 @@ import * as actions from "./store/actions/auth";
 import "semantic-ui-css/semantic.min.css";
 import CustomLayout from "./containers/Layout";
 import WebSocketInstance from "./websocket";
-// import * as messageActions from "./store/actions/message";
 
 
 class App extends Component {
 
-  test() {
-    this.props.onTryAutoSignup();
-  }
-
   componentDidMount() {
     if (!this.props.isAuthenticated) {
-
-        this.test();
-        // this.timer = setInterval(() => this.test(), 500);
+      this.props.onTryAutoSignup();
     }
-
   }
-
-  // componentWillUnmount() {
-  //   // this.timer = null;
-  // }
 
   constructor(props) {
-      super(props);
-      this.state = {};
-      // WebSocketInstance.addCallbacks(this.setMessages.bind(this));
-      WebSocketInstance.addCallbacks(this.props.setProfile.bind(this));
+    super(props);
+    WebSocketInstance.addCallbacks(this.props.setProfile.bind(this));
   }
-
-  // setMessages(username, cash) {
-  //   this.setState({ username: username,
-  //                   cash: cash});
-  // }
 
   render() {
     return (
@@ -49,6 +30,7 @@ class App extends Component {
       </Router>
     );
   }
+
 }
 
 const mapStateToProps = state => {
@@ -60,7 +42,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState()),
-      setProfile: (username, cash, wallet) => dispatch(actions.setProfile(username, cash, wallet)),
+    setProfile: (username, cash, wallet) => dispatch(actions.authUpdate(username, cash, wallet))
   };
 };
 

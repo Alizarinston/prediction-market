@@ -14,19 +14,19 @@ class WebSocketService {
   }
 
   connect(channel) {
-      console.log("ID: ", channel);
+    console.log("ID: ", channel);
     const path = `ws://127.0.0.1:8000/ws/anon/${channel}/`;
     this.socketRef = new WebSocket(path);
     this.socketRef.onopen = () => {
       console.log('WebSocket open');
-        this.sendMessage({
-            // message: "Client send this message",
-            channel: channel
-        })
+      this.sendMessage({
+        // message: "Client send this message",
+        channel: channel
+      })
     };
-    this.socketNewMessage(JSON.stringify({
-      command: 'fetch_messages'
-    }));
+    // this.socketNewMessage(JSON.stringify({
+    //   command: 'fetch_messages'
+    // }));
     this.socketRef.onmessage = e => {
       this.socketNewMessage(e.data);
       console.log('Client receive: ', e.data);
@@ -35,8 +35,8 @@ class WebSocketService {
       console.log(e.message);
     };
     this.socketRef.onclose = () => {
-      console.log("WebSocket closed let's reopen");
-      this.connect(channel);
+      // console.log("WebSocket closed let's reopen");
+      // this.connect(channel);
     };
   }
 
@@ -48,7 +48,7 @@ class WebSocketService {
       return;
     }
     if (command === 'market') {
-        this.callbacks[command](parsedData.markets)
+      this.callbacks[command](parsedData.markets)
     }
     if (command === 'messages') {
       this.callbacks[command](parsedData.messages);
@@ -67,17 +67,17 @@ class WebSocketService {
   }
 
   fetchToken(token) {
-      console.log('FETCH TOKEN: ', token);
-      this.sendMessage({ token: token })
+    console.log('FETCH TOKEN: ', token);
+    this.sendMessage({ token: token })
   }
 
   newChannel(channel) {
-      console.log('FETCH CHANNEL: ', channel);
-      this.sendMessage({ channel: channel })
+    console.log('FETCH CHANNEL: ', channel);
+    this.sendMessage({ channel: channel })
   }
 
   addCallbacks(authCallback) {
-      this.callbacks['market'] = authCallback;
+    this.callbacks['market'] = authCallback;
   }
 
   sendMessage(data) {

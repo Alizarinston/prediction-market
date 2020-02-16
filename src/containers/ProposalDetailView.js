@@ -13,217 +13,194 @@ import Login from './Login';
 
 class ProposalDetail extends React.Component {
 
-    constructor(props) {
+  constructor(props) {
     super(props);
 
     this.handler = this.handler.bind(this)
   }
 
 
-    handler(e) {
+  handler(e) {
+    this.setState({
+      id: e.target.id,
+      descr: e.target.value
+    });
+  }
+
+  state = {
+    proposal: [],
+    outcomes: ['null']
+  };
+
+  test() {
+    // if (this.state.id)
+    // const proposalID = this.props.match.params.proposalID;
+
+    const proposalID = this.props.match.params.marketID;
+    // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Token ${this.props.token}`
+    //     }})
+    // .then(res => {
+    //     this.setState({
+    //         auth: res.data,
+    //         wallet: res.data.wallet
+    //     });
+    // });
+
+    axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
+      , {headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${this.props.token}`
+        }}
+    )
+      .then(res => {
+        // if (!res.data.proposal) {
+        //     res.data = []
+        //     // тут нужно вызвать ошибку, there is no such proposal
+        // }
         this.setState({
-          id: e.target.id,
-          descr: e.target.value
-      });
-    }
-
-    state = {
-        proposal: [],
-        outcomes: ['null'],
-        auth: []
-    };
-
-    test() {
-        // if (this.state.id)
-        // const proposalID = this.props.match.params.proposalID;
-
-        const proposalID = this.props.match.params.marketID;
-            // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
-            //         "Content-Type": "application/json",
-            //         Authorization: `Token ${this.props.token}`
-            //     }})
-            // .then(res => {
-            //     this.setState({
-            //         auth: res.data,
-            //         wallet: res.data.wallet
-            //     });
-            // });
-
-        axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
-            , {headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                }}
-                )
-            .then(res => {
-                // if (!res.data.proposal) {
-                //     res.data = []
-                //     // тут нужно вызвать ошибку, there is no such proposal
-                // }
-                this.setState({
-                    proposal: res.data,
-                    outcomes: res.data.outcomes,
-                    // descr: res.data.outcomes[0].description,
-                    // id: res.data.outcomes[0].id
-                });
-                if (this.state.id === undefined || this.state.descr === undefined) {
-                    this.setState({
-                        descr: res.data.outcomes[0].description,
-                        id: res.data.outcomes[0].id
-                    })
-                }
-            }).catch(err => console.log("error " + err));
+          proposal: res.data,
+          outcomes: res.data.outcomes,
+          // descr: res.data.outcomes[0].description,
+          // id: res.data.outcomes[0].id
+        });
+        if (this.state.id === undefined || this.state.descr === undefined) {
+          this.setState({
+            descr: res.data.outcomes[0].description,
+            id: res.data.outcomes[0].id
+          })
         }
+      }).catch(err => console.log("error " + err));
+  }
 
-    componentDidMount() {
-        // const proposalID = this.props.match.params.proposalID;
-        // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: `Token ${this.props.token}`
-        //         }})
-        //     .then(res => {
-        //         this.setState({
-        //             auth: res.data,
-        //             wallet: res.data.wallet
-        //         });
-        //     });
-        // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
-        //     , {headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: `Token ${this.props.token}`
-        //         }}
-        //         )
-        //     .then(res => {
-        //         // if (!res.data.proposal) {
-        //         //     res.data = []
-        //         //     // тут нужно вызвать ошибку, there is no such proposal
-        //         // }
-        //         this.setState({
-        //             proposal: res.data,
-        //             outcomes: res.data.outcomes,
-        //             descr: res.data.outcomes[0].description,
-        //             id: res.data.outcomes[0].id
-        //         });
-        //     }).catch(err => console.log("error " + err));
+  componentDidMount() {
+    // const proposalID = this.props.match.params.proposalID;
+    // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
+    //     , {headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Token ${this.props.token}`
+    //         }}
+    //         )
+    //     .then(res => {
+    //         // if (!res.data.proposal) {
+    //         //     res.data = []
+    //         //     // тут нужно вызвать ошибку, there is no such proposal
+    //         // }
+    //         this.setState({
+    //             proposal: res.data,
+    //             outcomes: res.data.outcomes,
+    //             descr: res.data.outcomes[0].description,
+    //             id: res.data.outcomes[0].id
+    //         });
+    //     }).catch(err => console.log("error " + err));
 
-        if (this.props.token) {
+    if (this.props.token) {
 
-            this.test();
-            // this.timer = setInterval(() => this.test(), 500);
-        }
+      this.test();
+      // this.timer = setInterval(() => this.test(), 500);
     }
+  }
 
-    componentWillUnmount() {
-      // this.timer = null;
+  componentWillUnmount() {
+    // this.timer = null;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps)
+    {
+      // const proposalID = this.props.match.params.proposalID;
+      // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`, {headers: {
+      //         "Content-Type": "application/json",
+      //         Authorization: `Token ${this.props.token}`
+      //     }})
+      // .then(res => {
+      //     this.setState({
+      //         proposal: res.data,
+      //         outcomes: res.data.outcomes,
+      //         descr: res.data.outcomes[0].description,
+      //         id: res.data.outcomes[0].id
+      //     });
+      // }).catch(err => console.log("error " + err));
+      if (this.props.token) {
+        this.test();
+        // this.timer = setInterval(() => this.test(), 500);
+      }
+
+      // if (this.props.token) {
+      //     this.timer = setInterval(() => this.test(), 500);
+      // }
     }
+  }
 
-    componentDidUpdate(prevProps) {
-	    if (this.props !== prevProps)
-	    {
-	        // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
-            //         "Content-Type": "application/json",
-            //         Authorization: `Token ${this.props.token}`
-            //     }})
-            // .then(res => {
-            //     this.setState({
-            //         auth: res.data,
-            //         wallet: res.data.wallet
-            //     });
-            // });
-	        // const proposalID = this.props.match.params.proposalID;
-	        // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`, {headers: {
-            //         "Content-Type": "application/json",
-            //         Authorization: `Token ${this.props.token}`
-            //     }})
-            // .then(res => {
-            //     this.setState({
-            //         proposal: res.data,
-            //         outcomes: res.data.outcomes,
-            //         descr: res.data.outcomes[0].description,
-            //         id: res.data.outcomes[0].id
-            //     });
-            // }).catch(err => console.log("error " + err));
-            if (this.props.token) {
-                this.test();
-                // this.timer = setInterval(() => this.test(), 500);
-            }
+  render () {
+    // WebSocketInstance.connect(this.props.token, this.props.userID);
+    // if (this.props.token == null) {
+    // 	// return <Redirect to="/login" />;
+    //     return <Login/>
+    // }
 
-            // if (this.props.token) {
-            //     this.timer = setInterval(() => this.test(), 500);
-            // }
-	    }
-	}
+    return (
+      <div>
+        <br/><br/><br/>
+        <Grid columns={3}>
+          <Grid.Column floated={"left"}>
+            <Segment>
 
-    render () {
-        // WebSocketInstance.connect(this.props.token, this.props.userID);
-        // if (this.props.token == null) {
-		// 	// return <Redirect to="/login" />;
-        //     return <Login/>
-		// }
+              <Intro
+                outcome={this.state.id}/>
 
-        return (
-            <div>
-                <br/><br/><br/>
-                <Grid columns={3}>
-                    <Grid.Column floated={"left"}>
-                        <Segment>
+            </Segment>
 
-                            <Intro
-                                outcome={this.state.id}/>
+          </Grid.Column>
 
-                        </Segment>
+          <Grid.Column stretched width={6}>
+            <Segment>
 
-                    </Grid.Column>
+              <Card title={`${this.state.proposal.name}?`}>
+                <p/>
+                <p>{this.state.proposal.description}</p>
+              </Card>
 
-                    <Grid.Column stretched width={6}>
-                        <Segment>
+            </Segment>
+            <Segment>
 
-                            <Card title={`${this.state.proposal.name}?`}>
-                                <p/>
-                                <p>{this.state.proposal.description}</p>
-                            </Card>
+              <OrderForm
+                requestType="post"
+                outcome={this.state.id}
+                descr={this.state.descr}
+                userID={this.props.userID}
+              />
 
-                        </Segment>
-                        <Segment>
+            </Segment>
 
-                            <OrderForm
-                                requestType="post"
-                                outcome={this.state.id}
-                                descr={this.state.descr}
-                                // auth={this.state.auth.id}
-                                userID={this.props.userID}
-                                />
+            <Segment>
 
-                        </Segment>
+              <OrderBook
+                outcome={this.state.id}
+              />
 
-                        <Segment>
+            </Segment>
 
-                        <OrderBook
-                                outcome={this.state.id}
-                                />
+          </Grid.Column>
 
-                        </Segment>
+          <Grid.Column floated={"right"} width={4}>
 
-                    </Grid.Column>
+            <OutcomeList data={this.state.outcomes} handler={this.handler} wallet={this.props.wallet}/>
 
-                    <Grid.Column floated={"right"} width={4}>
-
-                        <OutcomeList data={this.state.outcomes} handler={this.handler} wallet={this.props.wallet}/>
-
-                    </Grid.Column>
-                </Grid>
-            </div>
-        )
-    }
+          </Grid.Column>
+        </Grid>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => {
   return {
     token: state.auth.token,
-      userID: state.auth.userID,
-      wallet: state.auth.wallet,
+    userID: state.auth.userID,
+    wallet: state.auth.wallet,
   };
 };
 
-// export default ProposalDetail;
 export default connect(mapStateToProps)(ProposalDetail);
