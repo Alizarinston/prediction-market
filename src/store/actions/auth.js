@@ -8,11 +8,20 @@ export const authStart = () => {
     }
 };
 
+export const setProfile = (username, cash, wallet) => {
+  return {
+    type: actionTypes.SET_PROFILE,
+    username: username,
+    cash: cash,
+    wallet: wallet,
+  };
+};
+
 export const authSuccess = (token, username, cash, userID) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
-        username: username, // WebSocketInstance.username
+        username: username,
         cash: cash,
         userID: userID,
     }

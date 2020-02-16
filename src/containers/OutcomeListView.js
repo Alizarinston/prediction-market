@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Container, Label, Progress, Segment} from "semantic-ui-react";
+// import WebSocketInstance from "../websocket";
 
 /**
  * @return {string}
@@ -11,6 +12,16 @@ function NumScroll(num) {
 }
 
 class OutcomeList extends React.Component{
+
+    constructor(props) {
+      super(props);
+      this.state = {};
+      // WebSocketInstance.addCallbacks(this.setMessages.bind(this));
+  }
+
+  // setMessages(username, cash, wallet) {
+  //   this.setState({ wallet: wallet});
+  // }
 
     colors = [
       'red',

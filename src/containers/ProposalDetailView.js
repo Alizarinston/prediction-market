@@ -30,24 +30,25 @@ class ProposalDetail extends React.Component {
     state = {
         proposal: [],
         outcomes: ['null'],
-        auth: [],
-        wallet: []
+        auth: []
     };
 
     test() {
         // if (this.state.id)
         // const proposalID = this.props.match.params.proposalID;
+
         const proposalID = this.props.match.params.marketID;
-            axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${this.props.token}`
-                }})
-            .then(res => {
-                this.setState({
-                    auth: res.data,
-                    wallet: res.data.wallet
-                });
-            });
+            // axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Token ${this.props.token}`
+            //     }})
+            // .then(res => {
+            //     this.setState({
+            //         auth: res.data,
+            //         wallet: res.data.wallet
+            //     });
+            // });
+
         axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
             , {headers: {
                     "Content-Type": "application/json",
@@ -154,10 +155,11 @@ class ProposalDetail extends React.Component {
 	}
 
     render () {
-        if (this.props.token == null) {
-			// return <Redirect to="/login" />;
-            return <Login/>
-		}
+        // WebSocketInstance.connect(this.props.token, this.props.userID);
+        // if (this.props.token == null) {
+		// 	// return <Redirect to="/login" />;
+        //     return <Login/>
+		// }
 
         return (
             <div>
@@ -188,7 +190,7 @@ class ProposalDetail extends React.Component {
                                 requestType="post"
                                 outcome={this.state.id}
                                 descr={this.state.descr}
-                                auth={this.state.auth.id}
+                                // auth={this.state.auth.id}
                                 userID={this.props.userID}
                                 />
 
@@ -206,7 +208,7 @@ class ProposalDetail extends React.Component {
 
                     <Grid.Column floated={"right"} width={4}>
 
-                        <OutcomeList data={this.state.outcomes} handler={this.handler} wallet={this.state.wallet}/>
+                        <OutcomeList data={this.state.outcomes} handler={this.handler} wallet={this.props.wallet}/>
 
                     </Grid.Column>
                 </Grid>
@@ -219,6 +221,7 @@ const mapStateToProps = state => {
   return {
     token: state.auth.token,
       userID: state.auth.userID,
+      wallet: state.auth.wallet,
   };
 };
 

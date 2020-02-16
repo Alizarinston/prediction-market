@@ -111,8 +111,9 @@ class ChartComponent extends React.Component {
                 // this.state.timer = setInterval(() => this.test(), 500);
 
                 // clearInterval(this.state.timer);
-                let timer = setInterval(() => this.test(), 500);
-                this.setState({ timer: timer })
+
+                // let timer = setInterval(() => this.test(), 500);
+                // this.setState({ timer: timer })
             }
 
             // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
@@ -138,7 +139,7 @@ class ChartComponent extends React.Component {
 	}
 
 	componentWillUnmount() {
-      clearInterval(this.state.timer);
+      // clearInterval(this.state.timer);
     }
 
 	componentDidUpdate(prevProps) {
@@ -149,8 +150,9 @@ class ChartComponent extends React.Component {
                 this.test();
                 // this.timer = setInterval(() => this.test(), 500);
                 // clearInterval(this.state.timer);
-                let timer = setInterval(() => this.test(), 500);
-                this.setState({ timer: timer })
+
+                // let timer = setInterval(() => this.test(), 500);
+                // this.setState({ timer: timer })
             }
 	        // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
             //         "Content-Type": "application/json",

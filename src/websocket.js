@@ -13,18 +13,16 @@ class WebSocketService {
     this.socketRef = null;
   }
 
-  connect(userID, token=null) {
+  connect(userID, token) {
       console.log("ID: ", userID);
     const path = `ws://127.0.0.1:8000/ws/auth/${userID}/`;
     this.socketRef = new WebSocket(path);
     this.socketRef.onopen = () => {
       console.log('WebSocket open');
-      if (token) {
-          this.sendMessage({
-              // message: "Client send this message",
-              token: token
-          })
-      }
+        this.sendMessage({
+            // message: "Client send this message",
+            token: token
+        })
     };
     this.socketNewMessage(JSON.stringify({
       command: 'fetch_messages'
@@ -50,10 +48,10 @@ class WebSocketService {
       return;
     }
     if (command === 'auth') {
-        this.callbacks[command](parsedData.username, parsedData.cash)
+        this.callbacks[command](parsedData.username, parsedData.cash, parsedData.wallet)
     }
-    if (command === 'messages') {
-      this.callbacks[command](parsedData.messages);
+    if (command === 'wallet') {
+      this.callbacks[command](parsedData.wallet)
     }
     if (command === 'new_message') {
       this.callbacks[command](parsedData.message);
@@ -73,14 +71,17 @@ class WebSocketService {
       this.sendMessage({ token: token })
   }
 
-  newChannel(channel) {
-      console.log('FETCH CHANNEL: ', channel);
-      this.sendMessage({ channel: channel })
+  fetchWallet(token) {
+      this.sendMessage({ command: 'wallet', token: token })
   }
 
   addCallbacks(authCallback) {
       this.callbacks['auth'] = authCallback;
   }
+
+  // addCallbackWallet(walletCallback) {
+  //     this.callbacks['wallet'] = walletCallback;
+  // }
 
   sendMessage(data) {
     try {

@@ -76,8 +76,9 @@ class OrderHistory extends React.Component {
                 this.test();
 
                 // clearInterval(this.state.timer);
-                let timer = setInterval(() => this.test(), 500);
-                this.setState({ timer: timer })
+
+                // let timer = setInterval(() => this.test(), 500);
+                // this.setState({ timer: timer })
             }
 
             // axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
@@ -109,7 +110,7 @@ class OrderHistory extends React.Component {
 	}*/
 
 	componentWillUnmount() {
-      clearInterval(this.state.timer);
+      // clearInterval(this.state.timer);
     }
 
 	render() {

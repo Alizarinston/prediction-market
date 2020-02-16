@@ -6,6 +6,8 @@ import * as actions from "./store/actions/auth";
 import "semantic-ui-css/semantic.min.css";
 import CustomLayout from "./containers/Layout";
 import WebSocketInstance from "./websocket";
+// import * as messageActions from "./store/actions/message";
+
 
 class App extends Component {
 
@@ -29,19 +31,19 @@ class App extends Component {
   constructor(props) {
       super(props);
       this.state = {};
-      WebSocketInstance.addCallbacks(this.setMessages.bind(this));
-      // WebSocketInstance.fetchToken(this.props.token);
+      // WebSocketInstance.addCallbacks(this.setMessages.bind(this));
+      WebSocketInstance.addCallbacks(this.props.setProfile.bind(this));
   }
 
-  setMessages(username, cash) {
-    this.setState({ username: username,
-                    cash: cash});
-  }
+  // setMessages(username, cash) {
+  //   this.setState({ username: username,
+  //                   cash: cash});
+  // }
 
   render() {
     return (
       <Router>
-        <CustomLayout {...this.props} username={this.state.username} cash={this.state.cash}>
+        <CustomLayout {...this.props}>
           <BaseRouter/>
         </CustomLayout>
       </Router>
@@ -52,13 +54,13 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.auth.token !== null,
-      token: state.auth.token
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTryAutoSignup: () => dispatch(actions.authCheckState())
+    onTryAutoSignup: () => dispatch(actions.authCheckState()),
+      setProfile: (username, cash, wallet) => dispatch(actions.setProfile(username, cash, wallet)),
   };
 };
 

@@ -5,7 +5,7 @@ import Proposals from '../components/Proposal';
 import { Link } from 'react-router-dom';
 import {Grid, Rail, Sticky, Menu, Dropdown, Ref, Button, Modal, Segment } from "semantic-ui-react";
 import CustomForm from '../components/Form';
-import WebSocketInstance from "../websocket_anon";
+import PublicWebSocketInstance from "../websocket_anon";
 
 class ProposalList extends React.Component {
 
@@ -17,14 +17,13 @@ class ProposalList extends React.Component {
 
     constructor(props) {
       super(props);
-      WebSocketInstance.addCallbacks(this.setMessages.bind(this));
+      PublicWebSocketInstance.addCallbacks(this.setMessages.bind(this));
     }
 
     setMessages(markets) {
         this.setState({
             proposals: markets
         });
-        console.log(markets)
     }
 
     componentDidMount() {
@@ -36,7 +35,7 @@ class ProposalList extends React.Component {
         //         console.log('PROPOSAL: ', res.data.results)
         //     });
 
-        WebSocketInstance.connect('markets')
+        PublicWebSocketInstance.connect('markets')
     }
 
     render () {

@@ -8,6 +8,7 @@ const initialState = {
     username: null,
     cash: null,
     userID: null,
+    wallet: []
 };
 
 const authStart = (state, action) => {
@@ -44,6 +45,14 @@ const authLogout = (state, action) => {
   });
 };
 
+const setProfile = (state, action) => {
+  return updateObject(state, {
+    username: action.username,
+    cash: action.cash,
+    wallet: action.wallet
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START:
@@ -54,6 +63,8 @@ const reducer = (state = initialState, action) => {
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
+    case actionTypes.SET_PROFILE:
+      return setProfile(state, action);
     default:
       return state;
   }

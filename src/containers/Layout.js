@@ -203,6 +203,8 @@ const mapStateToProps = state => {
   return {
     authenticated: state.auth.token !== null,
       token: state.auth.token,
+      username: state.auth.username,
+      cash: state.auth.cash,
       // username: state.auth.username,
       // cash: state.auth.cash,
   };

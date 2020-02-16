@@ -35,28 +35,8 @@ class AuthConsumer(AsyncWebsocketConsumer):
 
         if 'token' in text_data_json:
             await self.authenticate(text_data_json)
-        # elif 'channel' in text_data_json:
-        #     channel = text_data_json['channel']
-        #     if str(channel) == 'markets':
-        #         market = Market.objects.filter(pk=1)[0]
-        #         print(market.name)
-        #     pass
         else:
             await self.close()
-            # await self.validate_token(text_data_json)
-
-        # if not self.scope['user'].id:
-        #     await self.close()
-        # else:
-        #     # Send message to room group
-        #     await self.channel_layer.group_send(
-        #         self.user_group_name,
-        #         {
-        #             'type': 'auth_message',
-        #             'username': self.scope['user'].username,
-        #             'cash': self.scope['user'].cash
-        #         }
-        #     )
 
     async def authenticate(self, text_data_json):
         await self.validate_token(text_data_json)
@@ -70,7 +50,8 @@ class AuthConsumer(AsyncWebsocketConsumer):
                 {
                     'type': 'auth_message',
                     'username': self.scope['user'].username,
-                    'cash': self.scope['user'].cash
+                    'cash': self.scope['user'].cash,
+                    'wallet': self.scope['user'].wallet
                 }
             )
 
@@ -88,14 +69,9 @@ class AuthConsumer(AsyncWebsocketConsumer):
                     profile = MarketUser.objects.filter(pk=self.user_id)
                     self.scope['user'] = profile[0]
                     print('user/cash: ', self.scope['user'].username, self.scope['user'].cash)
+                    print('WALLET: ', self.scope['user'].wallet)
                 else:
                     await self.close()
-                # elif 'channel' in text_data_json:
-                #     message = text_data_json['channel']
-                #     if str(message) == 'markets':
-                #         market = Market.objects.filter(pk=1)
-                #         print(market.name)
-                #     pass
 
             except Exception as e:
                 # Data is not valid, so close it.
@@ -109,12 +85,14 @@ class AuthConsumer(AsyncWebsocketConsumer):
         else:
             username = event['username']
             cash = event['cash']
+            wallet = event['wallet']
 
             # Send message to WebSocket
             await self.send(text_data=json.dumps({
                 'command': 'auth',
                 'username': username,
-                'cash': cash
+                'cash': cash,
+                'wallet': wallet
             }))
 
     @staticmethod
@@ -129,7 +107,8 @@ class AuthConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'auth_message',
                 'username': instance.username,
-                'cash': instance.cash
+                'cash': instance.cash,
+                'wallet': instance.wallet
             }
         )
 
