@@ -22,6 +22,7 @@ jobs:
       with:
         postgresql version: '11'
         postgresql db: 'market'
+        postgresql port: '5432'
     
     - name: Install dependencies
       run: |
