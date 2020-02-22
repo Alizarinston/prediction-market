@@ -34,9 +34,16 @@ class WebSocketService {
     this.socketRef.onerror = e => {
       console.log(e.message);
     };
-    this.socketRef.onclose = () => {
-      // console.log("WebSocket closed let's reopen");
-      // this.connect(userID, token);
+    this.socketRef.onclose = (event) => {
+      if (!event.wasClean) {
+        this.connect(userID, token);
+      }
+      // if (event.wasClean) {
+      //   console.log(`[close] Connection closed cleanly, code=${event.code}`);
+      // } else {
+      //   console.log("WebSocket closed let's reopen");
+      //   this.connect(userID, token);
+      // }
     };
   }
 

@@ -34,9 +34,16 @@ class WebSocketService {
     this.socketRef.onerror = e => {
       console.log(e.message);
     };
-    this.socketRef.onclose = () => {
-      // console.log("WebSocket closed let's reopen");
-      // this.connect(channel);
+    this.socketRef.onclose = (event) => {
+      if (!event.wasClean) {
+        this.connect(channel);
+      }
+      // if (event.wasClean) {
+      //   console.log(`[close] Connection closed cleanly, code=${event.code}`);
+      // } else {
+      //   console.log("WebSocket closed let's reopen");
+      //   this.connect(channel);
+      // }
     };
   }
 
@@ -48,7 +55,7 @@ class WebSocketService {
       return;
     }
     if (command === 'market') {
-      this.callbacks[command](parsedData.markets)
+      this.callbacks[command](parsedData.market_data, parsedData.market_orders)
     }
     if (command === 'messages') {
       this.callbacks[command](parsedData.messages);
@@ -72,9 +79,12 @@ class WebSocketService {
   }
 
   newChannel(channel) {
-    console.log('FETCH CHANNEL: ', channel);
     this.sendMessage({ channel: channel })
   }
+
+  // newOutcome(channel, outcome) {
+  //   this.sendMessage({ channel: channel, outcome: outcome })
+  // }
 
   addCallbacks(authCallback) {
     this.callbacks['market'] = authCallback;

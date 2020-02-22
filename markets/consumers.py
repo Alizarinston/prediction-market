@@ -2,7 +2,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from rest_framework.authtoken.models import Token
-from .models import MarketUser, Market
+from .models import MarketUser, Market, Order, Outcome
 from django.db.models import signals
 from django.dispatch import receiver
 import channels.layers
@@ -144,27 +144,90 @@ class AnonConsumer(AsyncWebsocketConsumer):
 
     async def get_channel_data(self, text_data_json):
         channel = text_data_json['channel']
-        markets = None
-        if str(channel) == 'markets':
-            markets = MarketSerializer(Market.objects.filter(proposal=True).order_by('-created'), many=True).data
-        else:
-            await self.close()
+
+        # if 'outcome' in text_data_json:
+        #     outcome = text_data_json['outcome']
+        #     market_orders = OrderSerializer(Order.objects.all().filter(outcome=outcome), many=True).data
+        # else:
+        market_data = MarketSerializer(Market.objects.get(id=channel)).data
+        # print('First outcome: ', Market.objects.get(id=channel).outcomes.first().id)
+        # print('market_data: ', market_data)
+        # print('ORDER: ', OrderSerializer(Order.objects.all().filter(outcome=5), many=True).data)
+        # print('OUTCOME: ', OutcomeSerializer(Outcome.objects.get(id=8)).data)
+
+        # print('OUTCOME: ', Outcome.objects.get(id=8).order.all())
+
+        market_orders = OrderSerializer(Order.objects.all(), many=True).data
+        # if str(channel) == 'markets':
+        #     markets = MarketSerializer(Market.objects.filter(proposal=True).order_by('-created'), many=True).data
+        # else:
+        #     await self.close()
 
         # Send message to room group
         await self.channel_layer.group_send(
             self.user_group_name,
             {
                 'type': 'channel_message',
-                'markets': markets
+                'market_data': market_data,
+                'market_orders': market_orders
             }
         )
 
     # Receive message from room group
     async def channel_message(self, event):
-        markets = event['markets']
+        market_data = event['market_data']
+        market_orders = event['market_orders']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'command': 'market',
-            'markets': markets
+            'market_data': market_data,
+            'market_orders': market_orders
         }))
+
+    # async def order_message(self, event):
+    #     market_orders = event['market_orders']
+    #     print('MARKET_ORDERS: ', market_orders)
+    #
+    #     # Send message to WebSocket
+    #     await self.send(text_data=json.dumps({
+    #         'command': 'order',
+    #         'market_orders': market_orders
+    #     }))
+
+    """ Лол, это тупо """
+    @staticmethod
+    @receiver(signals.post_save, sender=Order)
+    def market_update(sender, instance, **kwargs):
+        market_id = instance.outcome.market.all()[0].id
+        group_name = 'anon_%s' % market_id
+        print('CHANGED: ', instance.outcome.market.all()[0].id)
+        print(instance)
+        market_data = MarketSerializer(Market.objects.get(id=market_id)).data
+        market_orders = OrderSerializer(Order.objects.all(), many=True).data
+        channel_layer = channels.layers.get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                'type': 'channel_message',
+                'market_data': market_data,
+                'market_orders': market_orders
+            }
+        )
+
+    """ Genius """
+    # @staticmethod
+    # @receiver(signals.post_save, sender=Order)
+    # def market_update(sender, instance, **kwargs):
+    #     market_id = instance.outcome.market.all()[0].id
+    #     group_name = 'anon_%s' % market_id
+    #     print('CHANGED: ', instance.outcome.market.all()[0].id)
+    #     print(instance)
+    #     channel_layer = channels.layers.get_channel_layer()
+    #     async_to_sync(channel_layer.group_send)(
+    #         group_name,
+    #         {
+    #             'type': 'order_message',
+    #             'market_orders': instance,
+    #         }
+    #     )

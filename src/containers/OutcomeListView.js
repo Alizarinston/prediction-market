@@ -51,17 +51,21 @@ class OutcomeList extends React.Component{
                             <Segment basic key={num}>
                                 <Button.Group toggle fluid labeled basic color={this.colors[num % 13]} vertical style={{border:`1px solid ${this.colors[num % 13]}`}}>
 
-                                    <Button active id={o.id} value={o.description} onClick={(e) => this.props.handler(e)}>
+                                    <Button active onClick={() => this.props.handler(`${o.id}`, `${o.description}`)}>
                                         <Container>
                                             {o.description}
                                         </Container>
                                         <Label size={'tiny'} attached={"top left"} as='a' color={this.colors[num % 13]}>
                                             Ціна: {parseFloat(o.probability).toFixed(2) + '$'}
                                         </Label>
-                                        <Label tag size={'tiny'} attached={"top right"} as='a' color={this.colors[num % 13]}>
-                                            {/*Balance: {o.amount}*/}
-                                            Баланс: {(this.props.wallet[o.id]) ? this.props.wallet[o.id] : 0}
-                                        </Label>
+                                      {this.props.wallet ?
+                                        (<Label tag size={'tiny'} attached={"top right"} as='a'
+                                               color={this.colors[num % 13]}>
+                                          {/*Balance: {o.amount}*/}
+                                          Баланс: {(this.props.wallet[o.id]) ? this.props.wallet[o.id] : 0}
+                                        </Label>) :
+                                        (null)
+                                      }
                                     </Button>
 
                                     <Progress percent={o.probability * 100} attached={"bottom"} color={this.colors[num % 13]}/>

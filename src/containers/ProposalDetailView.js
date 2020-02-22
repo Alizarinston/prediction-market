@@ -10,26 +10,69 @@ import OutcomeList from './OutcomeListView';
 import connect from "react-redux/es/connect/connect";
 // import { Redirect } from "react-router-dom";
 import Login from './Login';
+import PublicWebSocketInstance from "../websocket_anon";
+
 
 class ProposalDetail extends React.Component {
+
+  // initialiseChat() {
+  //   const proposalID = this.props.match.params.marketID;
+  //   this.waitForSocketConnection(() => {
+  //     PublicWebSocketInstance.newChannel(
+  //       proposalID
+  //     );
+  //   });
+  //   PublicWebSocketInstance.connect();
+  // }
 
   constructor(props) {
     super(props);
 
+    // this.initialiseChat();
+    PublicWebSocketInstance.addCallbacks(this.setMessages.bind(this));
+
     this.handler = this.handler.bind(this)
   }
 
+  // waitForSocketConnection(callback) {
+  //   const component = this;
+  //   setTimeout(function() {
+  //     if (PublicWebSocketInstance.state() === 1) {
+  //       console.log("Connection is made");
+  //       callback();
+  //       return;
+  //     } else {
+  //       console.log("wait for connection...");
+  //       component.waitForSocketConnection(callback);
+  //     }
+  //   }, 100);
+  // }
 
-  handler(e) {
+  setMessages(data, orders) {
+    if (this.state.id === undefined || this.state.descr === undefined) {
+      this.setState({
+        descr: data.outcomes[0].description,
+        id: data.outcomes[0].id
+      })
+    }
     this.setState({
-      id: e.target.id,
-      descr: e.target.value
+      proposal: data,
+      outcomes: data.outcomes,
+      orders: orders
+    });
+  }
+
+  handler(id, value) {
+    this.setState({
+      id: id,
+      descr: value
     });
   }
 
   state = {
     proposal: [],
-    outcomes: ['null']
+    outcomes: ['null'],
+    orders: []
   };
 
   test() {
@@ -65,6 +108,7 @@ class ProposalDetail extends React.Component {
           // descr: res.data.outcomes[0].description,
           // id: res.data.outcomes[0].id
         });
+
         if (this.state.id === undefined || this.state.descr === undefined) {
           this.setState({
             descr: res.data.outcomes[0].description,
@@ -75,6 +119,10 @@ class ProposalDetail extends React.Component {
   }
 
   componentDidMount() {
+    const proposalID = this.props.match.params.marketID;
+    PublicWebSocketInstance.connect(proposalID);
+    // PublicWebSocketInstance.newChannel(proposalID);
+
     // const proposalID = this.props.match.params.proposalID;
     // axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
     //     , {headers: {
@@ -97,7 +145,7 @@ class ProposalDetail extends React.Component {
 
     if (this.props.token) {
 
-      this.test();
+      // this.test();
       // this.timer = setInterval(() => this.test(), 500);
     }
   }
@@ -123,7 +171,7 @@ class ProposalDetail extends React.Component {
       //     });
       // }).catch(err => console.log("error " + err));
       if (this.props.token) {
-        this.test();
+        // this.test();
         // this.timer = setInterval(() => this.test(), 500);
       }
 
@@ -148,7 +196,8 @@ class ProposalDetail extends React.Component {
             <Segment>
 
               <Intro
-                outcome={this.state.id}/>
+                outcome={this.state.id}
+              />
 
             </Segment>
 
@@ -177,7 +226,7 @@ class ProposalDetail extends React.Component {
             <Segment>
 
               <OrderBook
-                outcome={this.state.id}
+                outcome={this.state.id} orders={this.state.orders}
               />
 
             </Segment>

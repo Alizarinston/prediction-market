@@ -16,27 +16,27 @@ class ProposalList extends React.Component {
     proposals: []
   };
 
-  constructor(props) {
-    super(props);
-    PublicWebSocketInstance.addCallbacks(this.setMessages.bind(this));
-  }
+  // constructor(props) {
+  //   super(props);
+  //   PublicWebSocketInstance.addCallbacks(this.setMessages.bind(this));
+  // }
 
-  setMessages(markets) {
-    this.setState({
-      proposals: markets
-    });
-  }
+  // setMessages(markets) {
+  //   this.setState({
+  //     proposals: markets
+  //   });
+  // }
 
   componentDidMount() {
-    // axios.get('http://127.0.0.1:8000/api/markets/?proposal=true')
-    //     .then(res => {
-    //         this.setState({
-    //             proposals: res.data.results
-    //         });
-    //         console.log('PROPOSAL: ', res.data.results)
-    //     });
+    axios.get('http://127.0.0.1:8000/api/markets/?proposal=true')
+        .then(res => {
+            this.setState({
+                proposals: res.data.results
+            });
+            console.log('PROPOSAL: ', res.data.results)
+        });
 
-    PublicWebSocketInstance.connect('markets')
+    // PublicWebSocketInstance.connect('markets')
   }
 
   componentWillUnmount() {
