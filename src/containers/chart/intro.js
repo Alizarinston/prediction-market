@@ -7,6 +7,7 @@ import { TypeChooser } from "react-stockcharts/lib/helper";
 import axios from "axios";
 import connect from "react-redux/es/connect/connect";
 // import equal from 'fast-deep-equal'
+import { HOST_URL } from '../../settings';
 
 
 var d = [{},{}];
@@ -68,7 +69,7 @@ class ChartComponent extends React.Component {
 
     test() {
         {
-            axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+            axios.get(`${HOST_URL}/api/orders/`, {headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${this.props.token}`
                 }})

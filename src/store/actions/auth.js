@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
 import WebSocketInstance from "../../websocket";
+import { HOST_URL } from '../../settings';
+
 
 export const authStart = () => {
   return {
@@ -59,14 +61,14 @@ export const checkAuthTimeout = expirationTime => {
 export const authLogin = (username, password) => {
   return dispatch => {
     dispatch(authStart());
-    axios.post('http://127.0.0.1:8000/api/auth/login/', {
+    axios.post(`${HOST_URL}/api/auth/login/`, {
       username: username,
       password: password
     })
       .then(res => {
         const token = res.data.key;
 
-        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+        axios.get(`${HOST_URL}/api/auth/user/`, {headers: {
             "Content-Type": "application/json",
             Authorization: `Token ${token}`
           }})
@@ -98,7 +100,7 @@ export const authLogin = (username, password) => {
 export const authSignup = (username, email, password1, password2) => {
   return dispatch => {
     dispatch(authStart());
-    axios.post('http://127.0.0.1:8000/api/auth/registration/', {
+    axios.post(`${HOST_URL}/api/auth/registration/`, {
       username: username,
       email: email,
       password1: password1,
@@ -107,7 +109,7 @@ export const authSignup = (username, email, password1, password2) => {
       .then(res => {
         const token = res.data.key;
 
-        axios.get(`http://127.0.0.1:8000/api/auth/user/`, {headers: {
+        axios.get(`${HOST_URL}/api/auth/user/`, {headers: {
             "Content-Type": "application/json",
             Authorization: `Token ${token}`
           }})

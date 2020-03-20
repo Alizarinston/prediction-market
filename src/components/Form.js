@@ -5,6 +5,7 @@ import { Button, Checkbox, Form, Message, TextArea, Segment, Grid, Select } from
 import {
   DatesRangeInput
 } from 'semantic-ui-calendar-react';
+import { HOST_URL } from '../settings';
 
 
 class CustomForm extends React.Component {
@@ -62,7 +63,7 @@ class CustomForm extends React.Component {
 
         switch (requestType) {
             case 'post':
-                return axios.post('http://127.0.0.1:8000/api/markets/', {
+                return axios.post(`${HOST_URL}/api/markets/`, {
                     name: title,
                     start_date: start_date,
                     end_date: end_date,

@@ -1,3 +1,5 @@
+import { SOCKET_URL } from "./settings";
+
 class WebSocketService {
   static instance = null;
   callbacks = {};
@@ -15,7 +17,7 @@ class WebSocketService {
 
   connect(channel) {
     console.log("ID: ", channel);
-    const path = `ws://127.0.0.1:8000/ws/anon/${channel}/`;
+    const path = `${SOCKET_URL}/ws/anon/${channel}/`;
     this.socketRef = new WebSocket(path);
     this.socketRef.onopen = () => {
       console.log('WebSocket open');

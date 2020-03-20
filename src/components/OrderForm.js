@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { Button, Form, Segment, Grid } from 'semantic-ui-react'
 import connect from "react-redux/es/connect/connect";
+import { HOST_URL } from '../settings';
 
 
 class OrderForm extends React.Component {
@@ -17,7 +18,7 @@ class OrderForm extends React.Component {
         //     "Content-Type": "application/json",
         //     Authorization: `Token ${this.props.token}`
         // };
-        return axios.post('http://127.0.0.1:8000/api/orders/', {
+        return axios.post(`${HOST_URL}/api/orders/`, {
           order_type: orderType,
           amount: amount,
           outcome: this.props.outcome,

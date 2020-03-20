@@ -11,6 +11,7 @@ import connect from "react-redux/es/connect/connect";
 // import { Redirect } from "react-router-dom";
 import Login from './Login';
 import PublicWebSocketInstance from "../websocket_anon";
+import { HOST_URL } from '../settings';
 
 
 class ProposalDetail extends React.Component {
@@ -91,7 +92,7 @@ class ProposalDetail extends React.Component {
     //     });
     // });
 
-    axios.get(`http://127.0.0.1:8000/api/markets/${proposalID}/`
+    axios.get(`${HOST_URL}/api/markets/${proposalID}/`
       , {headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${this.props.token}`

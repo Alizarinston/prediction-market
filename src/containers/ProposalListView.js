@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import axios from 'axios';
+import { HOST_URL } from '../settings';
 
 import Proposals from '../components/Proposal';
 import { Link } from 'react-router-dom';
@@ -28,7 +29,7 @@ class ProposalList extends React.Component {
   // }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/markets/?proposal=true')
+    axios.get(`${HOST_URL}/api/markets/?proposal=true`)
         .then(res => {
             this.setState({
                 proposals: res.data.results

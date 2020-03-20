@@ -3,6 +3,7 @@ import axios from "axios";
 import { Table } from 'semantic-ui-react'
 import connect from "react-redux/es/connect/connect";
 // import PublicWebSocketInstance from ".../websocket_anon";
+import { HOST_URL } from '../../settings';
 
 
 function decimalAdjust(type, value, exp) {
@@ -64,7 +65,7 @@ class OrderHistory extends React.Component {
 
   test() {
     {
-      axios.get('http://127.0.0.1:8000/api/orders/', {headers: {
+      axios.get(`${HOST_URL}/api/orders/`, {headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${this.props.token}`
         }})
