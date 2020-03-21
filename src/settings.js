@@ -1,4 +1,4 @@
-let DEBUG = false;
+let DEBUG = true;
 let HOST_URL = "http://pm-api.eba-ui7fbawd.eu-central-1.elasticbeanstalk.com";
 let SOCKET_URL = "ws://pm-api.eba-ui7fbawd.eu-central-1.elasticbeanstalk.com";
 if (DEBUG) {
