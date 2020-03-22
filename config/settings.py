@@ -30,7 +30,7 @@ SECRET_KEY = config.get('django', 'secret_key')
 
 DEBUG = True if config.get('django', 'debug') == 'true' else False
 
-ALLOWED_HOSTS = [host for host in config.get('django', 'hosts').split()]
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
 
 ROOT_URLCONF = 'config.urls'
 AUTH_USER_MODEL = 'markets.MarketUser'
@@ -176,7 +176,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(config.get('redis', 'redis_host'), config.get('redis', 'redis_port'))],
+            "hosts": [environ['REDIS_URL']],
         },
     },
 }
@@ -273,4 +273,3 @@ CORS_ORIGIN_WHITELIST = (
     config.get('cors', 'socket'),
 )
 
-HOST_URL = 'https://aeneas-prediction-market.herokuapp.com'
