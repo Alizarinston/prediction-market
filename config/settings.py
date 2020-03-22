@@ -30,7 +30,7 @@ SECRET_KEY = config.get('django', 'secret_key')
 
 DEBUG = True if config.get('django', 'debug') == 'true' else False
 
-ALLOWED_HOSTS = [host for host in config.get('django', 'hosts').split()]
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
 
 ROOT_URLCONF = 'config.urls'
 AUTH_USER_MODEL = 'markets.MarketUser'
