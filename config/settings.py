@@ -268,8 +268,4 @@ CSRF_COOKIE_NAME = "csrftoken"
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    config.get('cors', 'origin'),
-    config.get('cors', 'socket'),
-)
 
