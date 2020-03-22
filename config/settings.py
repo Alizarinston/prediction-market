@@ -273,3 +273,4 @@ CORS_ORIGIN_WHITELIST = (
     config.get('cors', 'socket'),
 )
 
+HOST_URL = 'https://aeneas-prediction-market.herokuapp.com'
