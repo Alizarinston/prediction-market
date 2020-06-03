@@ -1,4 +1,4 @@
-let DEBUG = false;
+let DEBUG = true;
 let HOST_URL = "https://aeneas-prediction-market.herokuapp.com";
 let SOCKET_URL = "wss://aeneas-prediction-market.herokuapp.com";
 if (DEBUG) {
